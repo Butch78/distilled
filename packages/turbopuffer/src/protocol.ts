@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownTurbopufferError } from "./errors.ts";
+import { UnknownTurbopufferError, TurbopufferParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated turbopuffer operation. Generated
@@ -35,7 +35,8 @@ export type TurbopufferOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownTurbopufferError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | TurbopufferParseError;
 
 /** Context (requirements) shared by every generated turbopuffer operation. */
 export type TurbopufferOpContext = Credentials | HttpClient.HttpClient;
@@ -65,4 +66,5 @@ export const TurbopufferProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new TurbopufferParseError({ body, cause }),
   });

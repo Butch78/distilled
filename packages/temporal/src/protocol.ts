@@ -24,7 +24,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownTemporalError } from "./errors.ts";
+import { UnknownTemporalError, TemporalParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Temporal operation. Generated
@@ -36,7 +36,8 @@ export type TemporalOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownTemporalError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | TemporalParseError;
 
 /** Context (requirements) shared by every generated Temporal operation. */
 export type TemporalOpContext = Credentials | HttpClient.HttpClient;
@@ -66,4 +67,5 @@ export const TemporalProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new TemporalParseError({ body, cause }),
   });

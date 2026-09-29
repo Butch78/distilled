@@ -25,7 +25,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownModrinthError } from "./errors.ts";
+import { UnknownModrinthError, ModrinthParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Modrinth operation. Generated
@@ -37,7 +37,8 @@ export type ModrinthOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownModrinthError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | ModrinthParseError;
 
 /** Context (requirements) shared by every generated Modrinth operation. */
 export type ModrinthOpContext = Credentials | HttpClient.HttpClient;
@@ -90,4 +91,5 @@ export const ModrinthProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new ModrinthParseError({ body, cause }),
   });

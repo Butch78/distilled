@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownRenderError } from "./errors.ts";
+import { UnknownRenderError, RenderParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Render operation. Generated
@@ -35,7 +35,8 @@ export type RenderOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownRenderError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | RenderParseError;
 
 /** Context (requirements) shared by every generated Render operation. */
 export type RenderOpContext = Credentials | HttpClient.HttpClient;
@@ -66,4 +67,5 @@ export const RenderProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new RenderParseError({ body, cause }),
   });

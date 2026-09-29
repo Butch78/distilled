@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownRemoteError } from "./errors.ts";
+import { UnknownRemoteError, RemoteParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Remote operation. Generated service
@@ -35,7 +35,8 @@ export type RemoteOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownRemoteError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | RemoteParseError;
 
 /** Context (requirements) shared by every generated Remote operation. */
 export type RemoteOpContext = Credentials | HttpClient.HttpClient;
@@ -66,4 +67,5 @@ export const RemoteProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new RemoteParseError({ body, cause }),
   });

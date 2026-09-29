@@ -134,6 +134,69 @@ not `Pkg.Services.vms.createVm`. Do not add a `Services` namespace. A
 single-service package re-exports operations on the root (`Pkg.listX`) the
 same way.
 
+### Errors and response validation
+
+Every error class in `src/errors.ts` must be one the protocol can actually
+raise. A class in the operation error union that nothing constructs tells
+callers to handle a failure that never happens — that is how ~75 packages
+ended up declaring a `<Pkg>ParseError` no code path created.
+
+`src/errors.ts` declares, and the operation error union
+(`<Pkg>OpError` / `DefaultErrors`) includes:
+
+- `Unknown<Pkg>Error` — built by the protocol's `unknownError` fallback.
+- `<Pkg>ParseError` with `{ body: Schema.Unknown, cause: Schema.Unknown }`,
+  `.pipe(Category.withParseError)` — built by the protocol's `parseError`
+  (copy `packages/s2/src/errors.ts`).
+- Any status classes the provider needs beyond core's `HTTP_STATUS_MAP`,
+  each wired into the protocol's `statusMap`.
+
+The protocol wires every one of them:
+
+- **`makeRestProtocol`** requires `parseError`:
+  `parseError: ({ body, cause }) => new <Pkg>ParseError({ body, cause })`.
+- **A hand-written protocol** calls `validateResponse(outputAst, value,
+  (cause) => new <Pkg>ParseError({ body, cause }))` from
+  `@distilled.cloud/core/response-validation` on every 2xx path that returns
+  the operation output — after wire→TS key mapping, before `wrapSensitive`.
+  `packages/core/src/protocol-rest.ts` is the reference.
+
+2xx responses are validated only in strict mode. `ResponseValidation`
+(`import { ResponseValidation } from "@distilled.cloud/core"`) is one context
+reference shared by every SDK: lenient by default, switched with
+`Effect.provide(ResponseValidation.strict)` — only ever by layer. A new
+protocol reads the mode through `validateResponse`; it never adds its own
+flag or environment variable.
+
+Lenient mode checks only what the protocol needs in order to transform the
+body (unwrap an envelope, map keys, wrap sensitive members) and nothing
+more: a non-JSON body comes back as text, a body missing members comes back
+as read. Never decode against the output schema outside `validateResponse`.
+Strict mode surfaces every spec inaccuracy (an undocumented `null`, a new
+enum member) as a `<Pkg>ParseError`; that is the cost of opting in, and why
+strict is never the default.
+
+Every SDK ships `src/response-validation.test.ts` (copy
+`packages/s2/src/response-validation.test.ts`). It uses
+`runValidationModes` from `@distilled.cloud/core/testing` to run one real
+operation against a canned response in both modes and asserts: a matching
+body succeeds in both; a mismatched body succeeds in lenient and fails with
+`<Pkg>ParseError` in strict; and what a non-JSON body does in each. CI runs
+every `packages/*/src/response-validation.test.ts`.
+
+Before opening the PR, confirm the parse error and the unknown-error
+fallback are both constructed outside the generated code — this must print
+two or more lines:
+
+```sh
+grep -rnE 'new \w+(ParseError|Unknown\w*Error)\(' packages/<pkg>/src \
+  --include='*.ts' --exclude-dir=services
+```
+
+For every other class you add to `errors.ts`, find where the protocol
+raises it (`statusMap`, a code lookup table, or `new`). A class nothing
+raises comes out of `errors.ts` and the error union.
+
 ## Step 5 — iterate
 
 ```sh
@@ -341,7 +404,9 @@ Body, in order:
    A PR whose only snippet is `listX({})` is incomplete; paste the README
    quick start.
 4. `Checks: pnpm specs:check` green, `tsc -b packages/<pkg> --noCheck false`
-   green, `DISTILLED_SPECS_LOCAL=1 pnpm generate <pkg>` reproduces output.
+   green, `DISTILLED_SPECS_LOCAL=1 pnpm generate <pkg>` reproduces output,
+   the error-construction check from step 4 finds both classes, and
+   `bun test src/response-validation.test.ts` passes.
 
 ```sh
 git push -u origin HEAD

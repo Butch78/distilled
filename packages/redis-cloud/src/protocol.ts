@@ -22,7 +22,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, formatHeaders, type Config } from "./credentials.ts";
-import { UnknownRedisCloudError } from "./errors.ts";
+import { UnknownRedisCloudError, RedisCloudParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Redis Cloud operation. Generated
@@ -34,7 +34,8 @@ export type RedisCloudOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownRedisCloudError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | RedisCloudParseError;
 
 /** Context (requirements) shared by every generated Redis Cloud operation. */
 export type RedisCloudOpContext = Credentials | HttpClient.HttpClient;
@@ -60,4 +61,5 @@ export const RedisCloudProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new RedisCloudParseError({ body, cause }),
   });

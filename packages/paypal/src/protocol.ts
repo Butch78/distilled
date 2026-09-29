@@ -25,7 +25,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownPaypalError } from "./errors.ts";
+import { UnknownPaypalError, PaypalParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated PayPal operation. Generated service
@@ -37,7 +37,8 @@ export type PaypalOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownPaypalError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | PaypalParseError;
 
 /** Context (requirements) shared by every generated PayPal operation. */
 export type PaypalOpContext = Credentials | HttpClient.HttpClient;
@@ -83,4 +84,5 @@ export const PaypalProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new PaypalParseError({ body, cause }),
   });

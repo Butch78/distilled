@@ -27,7 +27,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownInngestError } from "./errors.ts";
+import { UnknownInngestError, InngestParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Inngest operation. Generated service
@@ -39,7 +39,8 @@ export type InngestOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownInngestError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | InngestParseError;
 
 /** Context (requirements) shared by every generated Inngest operation. */
 export type InngestOpContext = Credentials | HttpClient.HttpClient;
@@ -104,4 +105,5 @@ export const InngestProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new InngestParseError({ body, cause }),
   });

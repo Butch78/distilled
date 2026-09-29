@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownSentryError } from "./errors.ts";
+import { UnknownSentryError, SentryParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Sentry operation. Generated service
@@ -35,7 +35,8 @@ export type SentryOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownSentryError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | SentryParseError;
 
 /** Context (requirements) shared by every generated Sentry operation. */
 export type SentryOpContext = Credentials | HttpClient.HttpClient;
@@ -65,4 +66,5 @@ export const SentryProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new SentryParseError({ body, cause }),
   });

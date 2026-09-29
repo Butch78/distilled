@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownXataError } from "./errors.ts";
+import { UnknownXataError, XataParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Xata operation. Generated service
@@ -35,7 +35,8 @@ export type XataOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownXataError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | XataParseError;
 
 /** Context (requirements) shared by every generated Xata operation. */
 export type XataOpContext = Credentials | HttpClient.HttpClient;
@@ -65,5 +66,6 @@ export const XataProtocol: Layer.Layer<API.Protocol> = makeRestProtocol<Config>(
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new XataParseError({ body, cause }),
   },
 );

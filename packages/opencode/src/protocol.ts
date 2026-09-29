@@ -22,7 +22,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownOpencodeError } from "./errors.ts";
+import { UnknownOpencodeError, OpencodeParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated OpenCode operation. Generated
@@ -34,7 +34,8 @@ export type OpencodeOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownOpencodeError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | OpencodeParseError;
 
 /** Context (requirements) shared by every generated OpenCode operation. */
 export type OpencodeOpContext = Credentials | HttpClient.HttpClient;
@@ -68,4 +69,5 @@ export const OpencodeProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new OpencodeParseError({ body, cause }),
   });

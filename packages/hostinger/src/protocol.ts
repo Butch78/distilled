@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownHostingerError } from "./errors.ts";
+import { UnknownHostingerError, HostingerParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Hostinger operation. Generated
@@ -35,7 +35,8 @@ export type HostingerOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownHostingerError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | HostingerParseError;
 
 /** Context (requirements) shared by every generated Hostinger operation. */
 export type HostingerOpContext = Credentials | HttpClient.HttpClient;
@@ -65,4 +66,5 @@ export const HostingerProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new HostingerParseError({ body, cause }),
   });

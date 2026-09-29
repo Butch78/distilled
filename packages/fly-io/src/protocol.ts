@@ -48,6 +48,10 @@ import {
   InternalServerError,
   type ConfigError,
 } from "@distilled.cloud/core/errors";
+import {
+  failIfStrict,
+  validateResponse,
+} from "@distilled.cloud/core/response-validation";
 import { parseRetryAfterForStatus } from "@distilled.cloud/core/retry-after";
 import {
   Credentials,
@@ -149,6 +153,7 @@ const FlyIoProtocolRest: Layer.Layer<API.Protocol> = makeRestProtocol<Config>({
   }),
   errorEnvelope: flyErrorEnvelope,
   unknownError: ({ message, body }) => new UnknownFlyIoError({ message, body }),
+  parseError: ({ body, cause }) => new FlyIoParseError({ body, cause }),
 });
 
 export const FlyIoProtocol: Layer.Layer<API.Protocol> = Layer.effect(
@@ -182,6 +187,7 @@ export const FlyApiProtocol: Layer.Layer<API.Protocol> =
     errorEnvelope: flyErrorEnvelope,
     unknownError: ({ message, body }) =>
       new UnknownFlyIoError({ message, body }),
+    parseError: ({ body, cause }) => new FlyIoParseError({ body, cause }),
   });
 
 const parseMaybeNdjson = (body: unknown): unknown => {
@@ -582,13 +588,20 @@ const decodeSpritesResponse = ({
       );
     }
 
-    if (execFrames !== undefined) {
-      return wrapSensitive(outputAst, mapKeys(outputAst, execFrames, "decode"));
-    }
-
-    let body: unknown = nonJson ? text : (json ?? {});
-    body = parseMaybeNdjson(body);
-    return wrapSensitive(outputAst, mapKeys(outputAst, body, "decode"));
+    // Strict mode checks the mapped body (or parsed exec frames) against the
+    // output schema.
+    const body: unknown =
+      execFrames ?? parseMaybeNdjson(nonJson ? text : (json ?? {}));
+    const mapped = yield* validateResponse(
+      outputAst,
+      mapKeys(outputAst, body, "decode"),
+      (cause) =>
+        new FlyIoParseError({
+          body: execFrames ?? (nonJson ? text : json),
+          cause,
+        }),
+    ).pipe(Effect.catch(fail));
+    return wrapSensitive(outputAst, mapped);
   });
 
 /** Sprites REST at `https://api.sprites.dev/v1`, minted from `FLY_API_TOKEN`. */
@@ -748,12 +761,14 @@ const graphqlDecode = ({
       if (status >= 400) {
         return yield* matchGraphqlError(status, text, headers, errors);
       }
-      return yield* fail(
+      // Lenient mode returns the body as read.
+      return yield* failIfStrict(
         new FlyIoParseError({
           body: text,
           cause: "response body is not valid JSON",
         }),
-      );
+        text,
+      ).pipe(Effect.catch(fail));
     }
 
     const envelope = json as { data?: unknown; errors?: unknown[] } | null;
@@ -779,7 +794,13 @@ const graphqlDecode = ({
             : undefined;
       }
     }
-    return payload === undefined ? null : payload;
+    // Strict mode checks the payload at the response path against the
+    // output schema.
+    return yield* validateResponse(
+      outputAst,
+      payload === undefined ? null : payload,
+      (cause) => new FlyIoParseError({ body: json, cause }),
+    ).pipe(Effect.catch(fail));
   });
 
 export const FlyGraphqlProtocol: Layer.Layer<API.Protocol> = Layer.succeed(

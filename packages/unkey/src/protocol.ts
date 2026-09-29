@@ -27,7 +27,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownUnkeyError } from "./errors.ts";
+import { UnknownUnkeyError, UnkeyParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Unkey operation. Generated service
@@ -39,7 +39,8 @@ export type UnkeyOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownUnkeyError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | UnkeyParseError;
 
 /** Context (requirements) shared by every generated Unkey operation. */
 export type UnkeyOpContext = Credentials | HttpClient.HttpClient;
@@ -98,4 +99,5 @@ export const UnkeyProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new UnkeyParseError({ body, cause }),
   });

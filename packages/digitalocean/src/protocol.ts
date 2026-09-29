@@ -28,7 +28,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownDigitalOceanError } from "./errors.ts";
+import { UnknownDigitalOceanError, DigitalOceanParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated DigitalOcean operation. Generated
@@ -40,7 +40,8 @@ export type DigitalOceanOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownDigitalOceanError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | DigitalOceanParseError;
 
 /** Context (requirements) shared by every generated DigitalOcean operation. */
 export type DigitalOceanOpContext = Credentials | HttpClient.HttpClient;
@@ -89,4 +90,6 @@ export const DigitalOceanProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) =>
+      new DigitalOceanParseError({ body, cause }),
   });

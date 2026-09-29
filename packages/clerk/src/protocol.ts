@@ -26,7 +26,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownClerkError } from "./errors.ts";
+import { UnknownClerkError, ClerkParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Clerk operation. Generated service
@@ -38,7 +38,8 @@ export type ClerkOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownClerkError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | ClerkParseError;
 
 /** Context (requirements) shared by every generated Clerk operation. */
 export type ClerkOpContext = Credentials | HttpClient.HttpClient;
@@ -97,4 +98,5 @@ export const ClerkProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new ClerkParseError({ body, cause }),
   });

@@ -25,7 +25,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownDatadogError } from "./errors.ts";
+import { UnknownDatadogError, DatadogParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Datadog operation. Generated
@@ -37,7 +37,8 @@ export type DatadogOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownDatadogError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | DatadogParseError;
 
 /** Context (requirements) shared by every generated Datadog operation. */
 export type DatadogOpContext = Credentials | HttpClient.HttpClient;
@@ -113,4 +114,5 @@ export const DatadogProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new DatadogParseError({ body, cause }),
   });

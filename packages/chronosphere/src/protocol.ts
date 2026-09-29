@@ -24,7 +24,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownChronosphereError } from "./errors.ts";
+import { UnknownChronosphereError, ChronosphereParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Chronosphere operation. Generated
@@ -36,7 +36,8 @@ export type ChronosphereOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownChronosphereError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | ChronosphereParseError;
 
 /** Context (requirements) shared by every generated Chronosphere operation. */
 export type ChronosphereOpContext = Credentials | HttpClient.HttpClient;
@@ -71,4 +72,6 @@ export const ChronosphereProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) =>
+      new ChronosphereParseError({ body, cause }),
   });

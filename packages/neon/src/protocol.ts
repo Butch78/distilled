@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownNeonError } from "./errors.ts";
+import { UnknownNeonError, NeonParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Neon operation. Generated service
@@ -35,7 +35,8 @@ export type NeonOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownNeonError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | NeonParseError;
 
 /** Context (requirements) shared by every generated Neon operation. */
 export type NeonOpContext = Credentials | HttpClient.HttpClient;
@@ -65,5 +66,6 @@ export const NeonProtocol: Layer.Layer<API.Protocol> = makeRestProtocol<Config>(
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new NeonParseError({ body, cause }),
   },
 );

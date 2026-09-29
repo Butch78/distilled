@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, formatHeaders, type Config } from "./credentials.ts";
-import { UnknownPlaidError } from "./errors.ts";
+import { UnknownPlaidError, PlaidParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Plaid operation. Generated service
@@ -35,7 +35,8 @@ export type PlaidOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownPlaidError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | PlaidParseError;
 
 /** Context (requirements) shared by every generated Plaid operation. */
 export type PlaidOpContext = Credentials | HttpClient.HttpClient;
@@ -79,4 +80,5 @@ export const PlaidProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new PlaidParseError({ body, cause }),
   });

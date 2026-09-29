@@ -24,7 +24,10 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownApacheSupersetError } from "./errors.ts";
+import {
+  UnknownApacheSupersetError,
+  ApacheSupersetParseError,
+} from "./errors.ts";
 
 /**
  * Error channel shared by every generated Apache Superset operation.
@@ -37,7 +40,8 @@ export type ApacheSupersetOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownApacheSupersetError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | ApacheSupersetParseError;
 
 /** Context (requirements) shared by every generated Apache Superset operation. */
 export type ApacheSupersetOpContext = Credentials | HttpClient.HttpClient;
@@ -65,4 +69,6 @@ export const ApacheSupersetProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) =>
+      new ApacheSupersetParseError({ body, cause }),
   });

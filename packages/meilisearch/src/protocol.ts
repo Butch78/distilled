@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownMeilisearchError } from "./errors.ts";
+import { UnknownMeilisearchError, MeilisearchParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Meilisearch operation. Generated
@@ -35,7 +35,8 @@ export type MeilisearchOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownMeilisearchError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | MeilisearchParseError;
 
 /** Context (requirements) shared by every generated Meilisearch operation. */
 export type MeilisearchOpContext = Credentials | HttpClient.HttpClient;
@@ -65,4 +66,5 @@ export const MeilisearchProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new MeilisearchParseError({ body, cause }),
   });

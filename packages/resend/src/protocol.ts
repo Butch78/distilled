@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownResendError } from "./errors.ts";
+import { UnknownResendError, ResendParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Resend operation. Generated service
@@ -35,7 +35,8 @@ export type ResendOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownResendError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | ResendParseError;
 
 /** Context (requirements) shared by every generated Resend operation. */
 export type ResendOpContext = Credentials | HttpClient.HttpClient;
@@ -79,4 +80,5 @@ export const ResendProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new ResendParseError({ body, cause }),
   });

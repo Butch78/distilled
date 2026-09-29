@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownCoolifyError } from "./errors.ts";
+import { UnknownCoolifyError, CoolifyParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Coolify operation. Generated
@@ -35,7 +35,8 @@ export type CoolifyOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownCoolifyError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | CoolifyParseError;
 
 /** Context (requirements) shared by every generated Coolify operation. */
 export type CoolifyOpContext = Credentials | HttpClient.HttpClient;
@@ -65,4 +66,5 @@ export const CoolifyProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new CoolifyParseError({ body, cause }),
   });

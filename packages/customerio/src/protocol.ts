@@ -28,7 +28,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownCustomerioError } from "./errors.ts";
+import { UnknownCustomerioError, CustomerioParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Customer.io operation. Generated
@@ -40,7 +40,8 @@ export type CustomerioOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownCustomerioError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | CustomerioParseError;
 
 /** Context (requirements) shared by every generated Customer.io operation. */
 export type CustomerioOpContext = Credentials | HttpClient.HttpClient;
@@ -111,4 +112,5 @@ export const CustomerioProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new CustomerioParseError({ body, cause }),
   });

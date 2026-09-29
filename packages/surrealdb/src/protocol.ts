@@ -25,7 +25,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownSurrealdbError } from "./errors.ts";
+import { UnknownSurrealdbError, SurrealdbParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated SurrealDB operation. Generated
@@ -37,7 +37,8 @@ export type SurrealdbOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownSurrealdbError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | SurrealdbParseError;
 
 /** Context (requirements) shared by every generated SurrealDB operation. */
 export type SurrealdbOpContext = Credentials | HttpClient.HttpClient;
@@ -69,4 +70,5 @@ export const SurrealdbProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new SurrealdbParseError({ body, cause }),
   });

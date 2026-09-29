@@ -26,7 +26,7 @@ import {
 } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownZendeskError } from "./errors.ts";
+import { UnknownZendeskError, ZendeskParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated Zendesk operation. Generated
@@ -38,7 +38,8 @@ export type ZendeskOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownZendeskError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | ZendeskParseError;
 
 /** Context (requirements) shared by every generated Zendesk operation. */
 export type ZendeskOpContext = Credentials | HttpClient.HttpClient;
@@ -94,4 +95,5 @@ export const ZendeskProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new ZendeskParseError({ body, cause }),
   });

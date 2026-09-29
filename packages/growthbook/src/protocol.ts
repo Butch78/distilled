@@ -23,7 +23,7 @@ import type * as API from "@distilled.cloud/core/api";
 import { makeRestProtocol } from "@distilled.cloud/core/protocol-rest";
 import type { API_ERRORS, ConfigError } from "@distilled.cloud/core/errors";
 import { Credentials, type Config } from "./credentials.ts";
-import { UnknownGrowthBookError } from "./errors.ts";
+import { UnknownGrowthBookError, GrowthBookParseError } from "./errors.ts";
 
 /**
  * Error channel shared by every generated GrowthBook operation. Generated
@@ -35,7 +35,8 @@ export type GrowthBookOpError =
   | InstanceType<(typeof API_ERRORS)[number]>
   | UnknownGrowthBookError
   | ConfigError
-  | HttpClientError.HttpClientError;
+  | HttpClientError.HttpClientError
+  | GrowthBookParseError;
 
 /** Context (requirements) shared by every generated GrowthBook operation. */
 export type GrowthBookOpContext = Credentials | HttpClient.HttpClient;
@@ -65,4 +66,5 @@ export const GrowthBookProtocol: Layer.Layer<API.Protocol> =
         message,
         body,
       }),
+    parseError: ({ body, cause }) => new GrowthBookParseError({ body, cause }),
   });
