@@ -65,6 +65,28 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** A starting URL's IP address is not reserved as a static address in this project (HTTP 400 FAILED_PRECONDITION). Reserve it first; retry briefly right after reserving. */
+export class StartingUrlIpNotReserved
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<StartingUrlIpNotReserved>()(
+      "StartingUrlIpNotReserved",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "reserved as static for this project" },
+      },
+    ],
+  ) {}
+
 export type StringList = Array<string>;
 export const StringList = /*@__PURE__*/ S.Array(
   S.String,
@@ -1086,6 +1108,7 @@ export type CreateProjectsScanConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | StartingUrlIpNotReserved
   | GcpOpError;
 /** Creates a new ScanConfig. */
 export const createProjectsScanConfigs: API.OperationMethod<
@@ -1096,7 +1119,14 @@ export const createProjectsScanConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsScanConfigsRequest,
   output: ScanConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    StartingUrlIpNotReserved,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1284,6 +1314,7 @@ export type PatchProjectsScanConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | StartingUrlIpNotReserved
   | GcpOpError;
 /** Updates a ScanConfig. This method support partial update of a ScanConfig. */
 export const patchProjectsScanConfigs: API.OperationMethod<
@@ -1294,7 +1325,14 @@ export const patchProjectsScanConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsScanConfigsRequest,
   output: ScanConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    StartingUrlIpNotReserved,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

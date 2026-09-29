@@ -39,6 +39,20 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** The folder does not exist, or the caller cannot see it. Resource Manager answers both with HTTP 403 'Permission ... denied on resource ... (or it may not exist).' */
+export class FolderNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<FolderNotFound>()("FolderNotFound", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "(or it may not exist)" } }],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -63,6 +77,48 @@ export class NotFound
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withBadRequestError),
     [{ status: 404 }],
+  ) {}
+
+/** The project does not exist, or the caller cannot see it. Resource Manager answers both with HTTP 403 'Permission ... denied on resource ... (or it may not exist).' */
+export class ProjectNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ProjectNotFound>()("ProjectNotFound", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "(or it may not exist)" } }],
+  ) {}
+
+/** The TagKey does not exist, or the caller cannot see it. Resource Manager answers both with HTTP 403 'Permission denied on resource ... (or it may not exist).'; a denial of an existing TagKey names the missing permission instead. */
+export class TagKeyNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<TagKeyNotFound>()("TagKeyNotFound", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "(or it may not exist)" } }],
+  ) {}
+
+/** The TagValue does not exist, or the caller cannot see it. Resource Manager answers both with HTTP 403 'Permission denied on resource ... (or it may not exist).'; a denial of an existing TagValue names the missing permission instead. */
+export class TagValueNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<TagValueNotFound>()("TagValueNotFound", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "(or it may not exist)" } }],
   ) {}
 
 export type StringMap = { [key: string]: string | undefined };
@@ -2437,6 +2493,7 @@ export type DeleteFoldersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FolderNotFound
   | GcpOpError;
 /** Requests deletion of a folder. The folder is moved into the DELETE_REQUESTED state immediately, and is deleted approximately 30 days later. This method may only be called on an empty folder, where a folder is empty if it doesn't contain any folders or projects in the ACTIVE state. If called on a folder in DELETE_REQUESTED state the operation will result in a no-op success. The caller must have `resourcemanager.folders.delete` permission on the identified folder. */
 export const deleteFolders: API.OperationMethod<
@@ -2447,7 +2504,14 @@ export const deleteFolders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteFoldersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FolderNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2477,6 +2541,7 @@ export type DeleteProjectsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProjectNotFound
   | GcpOpError;
 /** Marks the project identified by the specified `name` (for example, `projects/415104041262`) for deletion. This method will only affect the project if it has a lifecycle state of ACTIVE. This method changes the Project's lifecycle state from ACTIVE to DELETE_REQUESTED. The deletion starts at an unspecified time, at which point the Project is no longer accessible. Until the deletion completes, you can check the lifecycle state checked by retrieving the project with GetProject, and the project remains visible to ListProjects. However, you cannot update the project. After the deletion completes, the project is not retrievable by the GetProject, ListProjects, and SearchProjects methods. The caller must have `resourcemanager.projects.delete` permissions for this project. */
 export const deleteProjects: API.OperationMethod<
@@ -2487,7 +2552,14 @@ export const deleteProjects: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProjectNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2517,6 +2589,7 @@ export type DeleteTagKeysError =
   | Forbidden
   | BadRequest
   | Conflict
+  | TagKeyNotFound
   | GcpOpError;
 /** Deletes a TagKey. The TagKey cannot be deleted if it has any child TagValues. */
 export const deleteTagKeys: API.OperationMethod<
@@ -2527,7 +2600,14 @@ export const deleteTagKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteTagKeysRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    TagKeyNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2537,6 +2617,7 @@ export type DeleteTagValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | TagValueNotFound
   | GcpOpError;
 /** Deletes a TagValue. The TagValue cannot have any bindings when it is deleted. */
 export const deleteTagValues: API.OperationMethod<
@@ -2547,7 +2628,14 @@ export const deleteTagValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteTagValuesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    TagValueNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2587,7 +2675,11 @@ export const fetchResourceSemanticsV3: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetFoldersError = NotFound | Forbidden | GcpOpError;
+export type GetFoldersError =
+  | NotFound
+  | Forbidden
+  | FolderNotFound
+  | GcpOpError;
 /** Retrieves a folder identified by the supplied resource name. Valid folder resource names have the format `folders/{folder_id}` (for example, `folders/1234`). The caller must have `resourcemanager.folders.get` permission on the identified folder. */
 export const getFolders: API.OperationMethod<
   GetFoldersRequest,
@@ -2597,7 +2689,7 @@ export const getFolders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetFoldersRequest,
   output: Folder,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, FolderNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2622,6 +2714,7 @@ export type GetIamPolicyFoldersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FolderNotFound
   | GcpOpError;
 /** Gets the access control policy for a folder. The returned policy may be empty if no such policy or resource exists. The `resource` field should be the folder's resource name, for example: "folders/1234". The caller must have `resourcemanager.folders.getIamPolicy` permission on the identified folder. */
 export const getIamPolicyFolders: API.OperationMethod<
@@ -2632,7 +2725,14 @@ export const getIamPolicyFolders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyFoldersRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FolderNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2662,6 +2762,7 @@ export type GetIamPolicyProjectsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProjectNotFound
   | GcpOpError;
 /** Returns the IAM access control policy for the specified project, in the format `projects/{ProjectIdOrNumber}` e.g. projects/123. Permission is denied if the policy or the resource do not exist. */
 export const getIamPolicyProjects: API.OperationMethod<
@@ -2672,7 +2773,14 @@ export const getIamPolicyProjects: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProjectNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2682,6 +2790,7 @@ export type GetIamPolicyTagKeysError =
   | Forbidden
   | BadRequest
   | Conflict
+  | TagKeyNotFound
   | GcpOpError;
 /** Gets the access control policy for a TagKey. The returned policy may be empty if no such policy or resource exists. The `resource` field should be the TagKey's resource name. For example, "tagKeys/1234". The caller must have `cloudresourcemanager.googleapis.com/tagKeys.getIamPolicy` permission on the specified TagKey. */
 export const getIamPolicyTagKeys: API.OperationMethod<
@@ -2692,7 +2801,14 @@ export const getIamPolicyTagKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyTagKeysRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    TagKeyNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2768,7 +2884,11 @@ export const getLocationsTagBindingCollections: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetNamespacedTagKeysError = NotFound | Forbidden | GcpOpError;
+export type GetNamespacedTagKeysError =
+  | NotFound
+  | Forbidden
+  | TagKeyNotFound
+  | GcpOpError;
 /** Retrieves a TagKey by its namespaced name. This method will return `PERMISSION_DENIED` if the key does not exist or the user does not have permission to view it. */
 export const getNamespacedTagKeys: API.OperationMethod<
   GetNamespacedTagKeysRequest,
@@ -2778,12 +2898,16 @@ export const getNamespacedTagKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetNamespacedTagKeysRequest,
   output: TagKey,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, TagKeyNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetNamespacedTagValuesError = NotFound | Forbidden | GcpOpError;
+export type GetNamespacedTagValuesError =
+  | NotFound
+  | Forbidden
+  | TagValueNotFound
+  | GcpOpError;
 /** Retrieves a TagValue by its namespaced name. This method will return `PERMISSION_DENIED` if the value does not exist or the user does not have permission to view it. */
 export const getNamespacedTagValues: API.OperationMethod<
   GetNamespacedTagValuesRequest,
@@ -2793,7 +2917,7 @@ export const getNamespacedTagValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetNamespacedTagValuesRequest,
   output: TagValue,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, TagValueNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2828,7 +2952,11 @@ export const getOrganizations: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetProjectsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsError =
+  | NotFound
+  | Forbidden
+  | ProjectNotFound
+  | GcpOpError;
 /** Retrieves the project identified by the specified `name` (for example, `projects/415104041262`). The caller must have `resourcemanager.projects.get` permission for this project. */
 export const getProjects: API.OperationMethod<
   GetProjectsRequest,
@@ -2838,12 +2966,16 @@ export const getProjects: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsRequest,
   output: Project,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ProjectNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetTagKeysError = NotFound | Forbidden | GcpOpError;
+export type GetTagKeysError =
+  | NotFound
+  | Forbidden
+  | TagKeyNotFound
+  | GcpOpError;
 /** Retrieves a TagKey. This method will return `PERMISSION_DENIED` if the key does not exist or the user does not have permission to view it. */
 export const getTagKeys: API.OperationMethod<
   GetTagKeysRequest,
@@ -2853,12 +2985,16 @@ export const getTagKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetTagKeysRequest,
   output: TagKey,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, TagKeyNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetTagValuesError = NotFound | Forbidden | GcpOpError;
+export type GetTagValuesError =
+  | NotFound
+  | Forbidden
+  | TagValueNotFound
+  | GcpOpError;
 /** Retrieves a TagValue. This method will return `PERMISSION_DENIED` if the value does not exist or the user does not have permission to view it. */
 export const getTagValues: API.OperationMethod<
   GetTagValuesRequest,
@@ -2868,7 +3004,7 @@ export const getTagValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetTagValuesRequest,
   output: TagValue,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, TagValueNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2993,7 +3129,11 @@ export const listTagKeys: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListTagValuesError = NotFound | Forbidden | GcpOpError;
+export type ListTagValuesError =
+  | NotFound
+  | Forbidden
+  | TagValueNotFound
+  | GcpOpError;
 /** Lists all TagValues for a specific TagKey. */
 export const listTagValues: API.PaginatedOperationMethod<
   ListTagValuesRequest,
@@ -3004,7 +3144,7 @@ export const listTagValues: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListTagValuesRequest,
   output: ListTagValuesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, TagValueNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -3038,6 +3178,7 @@ export type MoveFoldersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FolderNotFound
   | GcpOpError;
 /** Moves a folder under a new resource parent. Returns an `Operation` which can be used to track the progress of the folder move workflow. Upon success, the `Operation.response` field will be populated with the moved folder. Upon failure, a `FolderOperationError` categorizing the failure cause will be returned - if the failure occurs synchronously then the `FolderOperationError` will be returned in the `Status.details` field. If it occurs asynchronously, then the FolderOperation will be returned in the `Operation.error` field. In addition, the `Operation.metadata` field will be populated with a `FolderOperation` message as an aid to stateless clients. Folder moves will be rejected if they violate either the naming, height, or fanout constraints described in the CreateFolder documentation. The caller must have `resourcemanager.folders.move` permission on the folder's current and proposed new parent. */
 export const moveFolders: API.OperationMethod<
@@ -3048,7 +3189,14 @@ export const moveFolders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: MoveFoldersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FolderNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3058,6 +3206,7 @@ export type MoveProjectsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProjectNotFound
   | GcpOpError;
 /** Move a project to another place in your resource hierarchy, under a new resource parent. Returns an operation which can be used to track the process of the project move workflow. Upon success, the `Operation.response` field will be populated with the moved project. The caller must have `resourcemanager.projects.move` permission on the project, on the project's current and proposed new parent. If project has no current parent, or it currently does not have an associated organization resource, you will also need the `resourcemanager.projects.setIamPolicy` permission in the project. */
 export const moveProjects: API.OperationMethod<
@@ -3068,7 +3217,14 @@ export const moveProjects: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: MoveProjectsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProjectNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3078,6 +3234,7 @@ export type PatchFoldersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FolderNotFound
   | GcpOpError;
 /** Updates a folder, changing its `display_name`. Changes to the folder `display_name` will be rejected if they violate either the `display_name` formatting rules or the naming constraints described in the CreateFolder documentation. The folder's `display_name` must start and end with a letter or digit, may contain letters, digits, spaces, hyphens and underscores and can be between 3 and 30 characters. This is captured by the regular expression: `\p{L}\p{N}{1,28}[\p{L}\p{N}]`. The caller must have `resourcemanager.folders.update` permission on the identified folder. If the update fails due to the unique name constraint then a `PreconditionFailure` explaining this violation will be returned in the Status.details field. */
 export const patchFolders: API.OperationMethod<
@@ -3088,7 +3245,14 @@ export const patchFolders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchFoldersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FolderNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3138,6 +3302,7 @@ export type PatchProjectsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProjectNotFound
   | GcpOpError;
 /** Updates the `display_name` and labels of the project identified by the specified `name` (for example, `projects/415104041262`). Deleting all labels requires an update mask for labels field. The caller must have `resourcemanager.projects.update` permission for this project. */
 export const patchProjects: API.OperationMethod<
@@ -3148,7 +3313,14 @@ export const patchProjects: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProjectNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3158,6 +3330,7 @@ export type PatchTagKeysError =
   | Forbidden
   | BadRequest
   | Conflict
+  | TagKeyNotFound
   | GcpOpError;
 /** Updates the attributes of the TagKey resource. */
 export const patchTagKeys: API.OperationMethod<
@@ -3168,7 +3341,14 @@ export const patchTagKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchTagKeysRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    TagKeyNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3178,6 +3358,7 @@ export type PatchTagValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | TagValueNotFound
   | GcpOpError;
 /** Updates the attributes of the TagValue resource. */
 export const patchTagValues: API.OperationMethod<
@@ -3188,7 +3369,14 @@ export const patchTagValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchTagValuesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    TagValueNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3458,6 +3646,7 @@ export type UndeleteFoldersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FolderNotFound
   | GcpOpError;
 /** Cancels the deletion request for a folder. This method may be called on a folder in any state. If the folder is in the ACTIVE state the result will be a no-op success. In order to succeed, the folder's parent must be in the ACTIVE state. In addition, reintroducing the folder into the tree must not violate folder naming, height, and fanout constraints described in the CreateFolder documentation. The caller must have `resourcemanager.folders.undelete` permission on the identified folder. */
 export const undeleteFolders: API.OperationMethod<
@@ -3468,7 +3657,14 @@ export const undeleteFolders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UndeleteFoldersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FolderNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3478,6 +3674,7 @@ export type UndeleteProjectsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProjectNotFound
   | GcpOpError;
 /** Restores the project identified by the specified `name` (for example, `projects/415104041262`). You can only use this method for a project that has a lifecycle state of DELETE_REQUESTED. After deletion starts, the project cannot be restored. The caller must have `resourcemanager.projects.undelete` permission for this project. */
 export const undeleteProjects: API.OperationMethod<
@@ -3488,7 +3685,14 @@ export const undeleteProjects: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UndeleteProjectsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProjectNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

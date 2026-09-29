@@ -39,6 +39,28 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** The access token lacks the Data Manager OAuth scope (`https://www.googleapis.com/auth/datamanager`) (HTTP 403 PERMISSION_DENIED, reason ACCESS_TOKEN_SCOPE_INSUFFICIENT: 'Request had insufficient authentication scopes.'). A `cloud-platform` token is not enough. Not retryable. */
+export class DataManagerScopeInsufficient
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<DataManagerScopeInsufficient>()(
+      "DataManagerScopeInsufficient",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "insufficient authentication scopes" },
+      },
+    ],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -3507,6 +3529,7 @@ export type CreateAccountTypesAccountsUserListsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataManagerScopeInsufficient
   | GcpOpError;
 /** Creates a UserList. Authorization Headers: This method supports the following optional headers to define how the API authorizes access for the request: * `login-account`: (Optional) The resource name of the account where the Google Account of the credentials is a user. If not set, defaults to the account of the request. Format: `accountTypes/{loginAccountType}/accounts/{loginAccountId}` * `linked-account`: (Optional) The resource name of the account with an established product link to the `login-account`. Format: `accountTypes/{linkedAccountType}/accounts/{linkedAccountId}` */
 export const createAccountTypesAccountsUserLists: API.OperationMethod<
@@ -3517,7 +3540,14 @@ export const createAccountTypesAccountsUserLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateAccountTypesAccountsUserListsRequest,
   output: UserList,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataManagerScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3547,6 +3577,7 @@ export type DeleteAccountTypesAccountsUserListsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataManagerScopeInsufficient
   | GcpOpError;
 /** Deletes a UserList. Authorization Headers: This method supports the following optional headers to define how the API authorizes access for the request: * `login-account`: (Optional) The resource name of the account where the Google Account of the credentials is a user. If not set, defaults to the account of the request. Format: `accountTypes/{loginAccountType}/accounts/{loginAccountId}` * `linked-account`: (Optional) The resource name of the account with an established product link to the `login-account`. Format: `accountTypes/{linkedAccountType}/accounts/{linkedAccountId}` */
 export const deleteAccountTypesAccountsUserLists: API.OperationMethod<
@@ -3557,7 +3588,14 @@ export const deleteAccountTypesAccountsUserLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteAccountTypesAccountsUserListsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataManagerScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3621,6 +3659,7 @@ export const getAccountTypesAccountsUserListGlobalLicenses: API.OperationMethod<
 export type GetAccountTypesAccountsUserListsError =
   | NotFound
   | Forbidden
+  | DataManagerScopeInsufficient
   | GcpOpError;
 /** Gets a UserList. Authorization Headers: This method supports the following optional headers to define how the API authorizes access for the request: * `login-account`: (Optional) The resource name of the account where the Google Account of the credentials is a user. If not set, defaults to the account of the request. Format: `accountTypes/{loginAccountType}/accounts/{loginAccountId}` * `linked-account`: (Optional) The resource name of the account with an established product link to the `login-account`. Format: `accountTypes/{linkedAccountType}/accounts/{linkedAccountId}` */
 export const getAccountTypesAccountsUserLists: API.OperationMethod<
@@ -3631,7 +3670,7 @@ export const getAccountTypesAccountsUserLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountTypesAccountsUserListsRequest,
   output: UserList,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataManagerScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3784,6 +3823,7 @@ export const listAccountTypesAccountsUserListGlobalLicensesUserListGlobalLicense
 export type ListAccountTypesAccountsUserListsError =
   | NotFound
   | Forbidden
+  | DataManagerScopeInsufficient
   | GcpOpError;
 /** Lists UserLists. Authorization Headers: This method supports the following optional headers to define how the API authorizes access for the request: * `login-account`: (Optional) The resource name of the account where the Google Account of the credentials is a user. If not set, defaults to the account of the request. Format: `accountTypes/{loginAccountType}/accounts/{loginAccountId}` * `linked-account`: (Optional) The resource name of the account with an established product link to the `login-account`. Format: `accountTypes/{linkedAccountType}/accounts/{linkedAccountId}` */
 export const listAccountTypesAccountsUserLists: API.PaginatedOperationMethod<
@@ -3795,7 +3835,7 @@ export const listAccountTypesAccountsUserLists: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAccountTypesAccountsUserListsRequest,
   output: ListUserListsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataManagerScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -3849,6 +3889,7 @@ export type PatchAccountTypesAccountsUserListsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataManagerScopeInsufficient
   | GcpOpError;
 /** Updates a UserList. Authorization Headers: This method supports the following optional headers to define how the API authorizes access for the request: * `login-account`: (Optional) The resource name of the account where the Google Account of the credentials is a user. If not set, defaults to the account of the request. Format: `accountTypes/{loginAccountType}/accounts/{loginAccountId}` * `linked-account`: (Optional) The resource name of the account with an established product link to the `login-account`. Format: `accountTypes/{linkedAccountType}/accounts/{linkedAccountId}` */
 export const patchAccountTypesAccountsUserLists: API.OperationMethod<
@@ -3859,7 +3900,14 @@ export const patchAccountTypesAccountsUserLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchAccountTypesAccountsUserListsRequest,
   output: UserList,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataManagerScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

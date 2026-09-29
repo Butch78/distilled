@@ -39,6 +39,27 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** A private services connection already exists for this network and service, so its allocated ranges cannot be changed through CreateConnection (HTTP 400 FAILED_PRECONDITION: 'Cannot modify allocated ranges in CreateConnection. Please use UpdateConnection.'), or the peering is already established. Not retryable; update the existing connection instead. */
+export class ConnectionAlreadyExists
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ConnectionAlreadyExists>()(
+      "ConnectionAlreadyExists",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      { status: 400, message: { includes: "Cannot modify allocated ranges" } },
+      { status: 400, message: { includes: "already exists" } },
+      { status: 400, message: { includes: "already established" } },
+    ],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -1615,6 +1636,7 @@ export type CreateServicesConnectionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ConnectionAlreadyExists
   | GcpOpError;
 /** Creates a private connection that establishes a VPC Network Peering connection to a VPC network in the service producer's organization. The administrator of the service consumer's VPC network invokes this method. The administrator must assign one or more allocated IP ranges for provisioning subnetworks in the service producer's VPC network. This connection is used for all supported services in the service producer's organization, so it only needs to be invoked once. */
 export const createServicesConnections: API.OperationMethod<
@@ -1625,7 +1647,14 @@ export const createServicesConnections: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateServicesConnectionsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ConnectionAlreadyExists,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1925,6 +1954,7 @@ export type PatchServicesConnectionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ConnectionAlreadyExists
   | GcpOpError;
 /** Updates the allocated ranges that are assigned to a connection. */
 export const patchServicesConnections: API.OperationMethod<
@@ -1935,7 +1965,14 @@ export const patchServicesConnections: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchServicesConnectionsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ConnectionAlreadyExists,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

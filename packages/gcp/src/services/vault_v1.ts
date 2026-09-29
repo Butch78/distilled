@@ -65,6 +65,28 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The access token lacks the Vault OAuth scope (`https://www.googleapis.com/auth/ediscovery`) (HTTP 403 PERMISSION_DENIED, reason ACCESS_TOKEN_SCOPE_INSUFFICIENT: 'Request had insufficient authentication scopes.'). A `cloud-platform` token is not enough. Not retryable. */
+export class VaultScopeInsufficient
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<VaultScopeInsufficient>()(
+      "VaultScopeInsufficient",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "insufficient authentication scopes" },
+      },
+    ],
+  ) {}
+
 export type StringList = Array<string>;
 export const StringList = /*@__PURE__*/ S.Array(
   S.String,
@@ -2153,6 +2175,7 @@ export type AddHeldAccountsMattersHoldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Adds accounts to a hold. Returns a list of accounts that have been successfully added. Accounts can be added only to an existing account-based hold. */
 export const addHeldAccountsMattersHolds: API.OperationMethod<
@@ -2163,7 +2186,14 @@ export const addHeldAccountsMattersHolds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: AddHeldAccountsMattersHoldsRequest,
   output: AddHeldAccountsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2173,6 +2203,7 @@ export type AddPermissionsMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Adds an account as a matter collaborator. */
 export const addPermissionsMatters: API.OperationMethod<
@@ -2183,7 +2214,14 @@ export const addPermissionsMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: AddPermissionsMattersRequest,
   output: MatterPermission,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2213,6 +2251,7 @@ export type CloseMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Closes the specified matter. Returns the matter with updated state. */
 export const closeMatters: API.OperationMethod<
@@ -2223,7 +2262,14 @@ export const closeMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CloseMattersRequest,
   output: CloseMatterResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2233,6 +2279,7 @@ export type CountMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Counts the accounts processed by the specified query. */
 export const countMatters: API.OperationMethod<
@@ -2243,7 +2290,14 @@ export const countMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CountMattersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2253,6 +2307,7 @@ export type CreateMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Creates a matter with the given name and description. The initial state is open, and the owner is the method caller. Returns the created matter with default view. */
 export const createMatters: API.OperationMethod<
@@ -2263,7 +2318,14 @@ export const createMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateMattersRequest,
   output: Matter,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2273,6 +2335,7 @@ export type CreateMattersExportsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Creates an export. */
 export const createMattersExports: API.OperationMethod<
@@ -2283,7 +2346,14 @@ export const createMattersExports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateMattersExportsRequest,
   output: Export,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2293,6 +2363,7 @@ export type CreateMattersHoldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Creates a hold in the specified matter. */
 export const createMattersHolds: API.OperationMethod<
@@ -2303,7 +2374,14 @@ export const createMattersHolds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateMattersHoldsRequest,
   output: Hold,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2313,6 +2391,7 @@ export type CreateMattersHoldsAccountsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Adds an account to a hold. Accounts can be added only to a hold that does not have an organizational unit set. If you try to add an account to an organizational unit-based hold, an error is returned. */
 export const createMattersHoldsAccounts: API.OperationMethod<
@@ -2323,7 +2402,14 @@ export const createMattersHoldsAccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateMattersHoldsAccountsRequest,
   output: HeldAccount,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2333,6 +2419,7 @@ export type CreateMattersSavedQueriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Creates a saved query. */
 export const createMattersSavedQueries: API.OperationMethod<
@@ -2343,7 +2430,14 @@ export const createMattersSavedQueries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateMattersSavedQueriesRequest,
   output: SavedQuery,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2353,6 +2447,7 @@ export type DeleteMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Deletes the specified matter. Returns the matter with updated state. */
 export const deleteMatters: API.OperationMethod<
@@ -2363,7 +2458,14 @@ export const deleteMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteMattersRequest,
   output: Matter,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2373,6 +2475,7 @@ export type DeleteMattersExportsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Deletes an export. */
 export const deleteMattersExports: API.OperationMethod<
@@ -2383,7 +2486,14 @@ export const deleteMattersExports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteMattersExportsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2393,6 +2503,7 @@ export type DeleteMattersHoldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Removes the specified hold and releases the accounts or organizational unit covered by the hold. If the data is not preserved by another hold or retention rule, it might be purged. */
 export const deleteMattersHolds: API.OperationMethod<
@@ -2403,7 +2514,14 @@ export const deleteMattersHolds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteMattersHoldsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2413,6 +2531,7 @@ export type DeleteMattersHoldsAccountsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Removes an account from a hold. */
 export const deleteMattersHoldsAccounts: API.OperationMethod<
@@ -2423,7 +2542,14 @@ export const deleteMattersHoldsAccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteMattersHoldsAccountsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2433,6 +2559,7 @@ export type DeleteMattersSavedQueriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Deletes the specified saved query. */
 export const deleteMattersSavedQueries: API.OperationMethod<
@@ -2443,7 +2570,14 @@ export const deleteMattersSavedQueries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteMattersSavedQueriesRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2468,7 +2602,11 @@ export const deleteOperations: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetMattersError = NotFound | Forbidden | GcpOpError;
+export type GetMattersError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Gets the specified matter. */
 export const getMatters: API.OperationMethod<
   GetMattersRequest,
@@ -2478,12 +2616,16 @@ export const getMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetMattersRequest,
   output: Matter,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetMattersExportsError = NotFound | Forbidden | GcpOpError;
+export type GetMattersExportsError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Gets an export. */
 export const getMattersExports: API.OperationMethod<
   GetMattersExportsRequest,
@@ -2493,12 +2635,16 @@ export const getMattersExports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetMattersExportsRequest,
   output: Export,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetMattersHoldsError = NotFound | Forbidden | GcpOpError;
+export type GetMattersHoldsError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Gets the specified hold. */
 export const getMattersHolds: API.OperationMethod<
   GetMattersHoldsRequest,
@@ -2508,12 +2654,16 @@ export const getMattersHolds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetMattersHoldsRequest,
   output: Hold,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetMattersSavedQueriesError = NotFound | Forbidden | GcpOpError;
+export type GetMattersSavedQueriesError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Retrieves the specified saved query. */
 export const getMattersSavedQueries: API.OperationMethod<
   GetMattersSavedQueriesRequest,
@@ -2523,7 +2673,7 @@ export const getMattersSavedQueries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetMattersSavedQueriesRequest,
   output: SavedQuery,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2543,7 +2693,11 @@ export const getOperations: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type ListMattersError = NotFound | Forbidden | GcpOpError;
+export type ListMattersError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Lists matters the requestor has access to. */
 export const listMatters: API.PaginatedOperationMethod<
   ListMattersRequest,
@@ -2554,7 +2708,7 @@ export const listMatters: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListMattersRequest,
   output: ListMattersResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2563,7 +2717,11 @@ export const listMatters: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListMattersExportsError = NotFound | Forbidden | GcpOpError;
+export type ListMattersExportsError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Lists details about the exports in the specified matter. */
 export const listMattersExports: API.PaginatedOperationMethod<
   ListMattersExportsRequest,
@@ -2574,7 +2732,7 @@ export const listMattersExports: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListMattersExportsRequest,
   output: ListExportsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2583,7 +2741,11 @@ export const listMattersExports: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListMattersHoldsError = NotFound | Forbidden | GcpOpError;
+export type ListMattersHoldsError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Lists the holds in a matter. */
 export const listMattersHolds: API.PaginatedOperationMethod<
   ListMattersHoldsRequest,
@@ -2594,7 +2756,7 @@ export const listMattersHolds: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListMattersHoldsRequest,
   output: ListHoldsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2603,7 +2765,11 @@ export const listMattersHolds: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListMattersHoldsAccountsError = NotFound | Forbidden | GcpOpError;
+export type ListMattersHoldsAccountsError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Lists the accounts covered by a hold. This can list only individually-specified accounts covered by the hold. If the hold covers an organizational unit, use the [Admin SDK](https://developers.google.com/admin-sdk/). to list the members of the organizational unit on hold. */
 export const listMattersHoldsAccounts: API.OperationMethod<
   ListMattersHoldsAccountsRequest,
@@ -2613,12 +2779,16 @@ export const listMattersHoldsAccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListMattersHoldsAccountsRequest,
   output: ListHeldAccountsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListMattersSavedQueriesError = NotFound | Forbidden | GcpOpError;
+export type ListMattersSavedQueriesError =
+  | NotFound
+  | Forbidden
+  | VaultScopeInsufficient
+  | GcpOpError;
 /** Lists the saved queries in a matter. */
 export const listMattersSavedQueries: API.PaginatedOperationMethod<
   ListMattersSavedQueriesRequest,
@@ -2629,7 +2799,7 @@ export const listMattersSavedQueries: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListMattersSavedQueriesRequest,
   output: ListSavedQueriesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, VaultScopeInsufficient, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2663,6 +2833,7 @@ export type RemoveHeldAccountsMattersHoldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Removes the specified accounts from a hold. Returns a list of statuses in the same order as the request. */
 export const removeHeldAccountsMattersHolds: API.OperationMethod<
@@ -2673,7 +2844,14 @@ export const removeHeldAccountsMattersHolds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: RemoveHeldAccountsMattersHoldsRequest,
   output: RemoveHeldAccountsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2683,6 +2861,7 @@ export type RemovePermissionsMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Removes an account as a matter collaborator. */
 export const removePermissionsMatters: API.OperationMethod<
@@ -2693,7 +2872,14 @@ export const removePermissionsMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: RemovePermissionsMattersRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2703,6 +2889,7 @@ export type ReopenMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Reopens the specified matter. Returns the matter with updated state. */
 export const reopenMatters: API.OperationMethod<
@@ -2713,7 +2900,14 @@ export const reopenMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ReopenMattersRequest,
   output: ReopenMatterResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2723,6 +2917,7 @@ export type UndeleteMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Undeletes the specified matter. Returns the matter with updated state. */
 export const undeleteMatters: API.OperationMethod<
@@ -2733,7 +2928,14 @@ export const undeleteMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UndeleteMattersRequest,
   output: Matter,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2743,6 +2945,7 @@ export type UpdateMattersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Updates the specified matter. This updates only the name and description of the matter, identified by matter ID. Changes to any other fields are ignored. Returns the default view of the matter. */
 export const updateMatters: API.OperationMethod<
@@ -2753,7 +2956,14 @@ export const updateMatters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateMattersRequest,
   output: Matter,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2763,6 +2973,7 @@ export type UpdateMattersHoldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | VaultScopeInsufficient
   | GcpOpError;
 /** Updates the scope (organizational unit or accounts) and query parameters of a hold. You cannot add accounts to a hold that covers an organizational unit, nor can you add organizational units to a hold that covers individual accounts. If you try, the unsupported values are ignored. */
 export const updateMattersHolds: API.OperationMethod<
@@ -2773,7 +2984,14 @@ export const updateMattersHolds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateMattersHoldsRequest,
   output: Hold,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    VaultScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

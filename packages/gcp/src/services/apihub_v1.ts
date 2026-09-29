@@ -13,6 +13,28 @@ import * as Retry from "../retry.ts";
 
 export type { GcpOpError, GcpOpContext };
 
+/** The project has no provisioned API hub instance (HTTP 400 FAILED_PRECONDITION: "Invalid resource state for ...: API Hub instance is not provisioned for this project"). */
+export class ApiHubNotProvisioned
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ApiHubNotProvisioned>()(
+      "ApiHubNotProvisioned",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "API Hub instance is not provisioned" },
+      },
+    ],
+  ) {}
+
 export class BadRequest
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<BadRequest>()("BadRequest", {
@@ -6159,6 +6181,7 @@ export type CancelProjectsLocationsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use Operations.GetOperation or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an Operation.error value with a google.rpc.Status.code of `1`, corresponding to `Code.CANCELLED`. */
 export const cancelProjectsLocationsOperations: API.OperationMethod<
@@ -6169,7 +6192,14 @@ export const cancelProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelProjectsLocationsOperationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6179,6 +6209,7 @@ export type CollectApiDataProjectsLocationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Collect API data from a source and push it to Hub's collect layer. */
 export const collectApiDataProjectsLocations: API.OperationMethod<
@@ -6189,7 +6220,14 @@ export const collectApiDataProjectsLocations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CollectApiDataProjectsLocationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6199,6 +6237,7 @@ export type ConfigureAndDeployServerProjectsLocationsServersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Configures and deploys a given server config for given target. Currently this API supports only deploying MCP server in Apigee X. For mcp server deployment in apigee X, if there is already a mcp proxy deployed, then this method will try to overwrite it by creating new revision i.e. all existing tools will be removed and new set of tools will be deployed. */
 export const configureAndDeployServerProjectsLocationsServers: API.OperationMethod<
@@ -6209,7 +6248,14 @@ export const configureAndDeployServerProjectsLocationsServers: API.OperationMeth
 > = /*@__PURE__*/ API.make(() => ({
   input: ConfigureAndDeployServerProjectsLocationsServersRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6219,6 +6265,7 @@ export type CreateProjectsLocationsApiHubInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Provisions instance resources for the API Hub. */
 export const createProjectsLocationsApiHubInstances: API.OperationMethod<
@@ -6229,7 +6276,14 @@ export const createProjectsLocationsApiHubInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsApiHubInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6239,6 +6293,7 @@ export type CreateProjectsLocationsApisError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create an API resource in the API hub. Once an API resource is created, versions can be added to it. */
 export const createProjectsLocationsApis: API.OperationMethod<
@@ -6249,7 +6304,14 @@ export const createProjectsLocationsApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsApisRequest,
   output: GoogleCloudApihubV1Api,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6259,6 +6321,7 @@ export type CreateProjectsLocationsApisVersionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create an API version for an API resource in the API hub. */
 export const createProjectsLocationsApisVersions: API.OperationMethod<
@@ -6269,7 +6332,14 @@ export const createProjectsLocationsApisVersions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsApisVersionsRequest,
   output: GoogleCloudApihubV1Version,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6279,6 +6349,7 @@ export type CreateProjectsLocationsApisVersionsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create an apiOperation in an API version. An apiOperation can be created only if the version has no apiOperations which were created by parsing a spec. */
 export const createProjectsLocationsApisVersionsOperations: API.OperationMethod<
@@ -6289,7 +6360,14 @@ export const createProjectsLocationsApisVersionsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsApisVersionsOperationsRequest,
   output: GoogleCloudApihubV1ApiOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6299,6 +6377,7 @@ export type CreateProjectsLocationsApisVersionsSpecsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Add a spec to an API version in the API hub. Multiple specs can be added to an API version. Note, while adding a spec, at least one of `contents` or `source_uri` must be provided. If `contents` is provided, then `spec_type` must also be provided. On adding a spec with contents to the version, the operations present in it will be added to the version.Note that the file contents in the spec should be of the same type as defined in the `projects/{project}/locations/{location}/attributes/system-spec-type` attribute associated with spec resource. Note that specs of various types can be uploaded, however parsing of details is supported for OpenAPI spec currently. In order to access the information parsed from the spec, use the GetSpec method. In order to access the raw contents for a particular spec, use the GetSpecContents method. In order to access the operations parsed from the spec, use the ListAPIOperations method. */
 export const createProjectsLocationsApisVersionsSpecs: API.OperationMethod<
@@ -6309,7 +6388,14 @@ export const createProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsApisVersionsSpecsRequest,
   output: GoogleCloudApihubV1Spec,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6319,6 +6405,7 @@ export type CreateProjectsLocationsAttributesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create a user defined attribute. Certain pre defined attributes are already created by the API hub. These attributes will have type as `SYSTEM_DEFINED` and can be listed via ListAttributes method. Allowed values for the same can be updated via UpdateAttribute method. */
 export const createProjectsLocationsAttributes: API.OperationMethod<
@@ -6329,7 +6416,14 @@ export const createProjectsLocationsAttributes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsAttributesRequest,
   output: GoogleCloudApihubV1Attribute,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6339,6 +6433,7 @@ export type CreateProjectsLocationsCurationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create a curation resource in the API hub. Once a curation resource is created, plugin instances can start using it. */
 export const createProjectsLocationsCurations: API.OperationMethod<
@@ -6349,7 +6444,14 @@ export const createProjectsLocationsCurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCurationsRequest,
   output: GoogleCloudApihubV1Curation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6359,6 +6461,7 @@ export type CreateProjectsLocationsDependenciesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create a dependency between two entities in the API hub. */
 export const createProjectsLocationsDependencies: API.OperationMethod<
@@ -6369,7 +6472,14 @@ export const createProjectsLocationsDependencies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsDependenciesRequest,
   output: GoogleCloudApihubV1Dependency,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6379,6 +6489,7 @@ export type CreateProjectsLocationsDeploymentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create a deployment resource in the API hub. Once a deployment resource is created, it can be associated with API versions. */
 export const createProjectsLocationsDeployments: API.OperationMethod<
@@ -6389,7 +6500,14 @@ export const createProjectsLocationsDeployments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsDeploymentsRequest,
   output: GoogleCloudApihubV1Deployment,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6399,6 +6517,7 @@ export type CreateProjectsLocationsExternalApisError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create an External API resource in the API hub. */
 export const createProjectsLocationsExternalApis: API.OperationMethod<
@@ -6409,7 +6528,14 @@ export const createProjectsLocationsExternalApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsExternalApisRequest,
   output: GoogleCloudApihubV1ExternalApi,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6419,6 +6545,7 @@ export type CreateProjectsLocationsHostProjectRegistrationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create a host project registration. A Google cloud project can be registered as a host project if it is not attached as a runtime project to another host project. A project can be registered as a host project only once. Subsequent register calls for the same project will fail. */
 export const createProjectsLocationsHostProjectRegistrations: API.OperationMethod<
@@ -6429,7 +6556,14 @@ export const createProjectsLocationsHostProjectRegistrations: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsHostProjectRegistrationsRequest,
   output: GoogleCloudApihubV1HostProjectRegistration,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6439,6 +6573,7 @@ export type CreateProjectsLocationsPluginsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Create an API Hub plugin resource in the API hub. Once a plugin is created, it can be used to create plugin instances. */
 export const createProjectsLocationsPlugins: API.OperationMethod<
@@ -6449,7 +6584,14 @@ export const createProjectsLocationsPlugins: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsPluginsRequest,
   output: GoogleCloudApihubV1Plugin,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6459,6 +6601,7 @@ export type CreateProjectsLocationsPluginsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Creates a Plugin instance in the API hub. */
 export const createProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -6469,7 +6612,14 @@ export const createProjectsLocationsPluginsInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsPluginsInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6479,6 +6629,7 @@ export type CreateProjectsLocationsRuntimeProjectAttachmentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Attaches a runtime project to the host project. */
 export const createProjectsLocationsRuntimeProjectAttachments: API.OperationMethod<
@@ -6489,7 +6640,14 @@ export const createProjectsLocationsRuntimeProjectAttachments: API.OperationMeth
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsRuntimeProjectAttachmentsRequest,
   output: GoogleCloudApihubV1RuntimeProjectAttachment,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6499,6 +6657,7 @@ export type DeleteProjectsLocationsApiHubInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Deletes the API hub instance. Deleting the API hub instance will also result in the removal of all associated runtime project attachments and the host project registration. */
 export const deleteProjectsLocationsApiHubInstances: API.OperationMethod<
@@ -6509,7 +6668,14 @@ export const deleteProjectsLocationsApiHubInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsApiHubInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6519,6 +6685,7 @@ export type DeleteProjectsLocationsApisError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete an API resource in the API hub. API can only be deleted if all underlying versions are deleted. */
 export const deleteProjectsLocationsApis: API.OperationMethod<
@@ -6529,7 +6696,14 @@ export const deleteProjectsLocationsApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsApisRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6539,6 +6713,7 @@ export type DeleteProjectsLocationsApisVersionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete an API version. Version can only be deleted if all underlying specs, operations, definitions and linked deployments are deleted. */
 export const deleteProjectsLocationsApisVersions: API.OperationMethod<
@@ -6549,7 +6724,14 @@ export const deleteProjectsLocationsApisVersions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsApisVersionsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6559,6 +6741,7 @@ export type DeleteProjectsLocationsApisVersionsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete an operation in an API version and we can delete only the operations created via create API. If the operation was created by parsing the spec, then it can be deleted by editing or deleting the spec. */
 export const deleteProjectsLocationsApisVersionsOperations: API.OperationMethod<
@@ -6569,7 +6752,14 @@ export const deleteProjectsLocationsApisVersionsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsApisVersionsOperationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6579,6 +6769,7 @@ export type DeleteProjectsLocationsApisVersionsSpecsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete a spec. Deleting a spec will also delete the associated operations from the version. */
 export const deleteProjectsLocationsApisVersionsSpecs: API.OperationMethod<
@@ -6589,7 +6780,14 @@ export const deleteProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsApisVersionsSpecsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6599,6 +6797,7 @@ export type DeleteProjectsLocationsAttributesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete an attribute. Note: System defined attributes cannot be deleted. All associations of the attribute being deleted with any API hub resource will also get deleted. */
 export const deleteProjectsLocationsAttributes: API.OperationMethod<
@@ -6609,7 +6808,14 @@ export const deleteProjectsLocationsAttributes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsAttributesRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6619,6 +6825,7 @@ export type DeleteProjectsLocationsCurationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete a curation resource in the API hub. A curation can only be deleted if it's not being used by any plugin instance. */
 export const deleteProjectsLocationsCurations: API.OperationMethod<
@@ -6629,7 +6836,14 @@ export const deleteProjectsLocationsCurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCurationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6639,6 +6853,7 @@ export type DeleteProjectsLocationsDependenciesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete the dependency resource. */
 export const deleteProjectsLocationsDependencies: API.OperationMethod<
@@ -6649,7 +6864,14 @@ export const deleteProjectsLocationsDependencies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsDependenciesRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6659,6 +6881,7 @@ export type DeleteProjectsLocationsDeploymentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete a deployment resource in the API hub. */
 export const deleteProjectsLocationsDeployments: API.OperationMethod<
@@ -6669,7 +6892,14 @@ export const deleteProjectsLocationsDeployments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsDeploymentsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6679,6 +6909,7 @@ export type DeleteProjectsLocationsExternalApisError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete an External API resource in the API hub. */
 export const deleteProjectsLocationsExternalApis: API.OperationMethod<
@@ -6689,7 +6920,14 @@ export const deleteProjectsLocationsExternalApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsExternalApisRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6699,6 +6937,7 @@ export type DeleteProjectsLocationsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Deletes a long-running operation. This method indicates that the client is no longer interested in the operation result. It does not cancel the operation. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. */
 export const deleteProjectsLocationsOperations: API.OperationMethod<
@@ -6709,7 +6948,14 @@ export const deleteProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsOperationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6719,6 +6965,7 @@ export type DeleteProjectsLocationsPluginsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete a Plugin in API hub. Note, only user owned plugins can be deleted via this method. */
 export const deleteProjectsLocationsPlugins: API.OperationMethod<
@@ -6729,7 +6976,14 @@ export const deleteProjectsLocationsPlugins: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsPluginsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6739,6 +6993,7 @@ export type DeleteProjectsLocationsPluginsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Deletes a plugin instance in the API hub. */
 export const deleteProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -6749,7 +7004,14 @@ export const deleteProjectsLocationsPluginsInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsPluginsInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6759,6 +7021,7 @@ export type DeleteProjectsLocationsRuntimeProjectAttachmentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Delete a runtime project attachment in the API Hub. This call will detach the runtime project from the host project. */
 export const deleteProjectsLocationsRuntimeProjectAttachments: API.OperationMethod<
@@ -6769,7 +7032,14 @@ export const deleteProjectsLocationsRuntimeProjectAttachments: API.OperationMeth
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsRuntimeProjectAttachmentsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6779,6 +7049,7 @@ export type DisableActionProjectsLocationsPluginsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Disables a plugin instance in the API hub. */
 export const disableActionProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -6789,7 +7060,14 @@ export const disableActionProjectsLocationsPluginsInstances: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: DisableActionProjectsLocationsPluginsInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6799,6 +7077,7 @@ export type DisableProjectsLocationsPluginsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Disables a plugin. The `state` of the plugin after disabling is `DISABLED` */
 export const disableProjectsLocationsPlugins: API.OperationMethod<
@@ -6809,7 +7088,14 @@ export const disableProjectsLocationsPlugins: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DisableProjectsLocationsPluginsRequest,
   output: GoogleCloudApihubV1Plugin,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6819,6 +7105,7 @@ export type EnableActionProjectsLocationsPluginsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Enables a plugin instance in the API hub. */
 export const enableActionProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -6829,7 +7116,14 @@ export const enableActionProjectsLocationsPluginsInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: EnableActionProjectsLocationsPluginsInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6839,6 +7133,7 @@ export type EnableProjectsLocationsPluginsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Enables a plugin. The `state` of the plugin after enabling is `ENABLED` */
 export const enableProjectsLocationsPlugins: API.OperationMethod<
@@ -6849,7 +7144,14 @@ export const enableProjectsLocationsPlugins: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: EnableProjectsLocationsPluginsRequest,
   output: GoogleCloudApihubV1Plugin,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6859,6 +7161,7 @@ export type ExecuteActionProjectsLocationsPluginsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Executes a plugin instance in the API hub. */
 export const executeActionProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -6869,7 +7172,14 @@ export const executeActionProjectsLocationsPluginsInstances: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: ExecuteActionProjectsLocationsPluginsInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6877,6 +7187,7 @@ export const executeActionProjectsLocationsPluginsInstances: API.OperationMethod
 export type FetchAdditionalSpecContentProjectsLocationsApisVersionsSpecsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Fetch additional spec content. */
 export const fetchAdditionalSpecContentProjectsLocationsApisVersionsSpecs: API.OperationMethod<
@@ -6887,7 +7198,7 @@ export const fetchAdditionalSpecContentProjectsLocationsApisVersionsSpecs: API.O
 > = /*@__PURE__*/ API.make(() => ({
   input: FetchAdditionalSpecContentProjectsLocationsApisVersionsSpecsRequest,
   output: GoogleCloudApihubV1FetchAdditionalSpecContentResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6918,6 +7229,7 @@ export const getApiViewsProjectsLocations: API.PaginatedOperationMethod<
 export type GetContentsProjectsLocationsApisVersionsSpecsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get spec contents. */
 export const getContentsProjectsLocationsApisVersionsSpecs: API.OperationMethod<
@@ -6928,7 +7240,7 @@ export const getContentsProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetContentsProjectsLocationsApisVersionsSpecsRequest,
   output: GoogleCloudApihubV1SpecContents,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6936,6 +7248,7 @@ export const getContentsProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 export type GetContentsProjectsLocationsPluginsStyleGuideError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get the contents of the style guide. */
 export const getContentsProjectsLocationsPluginsStyleGuide: API.OperationMethod<
@@ -6946,12 +7259,16 @@ export const getContentsProjectsLocationsPluginsStyleGuide: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetContentsProjectsLocationsPluginsStyleGuideRequest,
   output: GoogleCloudApihubV1StyleGuideContents,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsLocationsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsLocationsError =
+  | NotFound
+  | Forbidden
+  | ApiHubNotProvisioned
+  | GcpOpError;
 /** Gets information about a location. */
 export const getProjectsLocations: API.OperationMethod<
   GetProjectsLocationsRequest,
@@ -6961,12 +7278,16 @@ export const getProjectsLocations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsRequest,
   output: GoogleCloudLocationLocation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsLocationsAddonsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsLocationsAddonsError =
+  | NotFound
+  | Forbidden
+  | ApiHubNotProvisioned
+  | GcpOpError;
 /** Get an addon. */
 export const getProjectsLocationsAddons: API.OperationMethod<
   GetProjectsLocationsAddonsRequest,
@@ -6976,7 +7297,7 @@ export const getProjectsLocationsAddons: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsAddonsRequest,
   output: GoogleCloudApihubV1Addon,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6984,6 +7305,7 @@ export const getProjectsLocationsAddons: API.OperationMethod<
 export type GetProjectsLocationsApiHubInstancesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Gets details of a single API Hub instance. */
 export const getProjectsLocationsApiHubInstances: API.OperationMethod<
@@ -6994,12 +7316,16 @@ export const getProjectsLocationsApiHubInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsApiHubInstancesRequest,
   output: GoogleCloudApihubV1ApiHubInstance,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsLocationsApisError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsLocationsApisError =
+  | NotFound
+  | Forbidden
+  | ApiHubNotProvisioned
+  | GcpOpError;
 /** Get API resource details including the API versions contained in it. */
 export const getProjectsLocationsApis: API.OperationMethod<
   GetProjectsLocationsApisRequest,
@@ -7009,7 +7335,7 @@ export const getProjectsLocationsApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsApisRequest,
   output: GoogleCloudApihubV1Api,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7017,6 +7343,7 @@ export const getProjectsLocationsApis: API.OperationMethod<
 export type GetProjectsLocationsApisVersionsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about the API version of an API resource. This will include information about the specs and operations present in the API version as well as the deployments linked to it. */
 export const getProjectsLocationsApisVersions: API.OperationMethod<
@@ -7027,7 +7354,7 @@ export const getProjectsLocationsApisVersions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsApisVersionsRequest,
   output: GoogleCloudApihubV1Version,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7035,6 +7362,7 @@ export const getProjectsLocationsApisVersions: API.OperationMethod<
 export type GetProjectsLocationsApisVersionsDefinitionsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about a definition in an API version. */
 export const getProjectsLocationsApisVersionsDefinitions: API.OperationMethod<
@@ -7045,7 +7373,7 @@ export const getProjectsLocationsApisVersionsDefinitions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsApisVersionsDefinitionsRequest,
   output: GoogleCloudApihubV1Definition,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7053,6 +7381,7 @@ export const getProjectsLocationsApisVersionsDefinitions: API.OperationMethod<
 export type GetProjectsLocationsApisVersionsOperationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about a particular operation in API version. */
 export const getProjectsLocationsApisVersionsOperations: API.OperationMethod<
@@ -7063,7 +7392,7 @@ export const getProjectsLocationsApisVersionsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsApisVersionsOperationsRequest,
   output: GoogleCloudApihubV1ApiOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7071,6 +7400,7 @@ export const getProjectsLocationsApisVersionsOperations: API.OperationMethod<
 export type GetProjectsLocationsApisVersionsSpecsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about the information parsed from a spec. Note that this method does not return the raw spec contents. Use GetSpecContents method to retrieve the same. */
 export const getProjectsLocationsApisVersionsSpecs: API.OperationMethod<
@@ -7081,7 +7411,7 @@ export const getProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsApisVersionsSpecsRequest,
   output: GoogleCloudApihubV1Spec,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7089,6 +7419,7 @@ export const getProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 export type GetProjectsLocationsAttributesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about the attribute. */
 export const getProjectsLocationsAttributes: API.OperationMethod<
@@ -7099,7 +7430,7 @@ export const getProjectsLocationsAttributes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsAttributesRequest,
   output: GoogleCloudApihubV1Attribute,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7107,6 +7438,7 @@ export const getProjectsLocationsAttributes: API.OperationMethod<
 export type GetProjectsLocationsCurationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get curation resource details. */
 export const getProjectsLocationsCurations: API.OperationMethod<
@@ -7117,7 +7449,7 @@ export const getProjectsLocationsCurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCurationsRequest,
   output: GoogleCloudApihubV1Curation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7125,6 +7457,7 @@ export const getProjectsLocationsCurations: API.OperationMethod<
 export type GetProjectsLocationsDependenciesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about a dependency resource in the API hub. */
 export const getProjectsLocationsDependencies: API.OperationMethod<
@@ -7135,7 +7468,7 @@ export const getProjectsLocationsDependencies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsDependenciesRequest,
   output: GoogleCloudApihubV1Dependency,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7143,6 +7476,7 @@ export const getProjectsLocationsDependencies: API.OperationMethod<
 export type GetProjectsLocationsDeploymentsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about a deployment and the API versions linked to it. */
 export const getProjectsLocationsDeployments: API.OperationMethod<
@@ -7153,7 +7487,7 @@ export const getProjectsLocationsDeployments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsDeploymentsRequest,
   output: GoogleCloudApihubV1Deployment,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7161,6 +7495,7 @@ export const getProjectsLocationsDeployments: API.OperationMethod<
 export type GetProjectsLocationsDiscoveredApiObservationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Gets a DiscoveredAPIObservation in a given project, location and ApiObservation. */
 export const getProjectsLocationsDiscoveredApiObservations: API.OperationMethod<
@@ -7171,7 +7506,7 @@ export const getProjectsLocationsDiscoveredApiObservations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsDiscoveredApiObservationsRequest,
   output: GoogleCloudApihubV1DiscoveredApiObservation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7179,6 +7514,7 @@ export const getProjectsLocationsDiscoveredApiObservations: API.OperationMethod<
 export type GetProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Gets a DiscoveredAPIOperation in a given project, location, ApiObservation and ApiOperation. */
 export const getProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperations: API.OperationMethod<
@@ -7190,7 +7526,7 @@ export const getProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperation
   input:
     GetProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperationsRequest,
   output: GoogleCloudApihubV1DiscoveredApiOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7198,6 +7534,7 @@ export const getProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperation
 export type GetProjectsLocationsExternalApisError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get details about an External API resource in the API hub. */
 export const getProjectsLocationsExternalApis: API.OperationMethod<
@@ -7208,7 +7545,7 @@ export const getProjectsLocationsExternalApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsExternalApisRequest,
   output: GoogleCloudApihubV1ExternalApi,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7216,6 +7553,7 @@ export const getProjectsLocationsExternalApis: API.OperationMethod<
 export type GetProjectsLocationsHostProjectRegistrationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get a host project registration. */
 export const getProjectsLocationsHostProjectRegistrations: API.OperationMethod<
@@ -7226,7 +7564,7 @@ export const getProjectsLocationsHostProjectRegistrations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsHostProjectRegistrationsRequest,
   output: GoogleCloudApihubV1HostProjectRegistration,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7234,6 +7572,7 @@ export const getProjectsLocationsHostProjectRegistrations: API.OperationMethod<
 export type GetProjectsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsOperations: API.OperationMethod<
@@ -7244,7 +7583,7 @@ export const getProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7252,6 +7591,7 @@ export const getProjectsLocationsOperations: API.OperationMethod<
 export type GetProjectsLocationsPluginsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get an API Hub plugin. */
 export const getProjectsLocationsPlugins: API.OperationMethod<
@@ -7262,7 +7602,7 @@ export const getProjectsLocationsPlugins: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsPluginsRequest,
   output: GoogleCloudApihubV1Plugin,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7270,6 +7610,7 @@ export const getProjectsLocationsPlugins: API.OperationMethod<
 export type GetProjectsLocationsPluginsInstancesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get an API Hub plugin instance. */
 export const getProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -7280,7 +7621,7 @@ export const getProjectsLocationsPluginsInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsPluginsInstancesRequest,
   output: GoogleCloudApihubV1PluginInstance,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7288,6 +7629,7 @@ export const getProjectsLocationsPluginsInstances: API.OperationMethod<
 export type GetProjectsLocationsRuntimeProjectAttachmentsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Gets a runtime project attachment. */
 export const getProjectsLocationsRuntimeProjectAttachments: API.OperationMethod<
@@ -7298,7 +7640,7 @@ export const getProjectsLocationsRuntimeProjectAttachments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsRuntimeProjectAttachmentsRequest,
   output: GoogleCloudApihubV1RuntimeProjectAttachment,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7306,6 +7648,7 @@ export const getProjectsLocationsRuntimeProjectAttachments: API.OperationMethod<
 export type GetStyleGuideProjectsLocationsPluginsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Get the style guide being used for linting. */
 export const getStyleGuideProjectsLocationsPlugins: API.OperationMethod<
@@ -7316,7 +7659,7 @@ export const getStyleGuideProjectsLocationsPlugins: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetStyleGuideProjectsLocationsPluginsRequest,
   output: GoogleCloudApihubV1StyleGuide,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7326,6 +7669,7 @@ export type LintProjectsLocationsApisVersionsSpecsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Lints the requested spec and updates the corresponding API Spec with the lint response. This lint response will be available in all subsequent Get and List Spec calls to Core service. */
 export const lintProjectsLocationsApisVersionsSpecs: API.OperationMethod<
@@ -7336,12 +7680,23 @@ export const lintProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: LintProjectsLocationsApisVersionsSpecsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListProjectsLocationsError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsLocationsError =
+  | NotFound
+  | Forbidden
+  | ApiHubNotProvisioned
+  | GcpOpError;
 /** Lists information about the supported locations for this service. This method lists locations based on the resource scope provided in the ListLocationsRequest.name field: * **Global locations**: If `name` is empty, the method lists the public locations available to all projects. * **Project-specific locations**: If `name` follows the format `projects/{project}`, the method lists locations visible to that specific project. This includes public, private, or other project-specific locations enabled for the project. For gRPC and client library implementations, the resource name is passed as the `name` field. For direct service calls, the resource name is incorporated into the request path based on the specific service implementation and version. */
 export const listProjectsLocations: API.PaginatedOperationMethod<
   ListProjectsLocationsRequest,
@@ -7352,7 +7707,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsRequest,
   output: GoogleCloudLocationListLocationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7364,6 +7719,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsAddonsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List addons. */
 export const listProjectsLocationsAddons: API.PaginatedOperationMethod<
@@ -7375,7 +7731,7 @@ export const listProjectsLocationsAddons: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsAddonsRequest,
   output: GoogleCloudApihubV1ListAddonsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7384,7 +7740,11 @@ export const listProjectsLocationsAddons: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListProjectsLocationsApisError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsLocationsApisError =
+  | NotFound
+  | Forbidden
+  | ApiHubNotProvisioned
+  | GcpOpError;
 /** List API resources in the API hub. */
 export const listProjectsLocationsApis: API.PaginatedOperationMethod<
   ListProjectsLocationsApisRequest,
@@ -7395,7 +7755,7 @@ export const listProjectsLocationsApis: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsApisRequest,
   output: GoogleCloudApihubV1ListApisResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7407,6 +7767,7 @@ export const listProjectsLocationsApis: API.PaginatedOperationMethod<
 export type ListProjectsLocationsApisVersionsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List API versions of an API resource in the API hub. */
 export const listProjectsLocationsApisVersions: API.PaginatedOperationMethod<
@@ -7418,7 +7779,7 @@ export const listProjectsLocationsApisVersions: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsApisVersionsRequest,
   output: GoogleCloudApihubV1ListVersionsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7430,6 +7791,7 @@ export const listProjectsLocationsApisVersions: API.PaginatedOperationMethod<
 export type ListProjectsLocationsApisVersionsOperationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List operations in an API version. */
 export const listProjectsLocationsApisVersionsOperations: API.PaginatedOperationMethod<
@@ -7441,7 +7803,7 @@ export const listProjectsLocationsApisVersionsOperations: API.PaginatedOperation
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsApisVersionsOperationsRequest,
   output: GoogleCloudApihubV1ListApiOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7453,6 +7815,7 @@ export const listProjectsLocationsApisVersionsOperations: API.PaginatedOperation
 export type ListProjectsLocationsApisVersionsSpecsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List specs corresponding to a particular API resource. */
 export const listProjectsLocationsApisVersionsSpecs: API.PaginatedOperationMethod<
@@ -7464,7 +7827,7 @@ export const listProjectsLocationsApisVersionsSpecs: API.PaginatedOperationMetho
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsApisVersionsSpecsRequest,
   output: GoogleCloudApihubV1ListSpecsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7476,6 +7839,7 @@ export const listProjectsLocationsApisVersionsSpecs: API.PaginatedOperationMetho
 export type ListProjectsLocationsAttributesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List all attributes. */
 export const listProjectsLocationsAttributes: API.PaginatedOperationMethod<
@@ -7487,7 +7851,7 @@ export const listProjectsLocationsAttributes: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsAttributesRequest,
   output: GoogleCloudApihubV1ListAttributesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7499,6 +7863,7 @@ export const listProjectsLocationsAttributes: API.PaginatedOperationMethod<
 export type ListProjectsLocationsCurationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List curation resources in the API hub. */
 export const listProjectsLocationsCurations: API.PaginatedOperationMethod<
@@ -7510,7 +7875,7 @@ export const listProjectsLocationsCurations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCurationsRequest,
   output: GoogleCloudApihubV1ListCurationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7522,6 +7887,7 @@ export const listProjectsLocationsCurations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsDependenciesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List dependencies based on the provided filter and pagination parameters. */
 export const listProjectsLocationsDependencies: API.PaginatedOperationMethod<
@@ -7533,7 +7899,7 @@ export const listProjectsLocationsDependencies: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsDependenciesRequest,
   output: GoogleCloudApihubV1ListDependenciesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7545,6 +7911,7 @@ export const listProjectsLocationsDependencies: API.PaginatedOperationMethod<
 export type ListProjectsLocationsDeploymentsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List deployment resources in the API hub. */
 export const listProjectsLocationsDeployments: API.PaginatedOperationMethod<
@@ -7556,7 +7923,7 @@ export const listProjectsLocationsDeployments: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsDeploymentsRequest,
   output: GoogleCloudApihubV1ListDeploymentsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7568,6 +7935,7 @@ export const listProjectsLocationsDeployments: API.PaginatedOperationMethod<
 export type ListProjectsLocationsDiscoveredApiObservationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Lists all the DiscoveredAPIObservations in a given project and location. */
 export const listProjectsLocationsDiscoveredApiObservations: API.PaginatedOperationMethod<
@@ -7579,7 +7947,7 @@ export const listProjectsLocationsDiscoveredApiObservations: API.PaginatedOperat
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsDiscoveredApiObservationsRequest,
   output: GoogleCloudApihubV1ListDiscoveredApiObservationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7591,6 +7959,7 @@ export const listProjectsLocationsDiscoveredApiObservations: API.PaginatedOperat
 export type ListProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Lists all the DiscoveredAPIOperations in a given project, location and ApiObservation. */
 export const listProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperations: API.PaginatedOperationMethod<
@@ -7603,7 +7972,7 @@ export const listProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperatio
   input:
     ListProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperationsRequest,
   output: GoogleCloudApihubV1ListDiscoveredApiOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7615,6 +7984,7 @@ export const listProjectsLocationsDiscoveredApiObservationsDiscoveredApiOperatio
 export type ListProjectsLocationsExternalApisError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List External API resources in the API hub. */
 export const listProjectsLocationsExternalApis: API.PaginatedOperationMethod<
@@ -7626,7 +7996,7 @@ export const listProjectsLocationsExternalApis: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsExternalApisRequest,
   output: GoogleCloudApihubV1ListExternalApisResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7638,6 +8008,7 @@ export const listProjectsLocationsExternalApis: API.PaginatedOperationMethod<
 export type ListProjectsLocationsHostProjectRegistrationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Lists host project registrations. */
 export const listProjectsLocationsHostProjectRegistrations: API.PaginatedOperationMethod<
@@ -7649,7 +8020,7 @@ export const listProjectsLocationsHostProjectRegistrations: API.PaginatedOperati
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsHostProjectRegistrationsRequest,
   output: GoogleCloudApihubV1ListHostProjectRegistrationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7661,6 +8032,7 @@ export const listProjectsLocationsHostProjectRegistrations: API.PaginatedOperati
 export type ListProjectsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
@@ -7672,7 +8044,7 @@ export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7684,6 +8056,7 @@ export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsPluginsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List all the plugins in a given project and location. */
 export const listProjectsLocationsPlugins: API.PaginatedOperationMethod<
@@ -7695,7 +8068,7 @@ export const listProjectsLocationsPlugins: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsPluginsRequest,
   output: GoogleCloudApihubV1ListPluginsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7707,6 +8080,7 @@ export const listProjectsLocationsPlugins: API.PaginatedOperationMethod<
 export type ListProjectsLocationsPluginsInstancesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List all the plugins in a given project and location. `-` can be used as wildcard value for {plugin_id} */
 export const listProjectsLocationsPluginsInstances: API.PaginatedOperationMethod<
@@ -7718,7 +8092,7 @@ export const listProjectsLocationsPluginsInstances: API.PaginatedOperationMethod
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsPluginsInstancesRequest,
   output: GoogleCloudApihubV1ListPluginInstancesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7730,6 +8104,7 @@ export const listProjectsLocationsPluginsInstances: API.PaginatedOperationMethod
 export type ListProjectsLocationsRuntimeProjectAttachmentsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** List runtime projects attached to the host project. */
 export const listProjectsLocationsRuntimeProjectAttachments: API.PaginatedOperationMethod<
@@ -7741,7 +8116,7 @@ export const listProjectsLocationsRuntimeProjectAttachments: API.PaginatedOperat
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsRuntimeProjectAttachmentsRequest,
   output: GoogleCloudApihubV1ListRuntimeProjectAttachmentsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7753,6 +8128,7 @@ export const listProjectsLocationsRuntimeProjectAttachments: API.PaginatedOperat
 export type LookupProjectsLocationsApiHubInstancesError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Looks up an Api Hub instance in a given Google Cloud project. There will always be only one Api Hub instance for a Google Cloud project across all locations. */
 export const lookupProjectsLocationsApiHubInstances: API.OperationMethod<
@@ -7763,7 +8139,7 @@ export const lookupProjectsLocationsApiHubInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: LookupProjectsLocationsApiHubInstancesRequest,
   output: GoogleCloudApihubV1LookupApiHubInstanceResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7771,6 +8147,7 @@ export const lookupProjectsLocationsApiHubInstances: API.OperationMethod<
 export type LookupRuntimeProjectAttachmentProjectsLocationsError =
   | NotFound
   | Forbidden
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Look up a runtime project attachment. This API can be called in the context of any project. */
 export const lookupRuntimeProjectAttachmentProjectsLocations: API.OperationMethod<
@@ -7781,7 +8158,7 @@ export const lookupRuntimeProjectAttachmentProjectsLocations: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: LookupRuntimeProjectAttachmentProjectsLocationsRequest,
   output: GoogleCloudApihubV1LookupRuntimeProjectAttachmentResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ApiHubNotProvisioned, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7791,6 +8168,7 @@ export type ManageConfigProjectsLocationsAddonsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Manage addon config. This RPC is used for managing the config of the addon. Calling this RPC moves the addon into an updating state until the long-running operation succeeds. */
 export const manageConfigProjectsLocationsAddons: API.OperationMethod<
@@ -7801,7 +8179,14 @@ export const manageConfigProjectsLocationsAddons: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ManageConfigProjectsLocationsAddonsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7811,6 +8196,7 @@ export type ManageSourceDataProjectsLocationsPluginsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Manages data for a given plugin instance. */
 export const manageSourceDataProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -7821,7 +8207,14 @@ export const manageSourceDataProjectsLocationsPluginsInstances: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: ManageSourceDataProjectsLocationsPluginsInstancesRequest,
   output: GoogleCloudApihubV1ManagePluginInstanceSourceDataResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7831,6 +8224,7 @@ export type PatchProjectsLocationsApiHubInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update an Api Hub instance. The following fields in the ApiHubInstance can be updated: * disable_search * vertex_location * agent_registry_sync_config The update_mask should be used to specify the fields being updated. */
 export const patchProjectsLocationsApiHubInstances: API.OperationMethod<
@@ -7841,7 +8235,14 @@ export const patchProjectsLocationsApiHubInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsApiHubInstancesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7851,6 +8252,7 @@ export type PatchProjectsLocationsApisError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update an API resource in the API hub. The following fields in the API can be updated: * display_name * description * owner * documentation * target_user * team * business_unit * maturity_level * api_style * attributes * fingerprint The update_mask should be used to specify the fields being updated. Updating the owner field requires complete owner message and updates both owner and email fields. */
 export const patchProjectsLocationsApis: API.OperationMethod<
@@ -7861,7 +8263,14 @@ export const patchProjectsLocationsApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsApisRequest,
   output: GoogleCloudApihubV1Api,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7871,6 +8280,7 @@ export type PatchProjectsLocationsApisVersionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update API version. The following fields in the version can be updated currently: * display_name * description * documentation * deployments * lifecycle * compliance * accreditation * attributes The update_mask should be used to specify the fields being updated. */
 export const patchProjectsLocationsApisVersions: API.OperationMethod<
@@ -7881,7 +8291,14 @@ export const patchProjectsLocationsApisVersions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsApisVersionsRequest,
   output: GoogleCloudApihubV1Version,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7891,6 +8308,7 @@ export type PatchProjectsLocationsApisVersionsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update an operation in an API version. The following fields in the ApiOperation resource can be updated: * details.description * details.documentation * details.http_operation.path * details.http_operation.method * details.deprecated * attributes * details.mcp_tool.title * details.mcp_tool.description * details.mcp_tool.input_schema * details.mcp_tool.output_schema * details.input_schema * details.output_schema * details.mcp_tool.annotations.title * details.mcp_tool.annotations.read_only_hint * details.mcp_tool.annotations.destructive_hint * details.mcp_tool.annotations.idempotent_hint * details.mcp_tool.annotations.open_world_hint * details.mcp_tool.annotations.additional_hints The update_mask should be used to specify the fields being updated. An operation can be updated only if the operation was created via CreateApiOperation API. If the operation was created by parsing the spec, then it can be edited by updating the spec. */
 export const patchProjectsLocationsApisVersionsOperations: API.OperationMethod<
@@ -7901,7 +8319,14 @@ export const patchProjectsLocationsApisVersionsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsApisVersionsOperationsRequest,
   output: GoogleCloudApihubV1ApiOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7911,6 +8336,7 @@ export type PatchProjectsLocationsApisVersionsSpecsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update spec. The following fields in the spec can be updated: * display_name * source_uri * lint_response * attributes * contents * spec_type In case of an OAS spec, updating spec contents can lead to: 1. Creation, deletion and update of operations. 2. Creation, deletion and update of definitions. 3. Update of other info parsed out from the new spec. In case of contents or source_uri being present in update mask, spec_type must also be present. Also, spec_type can not be present in update mask if contents or source_uri is not present. The update_mask should be used to specify the fields being updated. */
 export const patchProjectsLocationsApisVersionsSpecs: API.OperationMethod<
@@ -7921,7 +8347,14 @@ export const patchProjectsLocationsApisVersionsSpecs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsApisVersionsSpecsRequest,
   output: GoogleCloudApihubV1Spec,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7931,6 +8364,7 @@ export type PatchProjectsLocationsAttributesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update the attribute. The following fields in the Attribute resource can be updated: * display_name The display name can be updated for user defined attributes only. * description The description can be updated for user defined attributes only. * allowed_values To update the list of allowed values, clients need to use the fetched list of allowed values and add or remove values to or from the same list. The mutable allowed values can be updated for both user defined and System defined attributes. The immutable allowed values cannot be updated or deleted. The updated list of allowed values cannot be empty. If an allowed value that is already used by some resource's attribute is deleted, then the association between the resource and the attribute value will also be deleted. * cardinality The cardinality can be updated for user defined attributes only. Cardinality can only be increased during an update. The update_mask should be used to specify the fields being updated. */
 export const patchProjectsLocationsAttributes: API.OperationMethod<
@@ -7941,7 +8375,14 @@ export const patchProjectsLocationsAttributes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsAttributesRequest,
   output: GoogleCloudApihubV1Attribute,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7951,6 +8392,7 @@ export type PatchProjectsLocationsCurationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update a curation resource in the API hub. The following fields in the curation can be updated: * display_name * description The update_mask should be used to specify the fields being updated. */
 export const patchProjectsLocationsCurations: API.OperationMethod<
@@ -7961,7 +8403,14 @@ export const patchProjectsLocationsCurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCurationsRequest,
   output: GoogleCloudApihubV1Curation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7971,6 +8420,7 @@ export type PatchProjectsLocationsDependenciesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update a dependency based on the update_mask provided in the request. The following fields in the dependency can be updated: * description */
 export const patchProjectsLocationsDependencies: API.OperationMethod<
@@ -7981,7 +8431,14 @@ export const patchProjectsLocationsDependencies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsDependenciesRequest,
   output: GoogleCloudApihubV1Dependency,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7991,6 +8448,7 @@ export type PatchProjectsLocationsDeploymentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update a deployment resource in the API hub. The following fields in the deployment resource can be updated: * display_name * description * documentation * deployment_type * resource_uri * endpoints * slo * environment * attributes * source_project * source_environment * management_url * source_uri The update_mask should be used to specify the fields being updated. */
 export const patchProjectsLocationsDeployments: API.OperationMethod<
@@ -8001,7 +8459,14 @@ export const patchProjectsLocationsDeployments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsDeploymentsRequest,
   output: GoogleCloudApihubV1Deployment,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8011,6 +8476,7 @@ export type PatchProjectsLocationsExternalApisError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update an External API resource in the API hub. The following fields can be updated: * display_name * description * documentation * endpoints * paths The update_mask should be used to specify the fields being updated. */
 export const patchProjectsLocationsExternalApis: API.OperationMethod<
@@ -8021,7 +8487,14 @@ export const patchProjectsLocationsExternalApis: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsExternalApisRequest,
   output: GoogleCloudApihubV1ExternalApi,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8031,6 +8504,7 @@ export type PatchProjectsLocationsPluginsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Updates a plugin instance in the API hub. The following fields in the plugin_instance can be updated currently: * display_name * schedule_cron_expression The update_mask should be used to specify the fields being updated. To update the auth_config and additional_config of the plugin instance, use the ApplyPluginInstanceConfig method. */
 export const patchProjectsLocationsPluginsInstances: API.OperationMethod<
@@ -8041,7 +8515,14 @@ export const patchProjectsLocationsPluginsInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsPluginsInstancesRequest,
   output: GoogleCloudApihubV1PluginInstance,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8051,6 +8532,7 @@ export type SearchResourcesProjectsLocationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Search across API-Hub resources. */
 export const searchResourcesProjectsLocations: API.OperationMethod<
@@ -8061,7 +8543,14 @@ export const searchResourcesProjectsLocations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SearchResourcesProjectsLocationsRequest,
   output: GoogleCloudApihubV1SearchResourcesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8071,6 +8560,7 @@ export type UpdateStyleGuideProjectsLocationsPluginsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ApiHubNotProvisioned
   | GcpOpError;
 /** Update the styleGuide to be used for liniting in by API hub. */
 export const updateStyleGuideProjectsLocationsPlugins: API.OperationMethod<
@@ -8081,7 +8571,14 @@ export const updateStyleGuideProjectsLocationsPlugins: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateStyleGuideProjectsLocationsPluginsRequest,
   output: GoogleCloudApihubV1StyleGuide,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ApiHubNotProvisioned,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

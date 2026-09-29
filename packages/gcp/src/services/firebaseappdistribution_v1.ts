@@ -65,6 +65,20 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The API is not enabled on the project (HTTP 403 PERMISSION_DENIED, reason SERVICE_DISABLED: "<API> has not been used in project <n> before or it is disabled."). */
+export class ServiceDisabled
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceDisabled>()("ServiceDisabled", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "has not been used in project" } }],
+  ) {}
+
 export type StringList = Array<string>;
 export const StringList = /*@__PURE__*/ S.Array(
   S.String,
@@ -1603,6 +1617,7 @@ export type BatchAddProjectsTestersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Batch adds testers. This call adds testers for the specified emails if they don't already exist. Returns all testers specified in the request, including newly created and previously existing testers. This action is idempotent. */
 export const batchAddProjectsTesters: API.OperationMethod<
@@ -1613,7 +1628,14 @@ export const batchAddProjectsTesters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchAddProjectsTestersRequest,
   output: GoogleFirebaseAppdistroV1BatchAddTestersResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1623,6 +1645,7 @@ export type BatchDeleteProjectsAppsReleasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes releases. A maximum of 100 releases can be deleted per request. */
 export const batchDeleteProjectsAppsReleases: API.OperationMethod<
@@ -1633,7 +1656,14 @@ export const batchDeleteProjectsAppsReleases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchDeleteProjectsAppsReleasesRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1643,6 +1673,7 @@ export type BatchJoinProjectsGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Batch adds members to a group. The testers will gain access to all releases that the groups have access to. */
 export const batchJoinProjectsGroups: API.OperationMethod<
@@ -1653,7 +1684,14 @@ export const batchJoinProjectsGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchJoinProjectsGroupsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1663,6 +1701,7 @@ export type BatchLeaveProjectsGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Batch removed members from a group. The testers will lose access to all releases that the groups have access to. */
 export const batchLeaveProjectsGroups: API.OperationMethod<
@@ -1673,7 +1712,14 @@ export const batchLeaveProjectsGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchLeaveProjectsGroupsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1683,6 +1729,7 @@ export type BatchRemoveProjectsTestersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Batch removes testers. If found, this call deletes testers for the specified emails. Returns all deleted testers. */
 export const batchRemoveProjectsTesters: API.OperationMethod<
@@ -1693,7 +1740,14 @@ export const batchRemoveProjectsTesters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchRemoveProjectsTestersRequest,
   output: GoogleFirebaseAppdistroV1BatchRemoveTestersResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1703,6 +1757,7 @@ export type CancelProjectsAppsReleasesOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use Operations.GetOperation or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an Operation.error value with a google.rpc.Status.code of `1`, corresponding to `Code.CANCELLED`. */
 export const cancelProjectsAppsReleasesOperations: API.OperationMethod<
@@ -1713,7 +1768,14 @@ export const cancelProjectsAppsReleasesOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelProjectsAppsReleasesOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1723,6 +1785,7 @@ export type CreateProjectsGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Create a group. */
 export const createProjectsGroups: API.OperationMethod<
@@ -1733,7 +1796,14 @@ export const createProjectsGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsGroupsRequest,
   output: GoogleFirebaseAppdistroV1Group,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1743,6 +1813,7 @@ export type DeleteProjectsAppsReleasesFeedbackReportsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a feedback report. */
 export const deleteProjectsAppsReleasesFeedbackReports: API.OperationMethod<
@@ -1753,7 +1824,14 @@ export const deleteProjectsAppsReleasesFeedbackReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsAppsReleasesFeedbackReportsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1763,6 +1841,7 @@ export type DeleteProjectsAppsReleasesOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a long-running operation. This method indicates that the client is no longer interested in the operation result. It does not cancel the operation. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. */
 export const deleteProjectsAppsReleasesOperations: API.OperationMethod<
@@ -1773,7 +1852,14 @@ export const deleteProjectsAppsReleasesOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsAppsReleasesOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1783,6 +1869,7 @@ export type DeleteProjectsGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Delete a group. */
 export const deleteProjectsGroups: API.OperationMethod<
@@ -1793,7 +1880,14 @@ export const deleteProjectsGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsGroupsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1803,6 +1897,7 @@ export type DistributeProjectsAppsReleasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Distributes a release to testers. This call does the following: 1. Creates testers for the specified emails, if none exist. 2. Adds the testers and groups to the release. 3. Sends new testers an invitation email. 4. Sends existing testers a new release email. The request will fail with a `INVALID_ARGUMENT` if it contains a group that doesn't exist. */
 export const distributeProjectsAppsReleases: API.OperationMethod<
@@ -1813,12 +1908,23 @@ export const distributeProjectsAppsReleases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DistributeProjectsAppsReleasesRequest,
   output: GoogleFirebaseAppdistroV1DistributeReleaseResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAabInfoProjectsAppsError = NotFound | Forbidden | GcpOpError;
+export type GetAabInfoProjectsAppsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Gets Android App Bundle (AAB) information for a Firebase app. */
 export const getAabInfoProjectsApps: API.OperationMethod<
   GetAabInfoProjectsAppsRequest,
@@ -1828,12 +1934,16 @@ export const getAabInfoProjectsApps: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAabInfoProjectsAppsRequest,
   output: GoogleFirebaseAppdistroV1AabInfo,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsAppsReleasesError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsAppsReleasesError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Gets a release. */
 export const getProjectsAppsReleases: API.OperationMethod<
   GetProjectsAppsReleasesRequest,
@@ -1843,7 +1953,7 @@ export const getProjectsAppsReleases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsAppsReleasesRequest,
   output: GoogleFirebaseAppdistroV1Release,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1851,6 +1961,7 @@ export const getProjectsAppsReleases: API.OperationMethod<
 export type GetProjectsAppsReleasesFeedbackReportsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets a feedback report. */
 export const getProjectsAppsReleasesFeedbackReports: API.OperationMethod<
@@ -1861,7 +1972,7 @@ export const getProjectsAppsReleasesFeedbackReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsAppsReleasesFeedbackReportsRequest,
   output: GoogleFirebaseAppdistroV1FeedbackReport,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1869,6 +1980,7 @@ export const getProjectsAppsReleasesFeedbackReports: API.OperationMethod<
 export type GetProjectsAppsReleasesOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsAppsReleasesOperations: API.OperationMethod<
@@ -1879,12 +1991,16 @@ export const getProjectsAppsReleasesOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsAppsReleasesOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsGroupsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsGroupsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Get a group. */
 export const getProjectsGroups: API.OperationMethod<
   GetProjectsGroupsRequest,
@@ -1894,12 +2010,16 @@ export const getProjectsGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsGroupsRequest,
   output: GoogleFirebaseAppdistroV1Group,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListProjectsAppsReleasesError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsAppsReleasesError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Lists releases. By default, sorts by `createTime` in descending order. */
 export const listProjectsAppsReleases: API.PaginatedOperationMethod<
   ListProjectsAppsReleasesRequest,
@@ -1910,7 +2030,7 @@ export const listProjectsAppsReleases: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsAppsReleasesRequest,
   output: GoogleFirebaseAppdistroV1ListReleasesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1922,6 +2042,7 @@ export const listProjectsAppsReleases: API.PaginatedOperationMethod<
 export type ListProjectsAppsReleasesFeedbackReportsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists feedback reports. By default, sorts by `createTime` in descending order. */
 export const listProjectsAppsReleasesFeedbackReports: API.PaginatedOperationMethod<
@@ -1933,7 +2054,7 @@ export const listProjectsAppsReleasesFeedbackReports: API.PaginatedOperationMeth
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsAppsReleasesFeedbackReportsRequest,
   output: GoogleFirebaseAppdistroV1ListFeedbackReportsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1945,6 +2066,7 @@ export const listProjectsAppsReleasesFeedbackReports: API.PaginatedOperationMeth
 export type ListProjectsAppsReleasesOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsAppsReleasesOperations: API.PaginatedOperationMethod<
@@ -1956,7 +2078,7 @@ export const listProjectsAppsReleasesOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsAppsReleasesOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1965,7 +2087,11 @@ export const listProjectsAppsReleasesOperations: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListProjectsGroupsError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsGroupsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** List groups. */
 export const listProjectsGroups: API.PaginatedOperationMethod<
   ListProjectsGroupsRequest,
@@ -1976,7 +2102,7 @@ export const listProjectsGroups: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsGroupsRequest,
   output: GoogleFirebaseAppdistroV1ListGroupsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1985,7 +2111,11 @@ export const listProjectsGroups: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListProjectsTestersError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsTestersError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Lists testers and their resource ids. */
 export const listProjectsTesters: API.PaginatedOperationMethod<
   ListProjectsTestersRequest,
@@ -1996,7 +2126,7 @@ export const listProjectsTesters: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsTestersRequest,
   output: GoogleFirebaseAppdistroV1ListTestersResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2010,6 +2140,7 @@ export type PatchProjectsAppsReleasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates a release. */
 export const patchProjectsAppsReleases: API.OperationMethod<
@@ -2020,7 +2151,14 @@ export const patchProjectsAppsReleases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsAppsReleasesRequest,
   output: GoogleFirebaseAppdistroV1Release,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2030,6 +2168,7 @@ export type PatchProjectsGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Update a group. */
 export const patchProjectsGroups: API.OperationMethod<
@@ -2040,7 +2179,14 @@ export const patchProjectsGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsGroupsRequest,
   output: GoogleFirebaseAppdistroV1Group,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2050,6 +2196,7 @@ export type PatchProjectsTestersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Update a tester. If the testers joins a group they gain access to all releases that the group has access to. */
 export const patchProjectsTesters: API.OperationMethod<
@@ -2060,7 +2207,14 @@ export const patchProjectsTesters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsTestersRequest,
   output: GoogleFirebaseAppdistroV1Tester,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2070,6 +2224,7 @@ export type UploadMediaError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Uploads a binary. Uploading a binary can result in a new release being created, an update to an existing release, or a no-op if a release with the same binary already exists. */
 export const uploadMedia: API.OperationMethod<
@@ -2080,7 +2235,14 @@ export const uploadMedia: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UploadMediaRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2090,6 +2252,7 @@ export type WaitProjectsAppsReleasesOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Waits until the specified long-running operation is done or reaches at most a specified timeout, returning the latest state. If the operation is already done, the latest state is immediately returned. If the timeout specified is greater than the default HTTP/RPC timeout, the HTTP/RPC timeout is used. If the server does not support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Note that this method is on a best-effort basis. It may return the latest state before the specified timeout (including immediately), meaning even an immediate response is no guarantee that the operation is done. */
 export const waitProjectsAppsReleasesOperations: API.OperationMethod<
@@ -2100,7 +2263,14 @@ export const waitProjectsAppsReleasesOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: WaitProjectsAppsReleasesOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

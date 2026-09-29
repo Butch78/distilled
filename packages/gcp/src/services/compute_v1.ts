@@ -26,6 +26,50 @@ export class BadRequest
     [{ status: 400 }],
   ) {}
 
+/** The project is not enrolled in Cloud Armor Enterprise (Managed Protection Plus), which network edge security services require (HTTP 400: 'Network Security Policies require Cloud Armor Managed Protection Plus tier and above to use.'). Not retryable. */
+export class CloudArmorEnterpriseRequired
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<CloudArmorEnterpriseRequired>()(
+      "CloudArmorEnterpriseRequired",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "require Cloud Armor Managed Protection Plus" },
+      },
+    ],
+  ) {}
+
+/** The forwarding rule used as the packet-mirroring collector is still being programmed (HTTP 400: 'Forwarding Rule specified as collector ILB is not ready'). Retryable after a few seconds. */
+export class CollectorIlbNotReady
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<CollectorIlbNotReady>()(
+      "CollectorIlbNotReady",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "specified as collector ILB is not ready" },
+      },
+    ],
+  ) {}
+
 export class Conflict
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Conflict>()("Conflict", {
@@ -50,6 +94,54 @@ export class Forbidden
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withAuthError),
     [{ status: 403 }],
+  ) {}
+
+/** The project is not eligible for the Future Reservations feature (HTTP 412 conditionNotMet: 'Based on your service usage history, you are not eligible for using the Future Reservations feature at this time.'). Not retryable. */
+export class FutureReservationsNotEligible
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<FutureReservationsNotEligible>()(
+      "FutureReservationsNotEligible",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ),
+    [
+      {
+        status: 412,
+        message: {
+          includes: "not eligible for using the Future Reservations feature",
+        },
+      },
+    ],
+  ) {}
+
+/** Health Check as a Service is not enabled for the project (HTTP 400: 'Invalid resource usage: 'HealthCheck as a Service feature is not available for this project.''). Not retryable. */
+export class HealthCheckServiceNotAvailable
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<HealthCheckServiceNotAvailable>()(
+      "HealthCheckServiceNotAvailable",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: {
+          includes: "HealthCheck as a Service feature is not available",
+        },
+      },
+    ],
   ) {}
 
 export class NotFound
@@ -83413,6 +83505,7 @@ export type InsertFutureReservationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FutureReservationsNotEligible
   | GcpOpError;
 /** Creates a new Future Reservation. */
 export const insertFutureReservations: API.OperationMethod<
@@ -83423,7 +83516,14 @@ export const insertFutureReservations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertFutureReservationsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FutureReservationsNotEligible,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -83893,6 +83993,7 @@ export type InsertNetworkEdgeSecurityServicesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | CloudArmorEnterpriseRequired
   | GcpOpError;
 /** Creates a new service in the specified project using the data included in the request. */
 export const insertNetworkEdgeSecurityServices: API.OperationMethod<
@@ -83903,7 +84004,14 @@ export const insertNetworkEdgeSecurityServices: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertNetworkEdgeSecurityServicesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    CloudArmorEnterpriseRequired,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -84033,6 +84141,7 @@ export type InsertPacketMirroringsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | CollectorIlbNotReady
   | GcpOpError;
 /** Creates a PacketMirroring resource in the specified project and region using the data included in the request. */
 export const insertPacketMirrorings: API.OperationMethod<
@@ -84043,7 +84152,14 @@ export const insertPacketMirrorings: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertPacketMirroringsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    CollectorIlbNotReady,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -84253,6 +84369,7 @@ export type InsertRegionHealthCheckServicesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | HealthCheckServiceNotAvailable
   | GcpOpError;
 /** Creates a regional HealthCheckService resource in the specified project and region using the data included in the request. */
 export const insertRegionHealthCheckServices: API.OperationMethod<
@@ -84263,7 +84380,14 @@ export const insertRegionHealthCheckServices: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertRegionHealthCheckServicesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    HealthCheckServiceNotAvailable,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -89020,6 +89144,7 @@ export type PatchPacketMirroringsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | CollectorIlbNotReady
   | GcpOpError;
 /** Patches the specified PacketMirroring resource with the data included in the request. This method supportsPATCH semantics and usesJSON merge patch format and processing rules. */
 export const patchPacketMirrorings: API.OperationMethod<
@@ -89030,7 +89155,14 @@ export const patchPacketMirrorings: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchPacketMirroringsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    CollectorIlbNotReady,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

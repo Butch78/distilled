@@ -13,6 +13,57 @@ import * as Retry from "../retry.ts";
 
 export type { GcpOpError, GcpOpContext };
 
+/** The association references a backup plan that does not exist (HTTP 400: 'The request was invalid: backup plan … not found'). Not retryable. */
+export class BackupPlanReferenceNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<BackupPlanReferenceNotFound>()(
+      "BackupPlanReferenceNotFound",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { matches: "backup plan .* not found" } }],
+  ) {}
+
+/** The association targets a workload resource that does not exist (HTTP 400: 'The request was invalid: resource … is not found'). Not retryable. */
+export class BackupResourceNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<BackupResourceNotFound>()(
+      "BackupResourceNotFound",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { matches: "resource .* is not found" } }],
+  ) {}
+
+/** The backup plan references a backup vault that does not exist (HTTP 400: 'The request was invalid: backup vault "…" not found'). Not retryable. */
+export class BackupVaultReferenceNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<BackupVaultReferenceNotFound>()(
+      "BackupVaultReferenceNotFound",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { matches: "backup vault .* not found" } }],
+  ) {}
+
 export class BadRequest
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<BadRequest>()("BadRequest", {
@@ -5404,6 +5455,8 @@ export type CreateProjectsLocationsBackupPlanAssociationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BackupPlanReferenceNotFound
+  | BackupResourceNotFound
   | GcpOpError;
 /** Create a BackupPlanAssociation */
 export const createProjectsLocationsBackupPlanAssociations: API.OperationMethod<
@@ -5414,7 +5467,15 @@ export const createProjectsLocationsBackupPlanAssociations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsBackupPlanAssociationsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BackupPlanReferenceNotFound,
+    BackupResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5424,6 +5485,7 @@ export type CreateProjectsLocationsBackupPlansError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BackupVaultReferenceNotFound
   | GcpOpError;
 /** Create a BackupPlan */
 export const createProjectsLocationsBackupPlans: API.OperationMethod<
@@ -5434,7 +5496,14 @@ export const createProjectsLocationsBackupPlans: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsBackupPlansRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BackupVaultReferenceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

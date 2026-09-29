@@ -65,6 +65,20 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The API is not enabled on the project (HTTP 403 PERMISSION_DENIED, reason SERVICE_DISABLED: "<API> has not been used in project <n> before or it is disabled."). */
+export class ServiceDisabled
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceDisabled>()("ServiceDisabled", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "has not been used in project" } }],
+  ) {}
+
 export interface CollectProjectsLocationsCatalogsEventStoresUserEventsRequest {
   /** Required. The parent eventStore name, such as `projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store`. */
   parent: string;
@@ -1718,6 +1732,7 @@ export const WriteProjectsLocationsCatalogsEventStoresUserEventsRequest =
 export type CollectProjectsLocationsCatalogsEventStoresUserEventsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Writes a single user event from the browser. This uses a GET request to due to browser restriction of POST-ing to a 3rd party domain. This method is used only by the Recommendations AI JavaScript pixel. Users should not call this method directly. */
 export const collectProjectsLocationsCatalogsEventStoresUserEvents: API.OperationMethod<
@@ -1728,7 +1743,7 @@ export const collectProjectsLocationsCatalogsEventStoresUserEvents: API.Operatio
 > = /*@__PURE__*/ API.make(() => ({
   input: CollectProjectsLocationsCatalogsEventStoresUserEventsRequest,
   output: GoogleApiHttpBody,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1738,6 +1753,7 @@ export type CreateProjectsLocationsCatalogsCatalogItemsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Creates a catalog item. */
 export const createProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
@@ -1748,7 +1764,14 @@ export const createProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsCatalogItemsRequest,
   output: GoogleCloudRecommendationengineV1beta1CatalogItem,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1758,6 +1781,7 @@ export type CreateProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrati
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Register an API key for use with predict method. */
 export const createProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrations: API.OperationMethod<
@@ -1769,7 +1793,14 @@ export const createProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrat
   input:
     CreateProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrationsRequest,
   output: GoogleCloudRecommendationengineV1beta1PredictionApiKeyRegistration,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1779,6 +1810,7 @@ export type DeleteProjectsLocationsCatalogsCatalogItemsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a catalog item. */
 export const deleteProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
@@ -1789,7 +1821,14 @@ export const deleteProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsCatalogItemsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1799,6 +1838,7 @@ export type DeleteProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrati
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Unregister an apiKey from using for predict method. */
 export const deleteProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrations: API.OperationMethod<
@@ -1810,7 +1850,14 @@ export const deleteProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrat
   input:
     DeleteProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1818,6 +1865,7 @@ export const deleteProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrat
 export type GetProjectsLocationsCatalogsCatalogItemsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets a specific catalog item. */
 export const getProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
@@ -1828,7 +1876,7 @@ export const getProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsCatalogItemsRequest,
   output: GoogleCloudRecommendationengineV1beta1CatalogItem,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1836,6 +1884,7 @@ export const getProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
 export type GetProjectsLocationsCatalogsEventStoresOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsCatalogsEventStoresOperations: API.OperationMethod<
@@ -1846,7 +1895,7 @@ export const getProjectsLocationsCatalogsEventStoresOperations: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsEventStoresOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1854,6 +1903,7 @@ export const getProjectsLocationsCatalogsEventStoresOperations: API.OperationMet
 export type GetProjectsLocationsCatalogsOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsCatalogsOperations: API.OperationMethod<
@@ -1864,7 +1914,7 @@ export const getProjectsLocationsCatalogsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1874,6 +1924,7 @@ export type ImportProjectsLocationsCatalogsCatalogItemsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Bulk import of multiple catalog items. Request processing may be synchronous. No partial updating supported. Non-existing items will be created. Operation.response is of type ImportResponse. Note that it is possible for a subset of the items to be successfully updated. */
 export const importProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
@@ -1884,7 +1935,14 @@ export const importProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ImportProjectsLocationsCatalogsCatalogItemsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1894,6 +1952,7 @@ export type ImportProjectsLocationsCatalogsEventStoresUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Bulk import of User events. Request processing might be synchronous. Events that already exist are skipped. Use this method for backfilling historical user events. Operation.response is of type ImportResponse. Note that it is possible for a subset of the items to be successfully inserted. Operation.metadata is of type ImportMetadata. */
 export const importProjectsLocationsCatalogsEventStoresUserEvents: API.OperationMethod<
@@ -1904,7 +1963,14 @@ export const importProjectsLocationsCatalogsEventStoresUserEvents: API.Operation
 > = /*@__PURE__*/ API.make(() => ({
   input: ImportProjectsLocationsCatalogsEventStoresUserEventsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1912,6 +1978,7 @@ export const importProjectsLocationsCatalogsEventStoresUserEvents: API.Operation
 export type ListProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists all the catalog configurations associated with the project. */
 export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
@@ -1923,7 +1990,7 @@ export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsRequest,
   output: GoogleCloudRecommendationengineV1beta1ListCatalogsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1935,6 +2002,7 @@ export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
 export type ListProjectsLocationsCatalogsCatalogItemsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets a list of catalog items. */
 export const listProjectsLocationsCatalogsCatalogItems: API.PaginatedOperationMethod<
@@ -1946,7 +2014,7 @@ export const listProjectsLocationsCatalogsCatalogItems: API.PaginatedOperationMe
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsCatalogItemsRequest,
   output: GoogleCloudRecommendationengineV1beta1ListCatalogItemsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1958,6 +2026,7 @@ export const listProjectsLocationsCatalogsCatalogItems: API.PaginatedOperationMe
 export type ListProjectsLocationsCatalogsEventStoresOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsLocationsCatalogsEventStoresOperations: API.PaginatedOperationMethod<
@@ -1969,7 +2038,7 @@ export const listProjectsLocationsCatalogsEventStoresOperations: API.PaginatedOp
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsEventStoresOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1981,6 +2050,7 @@ export const listProjectsLocationsCatalogsEventStoresOperations: API.PaginatedOp
 export type ListProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** List the registered apiKeys for use with predict method. */
 export const listProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrations: API.PaginatedOperationMethod<
@@ -1994,7 +2064,7 @@ export const listProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistratio
     ListProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistrationsRequest,
   output:
     GoogleCloudRecommendationengineV1beta1ListPredictionApiKeyRegistrationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2006,6 +2076,7 @@ export const listProjectsLocationsCatalogsEventStoresPredictionApiKeyRegistratio
 export type ListProjectsLocationsCatalogsEventStoresUserEventsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets a list of user events within a time range, with potential filtering. The method does not list unjoined user events. Unjoined user event definition: when a user event is ingested from Recommendations AI User Event APIs, the catalog item included in the user event is connected with the current catalog. If a catalog item of the ingested event is not in the current catalog, it could lead to degraded model quality. This is called an unjoined event. */
 export const listProjectsLocationsCatalogsEventStoresUserEvents: API.PaginatedOperationMethod<
@@ -2017,7 +2088,7 @@ export const listProjectsLocationsCatalogsEventStoresUserEvents: API.PaginatedOp
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsEventStoresUserEventsRequest,
   output: GoogleCloudRecommendationengineV1beta1ListUserEventsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2029,6 +2100,7 @@ export const listProjectsLocationsCatalogsEventStoresUserEvents: API.PaginatedOp
 export type ListProjectsLocationsCatalogsOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsLocationsCatalogsOperations: API.PaginatedOperationMethod<
@@ -2040,7 +2112,7 @@ export const listProjectsLocationsCatalogsOperations: API.PaginatedOperationMeth
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2054,6 +2126,7 @@ export type PatchProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates the catalog configuration. */
 export const patchProjectsLocationsCatalogs: API.OperationMethod<
@@ -2064,7 +2137,14 @@ export const patchProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsRequest,
   output: GoogleCloudRecommendationengineV1beta1Catalog,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2074,6 +2154,7 @@ export type PatchProjectsLocationsCatalogsCatalogItemsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates a catalog item. Partial updating is supported. Non-existing items will be created. */
 export const patchProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
@@ -2084,7 +2165,14 @@ export const patchProjectsLocationsCatalogsCatalogItems: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsCatalogItemsRequest,
   output: GoogleCloudRecommendationengineV1beta1CatalogItem,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2094,6 +2182,7 @@ export type PredictProjectsLocationsCatalogsEventStoresPlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Makes a recommendation prediction. If using API Key based authentication, the API Key must be registered using the PredictionApiKeyRegistry service. [Learn more](https://cloud.google.com/recommendations-ai/docs/setting-up#register-key). */
 export const predictProjectsLocationsCatalogsEventStoresPlacements: API.OperationMethod<
@@ -2104,7 +2193,14 @@ export const predictProjectsLocationsCatalogsEventStoresPlacements: API.Operatio
 > = /*@__PURE__*/ API.make(() => ({
   input: PredictProjectsLocationsCatalogsEventStoresPlacementsRequest,
   output: GoogleCloudRecommendationengineV1beta1PredictResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2114,6 +2210,7 @@ export type PurgeProjectsLocationsCatalogsEventStoresUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes permanently all user events specified by the filter provided. Depending on the number of events specified by the filter, this operation could take hours or days to complete. To test a filter, use the list command first. */
 export const purgeProjectsLocationsCatalogsEventStoresUserEvents: API.OperationMethod<
@@ -2124,7 +2221,14 @@ export const purgeProjectsLocationsCatalogsEventStoresUserEvents: API.OperationM
 > = /*@__PURE__*/ API.make(() => ({
   input: PurgeProjectsLocationsCatalogsEventStoresUserEventsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2134,6 +2238,7 @@ export type RejoinProjectsLocationsCatalogsEventStoresUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Triggers a user event rejoin operation with latest catalog data. Events will not be annotated with detailed catalog information if catalog item is missing at the time the user event is ingested, and these events are stored as unjoined events with a limited usage on training and serving. This API can be used to trigger a 'join' operation on specified events with latest version of catalog items. It can also be used to correct events joined with wrong catalog items. */
 export const rejoinProjectsLocationsCatalogsEventStoresUserEvents: API.OperationMethod<
@@ -2144,7 +2249,14 @@ export const rejoinProjectsLocationsCatalogsEventStoresUserEvents: API.Operation
 > = /*@__PURE__*/ API.make(() => ({
   input: RejoinProjectsLocationsCatalogsEventStoresUserEventsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2154,6 +2266,7 @@ export type WriteProjectsLocationsCatalogsEventStoresUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Writes a single user event. */
 export const writeProjectsLocationsCatalogsEventStoresUserEvents: API.OperationMethod<
@@ -2164,7 +2277,14 @@ export const writeProjectsLocationsCatalogsEventStoresUserEvents: API.OperationM
 > = /*@__PURE__*/ API.make(() => ({
   input: WriteProjectsLocationsCatalogsEventStoresUserEventsRequest,
   output: GoogleCloudRecommendationengineV1beta1UserEvent,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

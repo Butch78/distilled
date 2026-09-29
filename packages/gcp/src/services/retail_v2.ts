@@ -65,6 +65,23 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The project has not enabled Cloud Retail or not accepted the Retail data use terms (HTTP 400 FAILED_PRECONDITION: "... doesn't have Cloud Retail enabled or it hasn't accepted Retail data use terms."). Accept them once in the Retail console; not retryable until then. */
+export class RetailDataUseTermsNotAccepted
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<RetailDataUseTermsNotAccepted>()(
+      "RetailDataUseTermsNotAccepted",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "Retail data use terms" } }],
+  ) {}
+
 export type GoogleCloudRetailV2CatalogAttributeIndexableOptionEnum =
   | "INDEXABLE_OPTION_UNSPECIFIED"
   | "INDEXABLE_ENABLED"
@@ -5809,6 +5826,7 @@ export type AddCatalogAttributeProjectsLocationsCatalogsAttributesConfigError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Adds the specified CatalogAttribute to the AttributesConfig. If the CatalogAttribute to add already exists, an ALREADY_EXISTS error is returned. */
 export const addCatalogAttributeProjectsLocationsCatalogsAttributesConfig: API.OperationMethod<
@@ -5819,7 +5837,14 @@ export const addCatalogAttributeProjectsLocationsCatalogsAttributesConfig: API.O
 > = /*@__PURE__*/ API.make(() => ({
   input: AddCatalogAttributeProjectsLocationsCatalogsAttributesConfigRequest,
   output: GoogleCloudRetailV2AttributesConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5829,6 +5854,7 @@ export type AddControlProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Enables a Control on the specified ServingConfig. The control is added in the last position of the list of controls it belongs to (e.g. if it's a facet spec control it will be applied in the last position of servingConfig.facetSpecIds) Returns a ALREADY_EXISTS error if the control has already been applied. Returns a FAILED_PRECONDITION error if the addition could exceed maximum number of control allowed for that type of control. */
 export const addControlProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -5839,7 +5865,14 @@ export const addControlProjectsLocationsCatalogsServingConfigs: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: AddControlProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2ServingConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5849,6 +5882,7 @@ export type AddFulfillmentPlacesProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** We recommend that you use the ProductService.AddLocalInventories method instead of the ProductService.AddFulfillmentPlaces method. ProductService.AddLocalInventories achieves the same results but provides more fine-grained control over ingesting local inventory data. Incrementally adds place IDs to Product.fulfillment_info.place_ids. This process is asynchronous and does not require the Product to exist before updating fulfillment information. If the request is valid, the update will be enqueued and processed downstream. As a consequence, when a response is returned, the added place IDs are not immediately manifested in the Product queried by ProductService.GetProduct or ProductService.ListProducts. The returned Operations will be obsolete after 1 day, and GetOperation API will return NOT_FOUND afterwards. If conflicting updates are issued, the Operations associated with the stale updates will not be marked as done until being obsolete. */
 export const addFulfillmentPlacesProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -5859,7 +5893,14 @@ export const addFulfillmentPlacesProjectsLocationsCatalogsBranchesProducts: API.
 > = /*@__PURE__*/ API.make(() => ({
   input: AddFulfillmentPlacesProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5869,6 +5910,7 @@ export type AddLocalInventoriesProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates local inventory information for a Product at a list of places, while respecting the last update timestamps of each inventory field. This process is asynchronous and does not require the Product to exist before updating inventory information. If the request is valid, the update will be enqueued and processed downstream. As a consequence, when a response is returned, updates are not immediately manifested in the Product queried by ProductService.GetProduct or ProductService.ListProducts. Local inventory information can only be modified using this method. ProductService.CreateProduct and ProductService.UpdateProduct has no effect on local inventories. The returned Operations will be obsolete after 1 day, and GetOperation API will return NOT_FOUND afterwards. If conflicting updates are issued, the Operations associated with the stale updates will not be marked as done until being obsolete. */
 export const addLocalInventoriesProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -5879,7 +5921,14 @@ export const addLocalInventoriesProjectsLocationsCatalogsBranchesProducts: API.O
 > = /*@__PURE__*/ API.make(() => ({
   input: AddLocalInventoriesProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5889,6 +5938,7 @@ export type BatchUpdateProjectsLocationsCatalogsGenerativeQuestionError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Allows management of multiple questions. */
 export const batchUpdateProjectsLocationsCatalogsGenerativeQuestion: API.OperationMethod<
@@ -5899,7 +5949,14 @@ export const batchUpdateProjectsLocationsCatalogsGenerativeQuestion: API.Operati
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchUpdateProjectsLocationsCatalogsGenerativeQuestionRequest,
   output: GoogleCloudRetailV2BatchUpdateGenerativeQuestionConfigsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5909,6 +5966,7 @@ export type CollectProjectsLocationsCatalogsUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Writes a single user event from the browser. For larger user event payload over 16 KB, the POST method should be used instead, otherwise a 400 Bad Request error is returned. This method is used only by the AI Commerce Search API JavaScript pixel and Google Tag Manager. Users should not call this method directly. */
 export const collectProjectsLocationsCatalogsUserEvents: API.OperationMethod<
@@ -5919,7 +5977,14 @@ export const collectProjectsLocationsCatalogsUserEvents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CollectProjectsLocationsCatalogsUserEventsRequest,
   output: GoogleApiHttpBody,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5927,6 +5992,7 @@ export const collectProjectsLocationsCatalogsUserEvents: API.OperationMethod<
 export type CompleteQueryProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Completes the specified prefix with keyword suggestions. This feature is only available for users who have Retail Search enabled. Enable Retail Search on Cloud Console before using this feature. */
 export const completeQueryProjectsLocationsCatalogs: API.OperationMethod<
@@ -5937,7 +6003,7 @@ export const completeQueryProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CompleteQueryProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2CompleteQueryResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5947,6 +6013,7 @@ export type ConversationalSearchProjectsLocationsCatalogsPlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Performs a conversational search. This feature is only available for users who have Conversational Search enabled. */
 export const conversationalSearchProjectsLocationsCatalogsPlacements: API.OperationMethod<
@@ -5957,7 +6024,14 @@ export const conversationalSearchProjectsLocationsCatalogsPlacements: API.Operat
 > = /*@__PURE__*/ API.make(() => ({
   input: ConversationalSearchProjectsLocationsCatalogsPlacementsRequest,
   output: GoogleCloudRetailV2ConversationalSearchResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5967,6 +6041,7 @@ export type ConversationalSearchProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Performs a conversational search. This feature is only available for users who have Conversational Search enabled. */
 export const conversationalSearchProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -5977,7 +6052,14 @@ export const conversationalSearchProjectsLocationsCatalogsServingConfigs: API.Op
 > = /*@__PURE__*/ API.make(() => ({
   input: ConversationalSearchProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2ConversationalSearchResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5987,6 +6069,7 @@ export type CreateProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Creates a Product. */
 export const createProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -5997,7 +6080,14 @@ export const createProjectsLocationsCatalogsBranchesProducts: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleCloudRetailV2Product,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6007,6 +6097,7 @@ export type CreateProjectsLocationsCatalogsControlsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Creates a Control. If the Control to create already exists, an ALREADY_EXISTS error is returned. */
 export const createProjectsLocationsCatalogsControls: API.OperationMethod<
@@ -6017,7 +6108,14 @@ export const createProjectsLocationsCatalogsControls: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsControlsRequest,
   output: GoogleCloudRetailV2Control,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6027,6 +6125,7 @@ export type CreateProjectsLocationsCatalogsModelsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Creates a new model. */
 export const createProjectsLocationsCatalogsModels: API.OperationMethod<
@@ -6037,7 +6136,14 @@ export const createProjectsLocationsCatalogsModels: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsModelsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6047,6 +6153,7 @@ export type CreateProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Creates a ServingConfig. A maximum of 100 ServingConfigs are allowed in a Catalog, otherwise a FAILED_PRECONDITION error is returned. */
 export const createProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -6057,7 +6164,14 @@ export const createProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2ServingConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6067,6 +6181,7 @@ export type DeleteProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Deletes a Product. */
 export const deleteProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -6077,7 +6192,14 @@ export const deleteProjectsLocationsCatalogsBranchesProducts: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6087,6 +6209,7 @@ export type DeleteProjectsLocationsCatalogsControlsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Deletes a Control. If the Control to delete does not exist, a NOT_FOUND error is returned. */
 export const deleteProjectsLocationsCatalogsControls: API.OperationMethod<
@@ -6097,7 +6220,14 @@ export const deleteProjectsLocationsCatalogsControls: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsControlsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6107,6 +6237,7 @@ export type DeleteProjectsLocationsCatalogsModelsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Deletes an existing model. */
 export const deleteProjectsLocationsCatalogsModels: API.OperationMethod<
@@ -6117,7 +6248,14 @@ export const deleteProjectsLocationsCatalogsModels: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsModelsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6127,6 +6265,7 @@ export type DeleteProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Deletes a ServingConfig. Returns a NotFound error if the ServingConfig does not exist. */
 export const deleteProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -6137,7 +6276,14 @@ export const deleteProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6147,6 +6293,7 @@ export type ExportAnalyticsMetricsProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Exports analytics metrics. `Operation.response` is of type `ExportAnalyticsMetricsResponse`. `Operation.metadata` is of type `ExportMetadata`. */
 export const exportAnalyticsMetricsProjectsLocationsCatalogs: API.OperationMethod<
@@ -6157,7 +6304,14 @@ export const exportAnalyticsMetricsProjectsLocationsCatalogs: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: ExportAnalyticsMetricsProjectsLocationsCatalogsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6165,6 +6319,7 @@ export const exportAnalyticsMetricsProjectsLocationsCatalogs: API.OperationMetho
 export type GetAttributesConfigProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets an AttributesConfig. */
 export const getAttributesConfigProjectsLocationsCatalogs: API.OperationMethod<
@@ -6175,7 +6330,7 @@ export const getAttributesConfigProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAttributesConfigProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2AttributesConfig,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6183,6 +6338,7 @@ export const getAttributesConfigProjectsLocationsCatalogs: API.OperationMethod<
 export type GetCompletionConfigProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets a CompletionConfig. */
 export const getCompletionConfigProjectsLocationsCatalogs: API.OperationMethod<
@@ -6193,7 +6349,7 @@ export const getCompletionConfigProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCompletionConfigProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2CompletionConfig,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6201,6 +6357,7 @@ export const getCompletionConfigProjectsLocationsCatalogs: API.OperationMethod<
 export type GetConversationalSearchCustomizationConfigProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Returns the conversational search customization config for a given catalog. */
 export const getConversationalSearchCustomizationConfigProjectsLocationsCatalogs: API.OperationMethod<
@@ -6212,7 +6369,7 @@ export const getConversationalSearchCustomizationConfigProjectsLocationsCatalogs
   input:
     GetConversationalSearchCustomizationConfigProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2ConversationalSearchCustomizationConfig,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6220,6 +6377,7 @@ export const getConversationalSearchCustomizationConfigProjectsLocationsCatalogs
 export type GetDefaultBranchProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Get which branch is currently default branch set by CatalogService.SetDefaultBranch method under a specified parent catalog. */
 export const getDefaultBranchProjectsLocationsCatalogs: API.OperationMethod<
@@ -6230,7 +6388,7 @@ export const getDefaultBranchProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetDefaultBranchProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2GetDefaultBranchResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6238,6 +6396,7 @@ export const getDefaultBranchProjectsLocationsCatalogs: API.OperationMethod<
 export type GetGenerativeQuestionFeatureProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Manages overal generative question feature state -- enables toggling feature on and off. */
 export const getGenerativeQuestionFeatureProjectsLocationsCatalogs: API.OperationMethod<
@@ -6248,7 +6407,7 @@ export const getGenerativeQuestionFeatureProjectsLocationsCatalogs: API.Operatio
 > = /*@__PURE__*/ API.make(() => ({
   input: GetGenerativeQuestionFeatureProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2GenerativeQuestionsFeatureConfig,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6256,6 +6415,7 @@ export const getGenerativeQuestionFeatureProjectsLocationsCatalogs: API.Operatio
 export type GetProjectsLocationsCatalogsBranchesOperationsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsCatalogsBranchesOperations: API.OperationMethod<
@@ -6266,7 +6426,7 @@ export const getProjectsLocationsCatalogsBranchesOperations: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsBranchesOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6274,6 +6434,7 @@ export const getProjectsLocationsCatalogsBranchesOperations: API.OperationMethod
 export type GetProjectsLocationsCatalogsBranchesProductsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets a Product. */
 export const getProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -6284,7 +6445,7 @@ export const getProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleCloudRetailV2Product,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6292,6 +6453,7 @@ export const getProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
 export type GetProjectsLocationsCatalogsControlsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets a Control. */
 export const getProjectsLocationsCatalogsControls: API.OperationMethod<
@@ -6302,7 +6464,7 @@ export const getProjectsLocationsCatalogsControls: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsControlsRequest,
   output: GoogleCloudRetailV2Control,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6310,6 +6472,7 @@ export const getProjectsLocationsCatalogsControls: API.OperationMethod<
 export type GetProjectsLocationsCatalogsModelsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets a model. */
 export const getProjectsLocationsCatalogsModels: API.OperationMethod<
@@ -6320,7 +6483,7 @@ export const getProjectsLocationsCatalogsModels: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsModelsRequest,
   output: GoogleCloudRetailV2Model,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6328,6 +6491,7 @@ export const getProjectsLocationsCatalogsModels: API.OperationMethod<
 export type GetProjectsLocationsCatalogsOperationsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsCatalogsOperations: API.OperationMethod<
@@ -6338,7 +6502,7 @@ export const getProjectsLocationsCatalogsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6346,6 +6510,7 @@ export const getProjectsLocationsCatalogsOperations: API.OperationMethod<
 export type GetProjectsLocationsCatalogsServingConfigsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets a ServingConfig. Returns a NotFound error if the ServingConfig does not exist. */
 export const getProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -6356,7 +6521,7 @@ export const getProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2ServingConfig,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6364,6 +6529,7 @@ export const getProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
 export type GetProjectsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsOperations: API.OperationMethod<
@@ -6374,12 +6540,16 @@ export const getProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsOperationsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsOperationsError =
+  | NotFound
+  | Forbidden
+  | RetailDataUseTermsNotAccepted
+  | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsOperations: API.OperationMethod<
   GetProjectsOperationsRequest,
@@ -6389,7 +6559,7 @@ export const getProjectsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6399,6 +6569,7 @@ export type ImportProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Bulk import of multiple Products. Request processing may be synchronous. Non-existing items are created. Note that it is possible for a subset of the Products to be successfully updated. */
 export const importProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -6409,7 +6580,14 @@ export const importProjectsLocationsCatalogsBranchesProducts: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: ImportProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6419,6 +6597,7 @@ export type ImportProjectsLocationsCatalogsCompletionDataError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Bulk import of processed completion dataset. Request processing is asynchronous. Partial updating is not supported. The operation is successfully finished only after the imported suggestions are indexed successfully and ready for serving. The process takes hours. This feature is only available for users who have Retail Search enabled. Enable Retail Search on Cloud Console before using this feature. */
 export const importProjectsLocationsCatalogsCompletionData: API.OperationMethod<
@@ -6429,7 +6608,14 @@ export const importProjectsLocationsCatalogsCompletionData: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ImportProjectsLocationsCatalogsCompletionDataRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6439,6 +6625,7 @@ export type ImportProjectsLocationsCatalogsUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Bulk import of User events. Request processing might be synchronous. Events that already exist are skipped. Use this method for backfilling historical user events. `Operation.response` is of type `ImportResponse`. Note that it is possible for a subset of the items to be successfully inserted. `Operation.metadata` is of type `ImportMetadata`. */
 export const importProjectsLocationsCatalogsUserEvents: API.OperationMethod<
@@ -6449,7 +6636,14 @@ export const importProjectsLocationsCatalogsUserEvents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ImportProjectsLocationsCatalogsUserEventsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6457,6 +6651,7 @@ export const importProjectsLocationsCatalogsUserEvents: API.OperationMethod<
 export type ListProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Lists all the Catalogs associated with the project. */
 export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
@@ -6468,7 +6663,7 @@ export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2ListCatalogsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6480,6 +6675,7 @@ export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
 export type ListProjectsLocationsCatalogsBranchesProductsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Gets a list of Products. */
 export const listProjectsLocationsCatalogsBranchesProducts: API.PaginatedOperationMethod<
@@ -6491,7 +6687,7 @@ export const listProjectsLocationsCatalogsBranchesProducts: API.PaginatedOperati
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleCloudRetailV2ListProductsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6503,6 +6699,7 @@ export const listProjectsLocationsCatalogsBranchesProducts: API.PaginatedOperati
 export type ListProjectsLocationsCatalogsControlsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Lists all Controls by their parent Catalog. */
 export const listProjectsLocationsCatalogsControls: API.PaginatedOperationMethod<
@@ -6514,7 +6711,7 @@ export const listProjectsLocationsCatalogsControls: API.PaginatedOperationMethod
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsControlsRequest,
   output: GoogleCloudRetailV2ListControlsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6526,6 +6723,7 @@ export const listProjectsLocationsCatalogsControls: API.PaginatedOperationMethod
 export type ListProjectsLocationsCatalogsGenerativeQuestionsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Returns all questions for a given catalog. */
 export const listProjectsLocationsCatalogsGenerativeQuestions: API.OperationMethod<
@@ -6536,7 +6734,7 @@ export const listProjectsLocationsCatalogsGenerativeQuestions: API.OperationMeth
 > = /*@__PURE__*/ API.make(() => ({
   input: ListProjectsLocationsCatalogsGenerativeQuestionsRequest,
   output: GoogleCloudRetailV2ListGenerativeQuestionConfigsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6544,6 +6742,7 @@ export const listProjectsLocationsCatalogsGenerativeQuestions: API.OperationMeth
 export type ListProjectsLocationsCatalogsModelsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Lists all the models linked to this event store. */
 export const listProjectsLocationsCatalogsModels: API.PaginatedOperationMethod<
@@ -6555,7 +6754,7 @@ export const listProjectsLocationsCatalogsModels: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsModelsRequest,
   output: GoogleCloudRetailV2ListModelsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6567,6 +6766,7 @@ export const listProjectsLocationsCatalogsModels: API.PaginatedOperationMethod<
 export type ListProjectsLocationsCatalogsOperationsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsLocationsCatalogsOperations: API.PaginatedOperationMethod<
@@ -6578,7 +6778,7 @@ export const listProjectsLocationsCatalogsOperations: API.PaginatedOperationMeth
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6590,6 +6790,7 @@ export const listProjectsLocationsCatalogsOperations: API.PaginatedOperationMeth
 export type ListProjectsLocationsCatalogsServingConfigsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Lists all ServingConfigs linked to this catalog. */
 export const listProjectsLocationsCatalogsServingConfigs: API.PaginatedOperationMethod<
@@ -6601,7 +6802,7 @@ export const listProjectsLocationsCatalogsServingConfigs: API.PaginatedOperation
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2ListServingConfigsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6613,6 +6814,7 @@ export const listProjectsLocationsCatalogsServingConfigs: API.PaginatedOperation
 export type ListProjectsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
@@ -6624,7 +6826,7 @@ export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6633,7 +6835,11 @@ export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListProjectsOperationsError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsOperationsError =
+  | NotFound
+  | Forbidden
+  | RetailDataUseTermsNotAccepted
+  | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsOperations: API.PaginatedOperationMethod<
   ListProjectsOperationsRequest,
@@ -6644,7 +6850,7 @@ export const listProjectsOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, RetailDataUseTermsNotAccepted, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -6658,6 +6864,7 @@ export type PatchProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates the Catalogs. */
 export const patchProjectsLocationsCatalogs: API.OperationMethod<
@@ -6668,7 +6875,14 @@ export const patchProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2Catalog,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6678,6 +6892,7 @@ export type PatchProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates a Product. */
 export const patchProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -6688,7 +6903,14 @@ export const patchProjectsLocationsCatalogsBranchesProducts: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleCloudRetailV2Product,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6698,6 +6920,7 @@ export type PatchProjectsLocationsCatalogsControlsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates a Control. Control cannot be set to a different oneof field, if so an INVALID_ARGUMENT is returned. If the Control to update does not exist, a NOT_FOUND error is returned. */
 export const patchProjectsLocationsCatalogsControls: API.OperationMethod<
@@ -6708,7 +6931,14 @@ export const patchProjectsLocationsCatalogsControls: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsControlsRequest,
   output: GoogleCloudRetailV2Control,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6718,6 +6948,7 @@ export type PatchProjectsLocationsCatalogsModelsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Update of model metadata. Only fields that currently can be updated are: `filtering_option` and `periodic_tuning_state`. If other values are provided, this API method ignores them. */
 export const patchProjectsLocationsCatalogsModels: API.OperationMethod<
@@ -6728,7 +6959,14 @@ export const patchProjectsLocationsCatalogsModels: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsModelsRequest,
   output: GoogleCloudRetailV2Model,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6738,6 +6976,7 @@ export type PatchProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates a ServingConfig. */
 export const patchProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -6748,7 +6987,14 @@ export const patchProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2ServingConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6758,6 +7004,7 @@ export type PauseProjectsLocationsCatalogsModelsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Pauses the training of an existing model. */
 export const pauseProjectsLocationsCatalogsModels: API.OperationMethod<
@@ -6768,7 +7015,14 @@ export const pauseProjectsLocationsCatalogsModels: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PauseProjectsLocationsCatalogsModelsRequest,
   output: GoogleCloudRetailV2Model,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6778,6 +7032,7 @@ export type PredictProjectsLocationsCatalogsPlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Makes a recommendation prediction. */
 export const predictProjectsLocationsCatalogsPlacements: API.OperationMethod<
@@ -6788,7 +7043,14 @@ export const predictProjectsLocationsCatalogsPlacements: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PredictProjectsLocationsCatalogsPlacementsRequest,
   output: GoogleCloudRetailV2PredictResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6798,6 +7060,7 @@ export type PredictProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Makes a recommendation prediction. */
 export const predictProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -6808,7 +7071,14 @@ export const predictProjectsLocationsCatalogsServingConfigs: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: PredictProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2PredictResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6818,6 +7088,7 @@ export type PurgeProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Permanently deletes all selected Products under a branch. This process is asynchronous. If the request is valid, the removal will be enqueued and processed offline. Depending on the number of Products, this operation could take hours to complete. Before the operation completes, some Products may still be returned by ProductService.GetProduct or ProductService.ListProducts. Depending on the number of Products, this operation could take hours to complete. To get a sample of Products that would be deleted, set PurgeProductsRequest.force to false. */
 export const purgeProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -6828,7 +7099,14 @@ export const purgeProjectsLocationsCatalogsBranchesProducts: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: PurgeProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6838,6 +7116,7 @@ export type PurgeProjectsLocationsCatalogsUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Deletes permanently all user events specified by the filter provided. Depending on the number of events specified by the filter, this operation could take hours or days to complete. To test a filter, use the list command first. */
 export const purgeProjectsLocationsCatalogsUserEvents: API.OperationMethod<
@@ -6848,7 +7127,14 @@ export const purgeProjectsLocationsCatalogsUserEvents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PurgeProjectsLocationsCatalogsUserEventsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6858,6 +7144,7 @@ export type RejoinProjectsLocationsCatalogsUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Starts a user-event rejoin operation with latest product catalog. Events are not annotated with detailed product information for products that are missing from the catalog when the user event is ingested. These events are stored as unjoined events with limited usage on training and serving. You can use this method to start a join operation on specified events with the latest version of product catalog. You can also use this method to correct events joined with the wrong product catalog. A rejoin operation can take hours or days to complete. */
 export const rejoinProjectsLocationsCatalogsUserEvents: API.OperationMethod<
@@ -6868,7 +7155,14 @@ export const rejoinProjectsLocationsCatalogsUserEvents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: RejoinProjectsLocationsCatalogsUserEventsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6878,6 +7172,7 @@ export type RemoveCatalogAttributeProjectsLocationsCatalogsAttributesConfigError
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Removes the specified CatalogAttribute from the AttributesConfig. If the CatalogAttribute to remove does not exist, a NOT_FOUND error is returned. */
 export const removeCatalogAttributeProjectsLocationsCatalogsAttributesConfig: API.OperationMethod<
@@ -6888,7 +7183,14 @@ export const removeCatalogAttributeProjectsLocationsCatalogsAttributesConfig: AP
 > = /*@__PURE__*/ API.make(() => ({
   input: RemoveCatalogAttributeProjectsLocationsCatalogsAttributesConfigRequest,
   output: GoogleCloudRetailV2AttributesConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6898,6 +7200,7 @@ export type RemoveControlProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Disables a Control on the specified ServingConfig. The control is removed from the ServingConfig. Returns a NOT_FOUND error if the Control is not enabled for the ServingConfig. */
 export const removeControlProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -6908,7 +7211,14 @@ export const removeControlProjectsLocationsCatalogsServingConfigs: API.Operation
 > = /*@__PURE__*/ API.make(() => ({
   input: RemoveControlProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2ServingConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6918,6 +7228,7 @@ export type RemoveFulfillmentPlacesProjectsLocationsCatalogsBranchesProductsErro
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** We recommend that you use the ProductService.RemoveLocalInventories method instead of the ProductService.RemoveFulfillmentPlaces method. ProductService.RemoveLocalInventories achieves the same results but provides more fine-grained control over ingesting local inventory data. Incrementally removes place IDs from a Product.fulfillment_info.place_ids. This process is asynchronous and does not require the Product to exist before updating fulfillment information. If the request is valid, the update will be enqueued and processed downstream. As a consequence, when a response is returned, the removed place IDs are not immediately manifested in the Product queried by ProductService.GetProduct or ProductService.ListProducts. The returned Operations will be obsolete after 1 day, and GetOperation API will return NOT_FOUND afterwards. If conflicting updates are issued, the Operations associated with the stale updates will not be marked as done until being obsolete. */
 export const removeFulfillmentPlacesProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -6929,7 +7240,14 @@ export const removeFulfillmentPlacesProjectsLocationsCatalogsBranchesProducts: A
   input:
     RemoveFulfillmentPlacesProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6939,6 +7257,7 @@ export type RemoveLocalInventoriesProjectsLocationsCatalogsBranchesProductsError
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Remove local inventory information for a Product at a list of places at a removal timestamp. This process is asynchronous. If the request is valid, the removal will be enqueued and processed downstream. As a consequence, when a response is returned, removals are not immediately manifested in the Product queried by ProductService.GetProduct or ProductService.ListProducts. Local inventory information can only be removed using this method. ProductService.CreateProduct and ProductService.UpdateProduct has no effect on local inventories. The returned Operations will be obsolete after 1 day, and GetOperation API will return NOT_FOUND afterwards. If conflicting updates are issued, the Operations associated with the stale updates will not be marked as done until being obsolete. */
 export const removeLocalInventoriesProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -6949,7 +7268,14 @@ export const removeLocalInventoriesProjectsLocationsCatalogsBranchesProducts: AP
 > = /*@__PURE__*/ API.make(() => ({
   input: RemoveLocalInventoriesProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6959,6 +7285,7 @@ export type ReplaceCatalogAttributeProjectsLocationsCatalogsAttributesConfigErro
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Replaces the specified CatalogAttribute in the AttributesConfig by updating the catalog attribute with the same CatalogAttribute.key. If the CatalogAttribute to replace does not exist, a NOT_FOUND error is returned. */
 export const replaceCatalogAttributeProjectsLocationsCatalogsAttributesConfig: API.OperationMethod<
@@ -6970,7 +7297,14 @@ export const replaceCatalogAttributeProjectsLocationsCatalogsAttributesConfig: A
   input:
     ReplaceCatalogAttributeProjectsLocationsCatalogsAttributesConfigRequest,
   output: GoogleCloudRetailV2AttributesConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -6980,6 +7314,7 @@ export type ResumeProjectsLocationsCatalogsModelsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Resumes the training of an existing model. */
 export const resumeProjectsLocationsCatalogsModels: API.OperationMethod<
@@ -6990,7 +7325,14 @@ export const resumeProjectsLocationsCatalogsModels: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ResumeProjectsLocationsCatalogsModelsRequest,
   output: GoogleCloudRetailV2Model,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7000,6 +7342,7 @@ export type SearchProjectsLocationsCatalogsPlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Performs a search. This feature is only available for users who have Retail Search enabled. Enable Retail Search on Cloud Console before using this feature. */
 export const searchProjectsLocationsCatalogsPlacements: API.OperationMethod<
@@ -7010,7 +7353,14 @@ export const searchProjectsLocationsCatalogsPlacements: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SearchProjectsLocationsCatalogsPlacementsRequest,
   output: GoogleCloudRetailV2SearchResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7020,6 +7370,7 @@ export type SearchProjectsLocationsCatalogsServingConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Performs a search. This feature is only available for users who have Retail Search enabled. Enable Retail Search on Cloud Console before using this feature. */
 export const searchProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
@@ -7030,7 +7381,14 @@ export const searchProjectsLocationsCatalogsServingConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SearchProjectsLocationsCatalogsServingConfigsRequest,
   output: GoogleCloudRetailV2SearchResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7040,6 +7398,7 @@ export type SetDefaultBranchProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Set a specified branch id as default branch. API methods such as SearchService.Search, ProductService.GetProduct, ProductService.ListProducts will treat requests using "default_branch" to the actual branch id set as default. For example, if `projects/*\/locations/*\/catalogs/*\/branches/1` is set as default, setting SearchRequest.branch to `projects/*\/locations/*\/catalogs/*\/branches/default_branch` is equivalent to setting SearchRequest.branch to `projects/*\/locations/*\/catalogs/*\/branches/1`. Using multiple branches can be useful when developers would like to have a staging branch to test and verify for future usage. When it becomes ready, developers switch on the staging branch using this API while keeping using `projects/*\/locations/*\/catalogs/*\/branches/default_branch` as SearchRequest.branch to route the traffic to this staging branch. CAUTION: If you have live predict/search traffic, switching the default branch could potentially cause outages if the ID space of the new branch is very different from the old one. More specifically: * PredictionService will only return product IDs from branch {newBranch}. * SearchService will only return product IDs from branch {newBranch} (if branch is not explicitly set). * UserEventService will only join events with products from branch {newBranch}. */
 export const setDefaultBranchProjectsLocationsCatalogs: API.OperationMethod<
@@ -7050,7 +7409,14 @@ export const setDefaultBranchProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetDefaultBranchProjectsLocationsCatalogsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7060,6 +7426,7 @@ export type SetInventoryProjectsLocationsCatalogsBranchesProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates inventory information for a Product while respecting the last update timestamps of each inventory field. This process is asynchronous and does not require the Product to exist before updating fulfillment information. If the request is valid, the update is enqueued and processed downstream. As a consequence, when a response is returned, updates are not immediately manifested in the Product queried by ProductService.GetProduct or ProductService.ListProducts. When inventory is updated with ProductService.CreateProduct and ProductService.UpdateProduct, the specified inventory field value(s) overwrite any existing value(s) while ignoring the last update time for this field. Furthermore, the last update times for the specified inventory fields are overwritten by the times of the ProductService.CreateProduct or ProductService.UpdateProduct request. If no inventory fields are set in CreateProductRequest.product, then any pre-existing inventory information for this product is used. If no inventory fields are set in SetInventoryRequest.set_mask, then any existing inventory information is preserved. Pre-existing inventory information can only be updated with ProductService.SetInventory, ProductService.AddFulfillmentPlaces, and ProductService.RemoveFulfillmentPlaces. The returned Operations is obsolete after one day, and the GetOperation API returns `NOT_FOUND` afterwards. If conflicting updates are issued, the Operations associated with the stale updates are not marked as done until they are obsolete. */
 export const setInventoryProjectsLocationsCatalogsBranchesProducts: API.OperationMethod<
@@ -7070,7 +7437,14 @@ export const setInventoryProjectsLocationsCatalogsBranchesProducts: API.Operatio
 > = /*@__PURE__*/ API.make(() => ({
   input: SetInventoryProjectsLocationsCatalogsBranchesProductsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7080,6 +7454,7 @@ export type TuneProjectsLocationsCatalogsModelsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Tunes an existing model. */
 export const tuneProjectsLocationsCatalogsModels: API.OperationMethod<
@@ -7090,7 +7465,14 @@ export const tuneProjectsLocationsCatalogsModels: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: TuneProjectsLocationsCatalogsModelsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7100,6 +7482,7 @@ export type UpdateAttributesConfigProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates the AttributesConfig. The catalog attributes in the request will be updated in the catalog, or inserted if they do not exist. Existing catalog attributes not included in the request will remain unchanged. Attributes that are assigned to products, but do not exist at the catalog level, are always included in the response. The product attribute is assigned default values for missing catalog attribute fields, e.g., searchable and dynamic facetable options. */
 export const updateAttributesConfigProjectsLocationsCatalogs: API.OperationMethod<
@@ -7110,7 +7493,14 @@ export const updateAttributesConfigProjectsLocationsCatalogs: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateAttributesConfigProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2AttributesConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7120,6 +7510,7 @@ export type UpdateCompletionConfigProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates the CompletionConfigs. */
 export const updateCompletionConfigProjectsLocationsCatalogs: API.OperationMethod<
@@ -7130,7 +7521,14 @@ export const updateCompletionConfigProjectsLocationsCatalogs: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateCompletionConfigProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2CompletionConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7140,6 +7538,7 @@ export type UpdateConversationalSearchCustomizationConfigProjectsLocationsCatalo
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Updates the conversational search customization config for a given catalog. */
 export const updateConversationalSearchCustomizationConfigProjectsLocationsCatalogs: API.OperationMethod<
@@ -7151,7 +7550,14 @@ export const updateConversationalSearchCustomizationConfigProjectsLocationsCatal
   input:
     UpdateConversationalSearchCustomizationConfigProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2ConversationalSearchCustomizationConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7161,6 +7567,7 @@ export type UpdateGenerativeQuestionFeatureProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Manages overal generative question feature state -- enables toggling feature on and off. */
 export const updateGenerativeQuestionFeatureProjectsLocationsCatalogs: API.OperationMethod<
@@ -7171,7 +7578,14 @@ export const updateGenerativeQuestionFeatureProjectsLocationsCatalogs: API.Opera
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateGenerativeQuestionFeatureProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2GenerativeQuestionsFeatureConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7181,6 +7595,7 @@ export type UpdateGenerativeQuestionProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Allows management of individual questions. */
 export const updateGenerativeQuestionProjectsLocationsCatalogs: API.OperationMethod<
@@ -7191,7 +7606,14 @@ export const updateGenerativeQuestionProjectsLocationsCatalogs: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateGenerativeQuestionProjectsLocationsCatalogsRequest,
   output: GoogleCloudRetailV2GenerativeQuestionConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7201,6 +7623,7 @@ export type WriteProjectsLocationsCatalogsUserEventsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | RetailDataUseTermsNotAccepted
   | GcpOpError;
 /** Writes a single user event. */
 export const writeProjectsLocationsCatalogsUserEvents: API.OperationMethod<
@@ -7211,7 +7634,14 @@ export const writeProjectsLocationsCatalogsUserEvents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: WriteProjectsLocationsCatalogsUserEventsRequest,
   output: GoogleCloudRetailV2UserEvent,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    RetailDataUseTermsNotAccepted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

@@ -65,6 +65,50 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The A2A task endpoints reject callers without an established consumer identity (HTTP 403 PERMISSION_DENIED: 'Method doesn't allow unregistered callers (callers without established identity).'). Not retryable. */
+export class TasksUnregisteredCaller
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<TasksUnregisteredCaller>()(
+      "TasksUnregisteredCaller",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "doesn't allow unregistered callers" },
+      },
+    ],
+  ) {}
+
+/** The access token lacks a Workspace Events OAuth scope for the subscribed resource (HTTP 403 PERMISSION_DENIED, reason ACCESS_TOKEN_SCOPE_INSUFFICIENT: 'Request had insufficient authentication scopes.'). A `cloud-platform` token is not enough. Not retryable. */
+export class WorkspaceEventsScopeInsufficient
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<WorkspaceEventsScopeInsufficient>()(
+      "WorkspaceEventsScopeInsufficient",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "insufficient authentication scopes" },
+      },
+    ],
+  ) {}
+
 export interface CancelTaskRequest {
   /** Optional tenant, provided as a path parameter. Experimental, might still change for 1.0 release. */
   tenant?: string;
@@ -1011,6 +1055,7 @@ export type CreateSubscriptionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | WorkspaceEventsScopeInsufficient
   | GcpOpError;
 /** Creates a Google Workspace subscription. To learn how to use this method, see [Create a Google Workspace subscription](https://developers.google.com/workspace/events/guides/create-subscription). For a subscription on a [Chat target resource](https://developers.google.com/workspace/events/guides/events-chat), you can create a subscription as: - A Chat app subscribing to space events where the app is a member by specifying an authorization scope that begins with `chat.app` and getting one-time administrator approval. To learn more, see [Authorize as a Chat app with administrator approval](https://developers.google.com/workspace/chat/authenticate-authorize-chat-app). - [Developer Preview](https://developers.google.com/workspace/preview): A Chat app subscribing to all events in a Google Workspace organization by specifying an authorization scope that begins with `chat.app.all` and obtaining one-time administrator approval. To learn more, see [Subscribe to all Google Chat events in a Workspace organization ](https://developers.google.com/workspace/events/guides/create-subscription#customer-subscription). - A user by specifying an authorization scope that doesn't include `app` in its name. To learn more, see [Authorize as a Chat user](https://developers.google.com/workspace/chat/authenticate-authorize-chat-user). */
 export const createSubscriptions: API.OperationMethod<
@@ -1021,7 +1066,14 @@ export const createSubscriptions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateSubscriptionsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    WorkspaceEventsScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1031,6 +1083,7 @@ export type CreateTasksPushNotificationConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | TasksUnregisteredCaller
   | GcpOpError;
 /** Set a push notification config for a task. */
 export const createTasksPushNotificationConfigs: API.OperationMethod<
@@ -1041,7 +1094,14 @@ export const createTasksPushNotificationConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateTasksPushNotificationConfigsRequest,
   output: TaskPushNotificationConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    TasksUnregisteredCaller,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1051,6 +1111,7 @@ export type DeleteSubscriptionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | WorkspaceEventsScopeInsufficient
   | GcpOpError;
 /** Deletes a Google Workspace subscription. To learn how to use this method, see [Delete a Google Workspace subscription](https://developers.google.com/workspace/events/guides/delete-subscription). */
 export const deleteSubscriptions: API.OperationMethod<
@@ -1061,7 +1122,14 @@ export const deleteSubscriptions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteSubscriptionsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    WorkspaceEventsScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1071,6 +1139,7 @@ export type DeleteTasksPushNotificationConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | TasksUnregisteredCaller
   | GcpOpError;
 /** Delete a push notification config for a task. */
 export const deleteTasksPushNotificationConfigs: API.OperationMethod<
@@ -1081,7 +1150,14 @@ export const deleteTasksPushNotificationConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteTasksPushNotificationConfigsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    TasksUnregisteredCaller,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1101,7 +1177,11 @@ export const getOperations: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetSubscriptionsError = NotFound | Forbidden | GcpOpError;
+export type GetSubscriptionsError =
+  | NotFound
+  | Forbidden
+  | WorkspaceEventsScopeInsufficient
+  | GcpOpError;
 /** Gets details about a Google Workspace subscription. To learn how to use this method, see [Get details about a Google Workspace subscription](https://developers.google.com/workspace/events/guides/get-subscription). */
 export const getSubscriptions: API.OperationMethod<
   GetSubscriptionsRequest,
@@ -1111,7 +1191,12 @@ export const getSubscriptions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetSubscriptionsRequest,
   output: Subscription,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    WorkspaceEventsScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1134,6 +1219,7 @@ export const getTasks: API.OperationMethod<
 export type GetTasksPushNotificationConfigsError =
   | NotFound
   | Forbidden
+  | TasksUnregisteredCaller
   | GcpOpError;
 /** Get a push notification config for a task. */
 export const getTasksPushNotificationConfigs: API.OperationMethod<
@@ -1144,12 +1230,16 @@ export const getTasksPushNotificationConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetTasksPushNotificationConfigsRequest,
   output: TaskPushNotificationConfig,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, TasksUnregisteredCaller, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListSubscriptionsError = NotFound | Forbidden | GcpOpError;
+export type ListSubscriptionsError =
+  | NotFound
+  | Forbidden
+  | WorkspaceEventsScopeInsufficient
+  | GcpOpError;
 /** Lists Google Workspace subscriptions. To learn how to use this method, see [List Google Workspace subscriptions](https://developers.google.com/workspace/events/guides/list-subscriptions). */
 export const listSubscriptions: API.PaginatedOperationMethod<
   ListSubscriptionsRequest,
@@ -1160,7 +1250,12 @@ export const listSubscriptions: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListSubscriptionsRequest,
   output: ListSubscriptionsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    WorkspaceEventsScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1172,6 +1267,7 @@ export const listSubscriptions: API.PaginatedOperationMethod<
 export type ListTasksPushNotificationConfigsError =
   | NotFound
   | Forbidden
+  | TasksUnregisteredCaller
   | GcpOpError;
 /** Get a list of push notifications configured for a task. */
 export const listTasksPushNotificationConfigs: API.PaginatedOperationMethod<
@@ -1183,7 +1279,7 @@ export const listTasksPushNotificationConfigs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListTasksPushNotificationConfigsRequest,
   output: ListTaskPushNotificationConfigResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, TasksUnregisteredCaller, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1197,6 +1293,7 @@ export type PatchSubscriptionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | WorkspaceEventsScopeInsufficient
   | GcpOpError;
 /** Updates or renews a Google Workspace subscription. To learn how to use this method, see [Update or renew a Google Workspace subscription](https://developers.google.com/workspace/events/guides/update-subscription). For a subscription on a [Chat target resource](https://developers.google.com/workspace/events/guides/events-chat), you can update a subscription as: - A Chat app subscribing to space events where the app is a member by specifying an authorization scope that begins with `chat.app` and getting one-time administrator approval. To learn more, see [Authorize as a Chat app with administrator approval](https://developers.google.com/workspace/chat/authenticate-authorize-chat-app). - [Developer Preview](https://developers.google.com/workspace/preview): A Chat app subscribing to all events in a Google Workspace organization by specifying an authorization scope that begins with `chat.app.all` and getting one-time administrator approval. To learn more, see [Subscribe to all Google Chat events in a Workspace organization ](https://developers.google.com/workspace/events/guides/create-subscription#customer-subscription). - A user by specifying an authorization scope that doesn't include `app` in its name. To learn more, see [Authorize as a Chat user](https://developers.google.com/workspace/chat/authenticate-authorize-chat-user). */
 export const patchSubscriptions: API.OperationMethod<
@@ -1207,7 +1304,14 @@ export const patchSubscriptions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchSubscriptionsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    WorkspaceEventsScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1217,6 +1321,7 @@ export type ReactivateSubscriptionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | WorkspaceEventsScopeInsufficient
   | GcpOpError;
 /** Reactivates a suspended Google Workspace subscription. This method resets your subscription's `State` field to `ACTIVE`. Before you use this method, you must fix the error that suspended the subscription. This method will ignore or reject any subscription that isn't currently in a suspended state. To learn how to use this method, see [Reactivate a Google Workspace subscription](https://developers.google.com/workspace/events/guides/reactivate-subscription). For a subscription on a [Chat target resource](https://developers.google.com/workspace/events/guides/events-chat), you can reactivate a subscription as: - A Chat app subscribing to space events where the app is a member by specifying an authorization scope that begins with `chat.app` and getting one-time administrator approval. To learn more, see [Authorize as a Chat app with administrator approval](https://developers.google.com/workspace/chat/authenticate-authorize-chat-app). - [Developer Preview](https://developers.google.com/workspace/preview): A Chat app subscribing to all events in a Google Workspace organization by specifying an authorization scope that begins with `chat.app.all` and getting one-time administrator approval. To learn more, see [Subscribe to all Google Chat events in a Workspace organization ](https://developers.google.com/workspace/events/guides/create-subscription#customer-subscription). - A user by specifying an authorization scope that doesn't include `app` in its name. To learn more, see [Authorize as a Chat user](https://developers.google.com/workspace/chat/authenticate-authorize-chat-user). */
 export const reactivateSubscriptions: API.OperationMethod<
@@ -1227,7 +1332,14 @@ export const reactivateSubscriptions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ReactivateSubscriptionsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    WorkspaceEventsScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

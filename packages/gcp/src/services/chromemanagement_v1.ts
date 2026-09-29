@@ -52,6 +52,25 @@ export class Forbidden
     [{ status: 403 }],
   ) {}
 
+/** The OAuth token lacks the scope the API requires (HTTP 403 PERMISSION_DENIED: "Request had insufficient authentication scopes."). Service-account tokens with only cloud-platform scope hit this. */
+export class InsufficientScopes
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<InsufficientScopes>()("InsufficientScopes", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "insufficient authentication scopes" },
+      },
+    ],
+  ) {}
+
 export class NotFound
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<NotFound>()("NotFound", {
@@ -7011,6 +7030,7 @@ export type CancelOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use Operations.GetOperation or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an Operation.error value with a google.rpc.Status.code of `1`, corresponding to `Code.CANCELLED`. */
 export const cancelOperations: API.OperationMethod<
@@ -7021,7 +7041,14 @@ export const cancelOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7029,6 +7056,7 @@ export const cancelOperations: API.OperationMethod<
 export type CheckEnablementStatusCustomersEnterpriseSecurityInsightsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets the setting state of the insights feature for the customer. */
 export const checkEnablementStatusCustomersEnterpriseSecurityInsights: API.OperationMethod<
@@ -7039,7 +7067,7 @@ export const checkEnablementStatusCustomersEnterpriseSecurityInsights: API.Opera
 > = /*@__PURE__*/ API.make(() => ({
   input: CheckEnablementStatusCustomersEnterpriseSecurityInsightsRequest,
   output: GoogleChromeManagementVersionsV1CheckEnablementStatusResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7049,6 +7077,7 @@ export type ClaimCustomersCertificateProvisioningProcessesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Claims a certificate provisioning process. For each certificate provisioning process, this operation can succeed only for one `caller_instance_id`. */
 export const claimCustomersCertificateProvisioningProcesses: API.OperationMethod<
@@ -7060,7 +7089,14 @@ export const claimCustomersCertificateProvisioningProcesses: API.OperationMethod
   input: ClaimCustomersCertificateProvisioningProcessesRequest,
   output:
     GoogleChromeManagementVersionsV1ClaimCertificateProvisioningProcessResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7068,6 +7104,7 @@ export const claimCustomersCertificateProvisioningProcesses: API.OperationMethod
 export type CountActiveDevicesCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a count of active devices per set time frames. */
 export const countActiveDevicesCustomersReports: API.OperationMethod<
@@ -7078,7 +7115,7 @@ export const countActiveDevicesCustomersReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CountActiveDevicesCustomersReportsRequest,
   output: GoogleChromeManagementV1CountActiveDevicesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7086,6 +7123,7 @@ export const countActiveDevicesCustomersReports: API.OperationMethod<
 export type CountChromeAppRequestsCustomersAppsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generate summary of app installation requests. */
 export const countChromeAppRequestsCustomersApps: API.PaginatedOperationMethod<
@@ -7097,7 +7135,7 @@ export const countChromeAppRequestsCustomersApps: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: CountChromeAppRequestsCustomersAppsRequest,
   output: GoogleChromeManagementV1CountChromeAppRequestsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7109,6 +7147,7 @@ export const countChromeAppRequestsCustomersApps: API.PaginatedOperationMethod<
 export type CountChromeBrowsersNeedingAttentionCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Count of Chrome Browsers that have been recently enrolled, have new policy to be synced, or have no recent activity. */
 export const countChromeBrowsersNeedingAttentionCustomersReports: API.OperationMethod<
@@ -7119,7 +7158,7 @@ export const countChromeBrowsersNeedingAttentionCustomersReports: API.OperationM
 > = /*@__PURE__*/ API.make(() => ({
   input: CountChromeBrowsersNeedingAttentionCustomersReportsRequest,
   output: GoogleChromeManagementV1CountChromeBrowsersNeedingAttentionResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7127,6 +7166,7 @@ export const countChromeBrowsersNeedingAttentionCustomersReports: API.OperationM
 export type CountChromeCrashEventsCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a count of Chrome crash events. */
 export const countChromeCrashEventsCustomersReports: API.OperationMethod<
@@ -7137,7 +7177,7 @@ export const countChromeCrashEventsCustomersReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CountChromeCrashEventsCustomersReportsRequest,
   output: GoogleChromeManagementV1CountChromeCrashEventsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7145,6 +7185,7 @@ export const countChromeCrashEventsCustomersReports: API.OperationMethod<
 export type CountChromeDevicesReachingAutoExpirationDateCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generate report of the number of devices expiring in each month of the selected time frame. Devices are grouped by auto update expiration date and model. Further information can be found [here](https://support.google.com/chrome/a/answer/10564947). */
 export const countChromeDevicesReachingAutoExpirationDateCustomersReports: API.OperationMethod<
@@ -7156,7 +7197,7 @@ export const countChromeDevicesReachingAutoExpirationDateCustomersReports: API.O
   input: CountChromeDevicesReachingAutoExpirationDateCustomersReportsRequest,
   output:
     GoogleChromeManagementV1CountChromeDevicesReachingAutoExpirationDateResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7164,6 +7205,7 @@ export const countChromeDevicesReachingAutoExpirationDateCustomersReports: API.O
 export type CountChromeDevicesThatNeedAttentionCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Counts of ChromeOS devices that have not synced policies or have lacked user activity in the past 28 days, are out of date, or are not complaint. Further information can be found here https://support.google.com/chrome/a/answer/10564947 */
 export const countChromeDevicesThatNeedAttentionCustomersReports: API.OperationMethod<
@@ -7174,7 +7216,7 @@ export const countChromeDevicesThatNeedAttentionCustomersReports: API.OperationM
 > = /*@__PURE__*/ API.make(() => ({
   input: CountChromeDevicesThatNeedAttentionCustomersReportsRequest,
   output: GoogleChromeManagementV1CountChromeDevicesThatNeedAttentionResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7182,6 +7224,7 @@ export const countChromeDevicesThatNeedAttentionCustomersReports: API.OperationM
 export type CountChromeHardwareFleetDevicesCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Counts of devices with a specific hardware specification from the requested hardware type (for example model name, processor type). Further information can be found here https://support.google.com/chrome/a/answer/10564947 */
 export const countChromeHardwareFleetDevicesCustomersReports: API.OperationMethod<
@@ -7192,7 +7235,7 @@ export const countChromeHardwareFleetDevicesCustomersReports: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: CountChromeHardwareFleetDevicesCustomersReportsRequest,
   output: GoogleChromeManagementV1CountChromeHardwareFleetDevicesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7200,6 +7243,7 @@ export const countChromeHardwareFleetDevicesCustomersReports: API.OperationMetho
 export type CountChromeProfileVersionsCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generate report of installed Chrome versions on managed profiles. */
 export const countChromeProfileVersionsCustomersReports: API.PaginatedOperationMethod<
@@ -7211,7 +7255,7 @@ export const countChromeProfileVersionsCustomersReports: API.PaginatedOperationM
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: CountChromeProfileVersionsCustomersReportsRequest,
   output: GoogleChromeManagementV1CountChromeProfileVersionsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7223,6 +7267,7 @@ export const countChromeProfileVersionsCustomersReports: API.PaginatedOperationM
 export type CountChromeVersionsCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generate report of installed Chrome versions. */
 export const countChromeVersionsCustomersReports: API.PaginatedOperationMethod<
@@ -7234,7 +7279,7 @@ export const countChromeVersionsCustomersReports: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: CountChromeVersionsCustomersReportsRequest,
   output: GoogleChromeManagementV1CountChromeVersionsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7246,6 +7291,7 @@ export const countChromeVersionsCustomersReports: API.PaginatedOperationMethod<
 export type CountDevicesPerBootTypeCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a count of devices per boot type. */
 export const countDevicesPerBootTypeCustomersReports: API.OperationMethod<
@@ -7256,7 +7302,7 @@ export const countDevicesPerBootTypeCustomersReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CountDevicesPerBootTypeCustomersReportsRequest,
   output: GoogleChromeManagementV1CountDevicesPerBootTypeResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7264,6 +7310,7 @@ export const countDevicesPerBootTypeCustomersReports: API.OperationMethod<
 export type CountDevicesPerReleaseChannelCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a count of devices per channel. */
 export const countDevicesPerReleaseChannelCustomersReports: API.OperationMethod<
@@ -7274,7 +7321,7 @@ export const countDevicesPerReleaseChannelCustomersReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CountDevicesPerReleaseChannelCustomersReportsRequest,
   output: GoogleChromeManagementV1CountDevicesPerReleaseChannelResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7282,6 +7329,7 @@ export const countDevicesPerReleaseChannelCustomersReports: API.OperationMethod<
 export type CountInstalledAppsCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generate report of app installations. */
 export const countInstalledAppsCustomersReports: API.PaginatedOperationMethod<
@@ -7293,7 +7341,7 @@ export const countInstalledAppsCustomersReports: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: CountInstalledAppsCustomersReportsRequest,
   output: GoogleChromeManagementV1CountInstalledAppsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7305,6 +7353,7 @@ export const countInstalledAppsCustomersReports: API.PaginatedOperationMethod<
 export type CountPrintJobsByPrinterCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a summary of printing done by each printer. */
 export const countPrintJobsByPrinterCustomersReports: API.PaginatedOperationMethod<
@@ -7316,7 +7365,7 @@ export const countPrintJobsByPrinterCustomersReports: API.PaginatedOperationMeth
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: CountPrintJobsByPrinterCustomersReportsRequest,
   output: GoogleChromeManagementV1CountPrintJobsByPrinterResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7328,6 +7377,7 @@ export const countPrintJobsByPrinterCustomersReports: API.PaginatedOperationMeth
 export type CountPrintJobsByUserCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a summary of printing done by each user. */
 export const countPrintJobsByUserCustomersReports: API.PaginatedOperationMethod<
@@ -7339,7 +7389,7 @@ export const countPrintJobsByUserCustomersReports: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: CountPrintJobsByUserCustomersReportsRequest,
   output: GoogleChromeManagementV1CountPrintJobsByUserResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7353,6 +7403,7 @@ export type CreateCustomersConnectorConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Creates a connector config. */
 export const createCustomersConnectorConfigs: API.OperationMethod<
@@ -7363,7 +7414,14 @@ export const createCustomersConnectorConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateCustomersConnectorConfigsRequest,
   output: GoogleChromeManagementVersionsV1ConnectorConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7373,6 +7431,7 @@ export type CreateCustomersProfilesCommandsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Creates a Chrome browser profile remote command. */
 export const createCustomersProfilesCommands: API.OperationMethod<
@@ -7383,7 +7442,14 @@ export const createCustomersProfilesCommands: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateCustomersProfilesCommandsRequest,
   output: GoogleChromeManagementVersionsV1ChromeBrowserProfileCommand,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7393,6 +7459,7 @@ export type CreateCustomersTelemetryNotificationConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Create a telemetry notification config. */
 export const createCustomersTelemetryNotificationConfigs: API.OperationMethod<
@@ -7403,7 +7470,14 @@ export const createCustomersTelemetryNotificationConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateCustomersTelemetryNotificationConfigsRequest,
   output: GoogleChromeManagementV1TelemetryNotificationConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7413,6 +7487,7 @@ export type DeleteCustomersConnectorConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes a connector config. */
 export const deleteCustomersConnectorConfigs: API.OperationMethod<
@@ -7423,7 +7498,14 @@ export const deleteCustomersConnectorConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteCustomersConnectorConfigsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7433,6 +7515,7 @@ export type DeleteCustomersProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes the data collected from a Chrome browser profile. */
 export const deleteCustomersProfiles: API.OperationMethod<
@@ -7443,7 +7526,14 @@ export const deleteCustomersProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteCustomersProfilesRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7453,6 +7543,7 @@ export type DeleteCustomersTelemetryNotificationConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Delete a telemetry notification config. */
 export const deleteCustomersTelemetryNotificationConfigs: API.OperationMethod<
@@ -7463,7 +7554,14 @@ export const deleteCustomersTelemetryNotificationConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteCustomersTelemetryNotificationConfigsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7473,6 +7571,7 @@ export type DeleteOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes a long-running operation. This method indicates that the client is no longer interested in the operation result. It does not cancel the operation. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. */
 export const deleteOperations: API.OperationMethod<
@@ -7483,7 +7582,14 @@ export const deleteOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7493,6 +7599,7 @@ export type DisableCustomersEnterpriseSecurityInsightsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Disables insights for the customer. */
 export const disableCustomersEnterpriseSecurityInsights: API.OperationMethod<
@@ -7503,7 +7610,14 @@ export const disableCustomersEnterpriseSecurityInsights: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DisableCustomersEnterpriseSecurityInsightsRequest,
   output: GoogleChromeManagementVersionsV1DisableInsightsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7513,6 +7627,7 @@ export type EnableCustomersEnterpriseSecurityInsightsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Enables insights for the customer and sets up required chrome connectors. */
 export const enableCustomersEnterpriseSecurityInsights: API.OperationMethod<
@@ -7523,7 +7638,14 @@ export const enableCustomersEnterpriseSecurityInsights: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: EnableCustomersEnterpriseSecurityInsightsRequest,
   output: GoogleChromeManagementVersionsV1EnableInsightsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7531,6 +7653,7 @@ export const enableCustomersEnterpriseSecurityInsights: API.OperationMethod<
 export type EnumeratePrintJobsCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a list of print jobs. */
 export const enumeratePrintJobsCustomersReports: API.PaginatedOperationMethod<
@@ -7542,7 +7665,7 @@ export const enumeratePrintJobsCustomersReports: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: EnumeratePrintJobsCustomersReportsRequest,
   output: GoogleChromeManagementV1EnumeratePrintJobsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7554,6 +7677,7 @@ export const enumeratePrintJobsCustomersReports: API.PaginatedOperationMethod<
 export type FetchDevicesRequestingExtensionCustomersAppsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a list of devices that have requested to install an extension. */
 export const fetchDevicesRequestingExtensionCustomersApps: API.PaginatedOperationMethod<
@@ -7565,7 +7689,7 @@ export const fetchDevicesRequestingExtensionCustomersApps: API.PaginatedOperatio
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: FetchDevicesRequestingExtensionCustomersAppsRequest,
   output: GoogleChromeManagementV1FetchDevicesRequestingExtensionResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7577,6 +7701,7 @@ export const fetchDevicesRequestingExtensionCustomersApps: API.PaginatedOperatio
 export type FetchUsersRequestingExtensionCustomersAppsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get a list of users that have requested to install an extension. */
 export const fetchUsersRequestingExtensionCustomersApps: API.PaginatedOperationMethod<
@@ -7588,7 +7713,7 @@ export const fetchUsersRequestingExtensionCustomersApps: API.PaginatedOperationM
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: FetchUsersRequestingExtensionCustomersAppsRequest,
   output: GoogleChromeManagementV1FetchUsersRequestingExtensionResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7600,6 +7725,7 @@ export const fetchUsersRequestingExtensionCustomersApps: API.PaginatedOperationM
 export type FindInstalledAppDevicesCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generate report of managed Chrome browser devices that have a specified app installed. */
 export const findInstalledAppDevicesCustomersReports: API.PaginatedOperationMethod<
@@ -7611,7 +7737,7 @@ export const findInstalledAppDevicesCustomersReports: API.PaginatedOperationMeth
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: FindInstalledAppDevicesCustomersReportsRequest,
   output: GoogleChromeManagementV1FindInstalledAppDevicesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7623,6 +7749,7 @@ export const findInstalledAppDevicesCustomersReports: API.PaginatedOperationMeth
 export type FindInstalledAppProfilesCustomersReportsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generate report of managed Chrome profiles that have a specified app installed. */
 export const findInstalledAppProfilesCustomersReports: API.PaginatedOperationMethod<
@@ -7634,7 +7761,7 @@ export const findInstalledAppProfilesCustomersReports: API.PaginatedOperationMet
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: FindInstalledAppProfilesCustomersReportsRequest,
   output: GoogleChromeManagementV1FindInstalledAppProfilesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7643,7 +7770,11 @@ export const findInstalledAppProfilesCustomersReports: API.PaginatedOperationMet
   } as const,
 })) as any;
 
-export type GetCustomersAppsAndroidError = NotFound | Forbidden | GcpOpError;
+export type GetCustomersAppsAndroidError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Get a specific app for a customer by its resource name. */
 export const getCustomersAppsAndroid: API.OperationMethod<
   GetCustomersAppsAndroidRequest,
@@ -7653,12 +7784,16 @@ export const getCustomersAppsAndroid: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersAppsAndroidRequest,
   output: GoogleChromeManagementV1AppDetails,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCustomersAppsChromeError = NotFound | Forbidden | GcpOpError;
+export type GetCustomersAppsChromeError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Get a specific app for a customer by its resource name. */
 export const getCustomersAppsChrome: API.OperationMethod<
   GetCustomersAppsChromeRequest,
@@ -7668,12 +7803,16 @@ export const getCustomersAppsChrome: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersAppsChromeRequest,
   output: GoogleChromeManagementV1AppDetails,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCustomersAppsWebError = NotFound | Forbidden | GcpOpError;
+export type GetCustomersAppsWebError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Get a specific app for a customer by its resource name. */
 export const getCustomersAppsWeb: API.OperationMethod<
   GetCustomersAppsWebRequest,
@@ -7683,7 +7822,7 @@ export const getCustomersAppsWeb: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersAppsWebRequest,
   output: GoogleChromeManagementV1AppDetails,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7691,6 +7830,7 @@ export const getCustomersAppsWeb: API.OperationMethod<
 export type GetCustomersCertificateProvisioningProcessesError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves a certificate provisioning process. */
 export const getCustomersCertificateProvisioningProcesses: API.OperationMethod<
@@ -7701,7 +7841,7 @@ export const getCustomersCertificateProvisioningProcesses: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersCertificateProvisioningProcessesRequest,
   output: GoogleChromeManagementVersionsV1CertificateProvisioningProcess,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7709,6 +7849,7 @@ export const getCustomersCertificateProvisioningProcesses: API.OperationMethod<
 export type GetCustomersCertificateProvisioningProcessesOperationsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getCustomersCertificateProvisioningProcessesOperations: API.OperationMethod<
@@ -7719,7 +7860,7 @@ export const getCustomersCertificateProvisioningProcessesOperations: API.Operati
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersCertificateProvisioningProcessesOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7727,6 +7868,7 @@ export const getCustomersCertificateProvisioningProcessesOperations: API.Operati
 export type GetCustomersConnectorConfigsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets a connector config with customer ID and config ID. */
 export const getCustomersConnectorConfigs: API.OperationMethod<
@@ -7737,12 +7879,16 @@ export const getCustomersConnectorConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersConnectorConfigsRequest,
   output: GoogleChromeManagementVersionsV1ConnectorConfig,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCustomersProfilesError = NotFound | Forbidden | GcpOpError;
+export type GetCustomersProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a Chrome browser profile with customer ID and profile permanent ID. */
 export const getCustomersProfiles: API.OperationMethod<
   GetCustomersProfilesRequest,
@@ -7752,7 +7898,7 @@ export const getCustomersProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersProfilesRequest,
   output: GoogleChromeManagementVersionsV1ChromeBrowserProfile,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7760,6 +7906,7 @@ export const getCustomersProfiles: API.OperationMethod<
 export type GetCustomersProfilesCommandsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets a Chrome browser profile remote command. */
 export const getCustomersProfilesCommands: API.OperationMethod<
@@ -7770,7 +7917,7 @@ export const getCustomersProfilesCommands: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersProfilesCommandsRequest,
   output: GoogleChromeManagementVersionsV1ChromeBrowserProfileCommand,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7778,6 +7925,7 @@ export const getCustomersProfilesCommands: API.OperationMethod<
 export type GetCustomersTelemetryDevicesError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Get telemetry device. */
 export const getCustomersTelemetryDevices: API.OperationMethod<
@@ -7788,12 +7936,16 @@ export const getCustomersTelemetryDevices: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersTelemetryDevicesRequest,
   output: GoogleChromeManagementV1TelemetryDevice,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCustomersTelemetryUsersError = NotFound | Forbidden | GcpOpError;
+export type GetCustomersTelemetryUsersError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Get telemetry user. */
 export const getCustomersTelemetryUsers: API.OperationMethod<
   GetCustomersTelemetryUsersRequest,
@@ -7803,7 +7955,7 @@ export const getCustomersTelemetryUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCustomersTelemetryUsersRequest,
   output: GoogleChromeManagementV1TelemetryUser,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7811,6 +7963,7 @@ export const getCustomersTelemetryUsers: API.OperationMethod<
 export type ListCustomersConnectorConfigsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Lists connector configs of a customer. */
 export const listCustomersConnectorConfigs: API.PaginatedOperationMethod<
@@ -7822,7 +7975,7 @@ export const listCustomersConnectorConfigs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCustomersConnectorConfigsRequest,
   output: GoogleChromeManagementVersionsV1ListConnectorConfigsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7831,7 +7984,11 @@ export const listCustomersConnectorConfigs: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListCustomersProfilesError = NotFound | Forbidden | GcpOpError;
+export type ListCustomersProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Lists Chrome browser profiles of a customer based on the given search and sorting criteria. */
 export const listCustomersProfiles: API.PaginatedOperationMethod<
   ListCustomersProfilesRequest,
@@ -7842,7 +7999,7 @@ export const listCustomersProfiles: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCustomersProfilesRequest,
   output: GoogleChromeManagementVersionsV1ListChromeBrowserProfilesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7854,6 +8011,7 @@ export const listCustomersProfiles: API.PaginatedOperationMethod<
 export type ListCustomersProfilesCommandsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Lists remote commands of a Chrome browser profile. */
 export const listCustomersProfilesCommands: API.PaginatedOperationMethod<
@@ -7866,7 +8024,7 @@ export const listCustomersProfilesCommands: API.PaginatedOperationMethod<
   input: ListCustomersProfilesCommandsRequest,
   output:
     GoogleChromeManagementVersionsV1ListChromeBrowserProfileCommandsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7878,6 +8036,7 @@ export const listCustomersProfilesCommands: API.PaginatedOperationMethod<
 export type ListCustomersTelemetryDevicesError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** List all telemetry devices. */
 export const listCustomersTelemetryDevices: API.PaginatedOperationMethod<
@@ -7889,7 +8048,7 @@ export const listCustomersTelemetryDevices: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCustomersTelemetryDevicesRequest,
   output: GoogleChromeManagementV1ListTelemetryDevicesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7901,6 +8060,7 @@ export const listCustomersTelemetryDevices: API.PaginatedOperationMethod<
 export type ListCustomersTelemetryEventsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** List telemetry events. */
 export const listCustomersTelemetryEvents: API.PaginatedOperationMethod<
@@ -7912,7 +8072,7 @@ export const listCustomersTelemetryEvents: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCustomersTelemetryEventsRequest,
   output: GoogleChromeManagementV1ListTelemetryEventsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7924,6 +8084,7 @@ export const listCustomersTelemetryEvents: API.PaginatedOperationMethod<
 export type ListCustomersTelemetryNotificationConfigsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** List all telemetry notification configs. */
 export const listCustomersTelemetryNotificationConfigs: API.PaginatedOperationMethod<
@@ -7935,7 +8096,7 @@ export const listCustomersTelemetryNotificationConfigs: API.PaginatedOperationMe
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCustomersTelemetryNotificationConfigsRequest,
   output: GoogleChromeManagementV1ListTelemetryNotificationConfigsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7947,6 +8108,7 @@ export const listCustomersTelemetryNotificationConfigs: API.PaginatedOperationMe
 export type ListCustomersTelemetryUsersError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** List all telemetry users. */
 export const listCustomersTelemetryUsers: API.PaginatedOperationMethod<
@@ -7958,7 +8120,7 @@ export const listCustomersTelemetryUsers: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCustomersTelemetryUsersRequest,
   output: GoogleChromeManagementV1ListTelemetryUsersResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7967,7 +8129,11 @@ export const listCustomersTelemetryUsers: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListOperationsError = NotFound | Forbidden | GcpOpError;
+export type ListOperationsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listOperations: API.PaginatedOperationMethod<
   ListOperationsRequest,
@@ -7978,7 +8144,7 @@ export const listOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7992,6 +8158,7 @@ export type MoveCustomersThirdPartyProfileUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Moves a third party chrome profile user to a destination OU. All profiles associated to that user will be moved to the destination OU. */
 export const moveCustomersThirdPartyProfileUsers: API.OperationMethod<
@@ -8002,7 +8169,14 @@ export const moveCustomersThirdPartyProfileUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: MoveCustomersThirdPartyProfileUsersRequest,
   output: GoogleChromeManagementVersionsV1MoveThirdPartyProfileUserResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8012,6 +8186,7 @@ export type PatchCustomersConnectorConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates a connector config. */
 export const patchCustomersConnectorConfigs: API.OperationMethod<
@@ -8022,7 +8197,14 @@ export const patchCustomersConnectorConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchCustomersConnectorConfigsRequest,
   output: GoogleChromeManagementVersionsV1ConnectorConfig,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8030,6 +8212,7 @@ export const patchCustomersConnectorConfigs: API.OperationMethod<
 export type QueryContentTransfersBreakdownsCustomersEnterpriseSecurityInsightsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Returns summaries of content transfers for a given metric and breakdown dimension. */
 export const queryContentTransfersBreakdownsCustomersEnterpriseSecurityInsights: API.PaginatedOperationMethod<
@@ -8043,7 +8226,7 @@ export const queryContentTransfersBreakdownsCustomersEnterpriseSecurityInsights:
     QueryContentTransfersBreakdownsCustomersEnterpriseSecurityInsightsRequest,
   output:
     GoogleChromeManagementVersionsV1QueryContentTransfersBreakdownsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -8055,6 +8238,7 @@ export const queryContentTransfersBreakdownsCustomersEnterpriseSecurityInsights:
 export type QueryContentTransfersCustomersEnterpriseSecurityInsightsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Returns a high-level summary of content transfers for a given customer. */
 export const queryContentTransfersCustomersEnterpriseSecurityInsights: API.OperationMethod<
@@ -8065,7 +8249,7 @@ export const queryContentTransfersCustomersEnterpriseSecurityInsights: API.Opera
 > = /*@__PURE__*/ API.make(() => ({
   input: QueryContentTransfersCustomersEnterpriseSecurityInsightsRequest,
   output: GoogleChromeManagementVersionsV1QueryContentTransfersResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8073,6 +8257,7 @@ export const queryContentTransfersCustomersEnterpriseSecurityInsights: API.Opera
 export type QueryUrlVisitsBreakdownsCustomersEnterpriseSecurityInsightsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Returns summaries of URL visits for a given metric and breakdown dimension. Requires a Chrome Enterprise Premium subscription. If the customer does not have this subscription, query results will be empty. */
 export const queryUrlVisitsBreakdownsCustomersEnterpriseSecurityInsights: API.PaginatedOperationMethod<
@@ -8084,7 +8269,7 @@ export const queryUrlVisitsBreakdownsCustomersEnterpriseSecurityInsights: API.Pa
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: QueryUrlVisitsBreakdownsCustomersEnterpriseSecurityInsightsRequest,
   output: GoogleChromeManagementVersionsV1QueryUrlVisitsBreakdownsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -8096,6 +8281,7 @@ export const queryUrlVisitsBreakdownsCustomersEnterpriseSecurityInsights: API.Pa
 export type QueryUrlVisitsCustomersEnterpriseSecurityInsightsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Returns a high-level summary of URL visits for a given customer. Requires a Chrome Enterprise Premium subscription. If the customer does not have this subscription, query results will be empty. */
 export const queryUrlVisitsCustomersEnterpriseSecurityInsights: API.OperationMethod<
@@ -8106,7 +8292,7 @@ export const queryUrlVisitsCustomersEnterpriseSecurityInsights: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: QueryUrlVisitsCustomersEnterpriseSecurityInsightsRequest,
   output: GoogleChromeManagementVersionsV1QueryUrlVisitsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8116,6 +8302,7 @@ export type SetFailureCustomersCertificateProvisioningProcessesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Marks a certificate provisioning process as failed. */
 export const setFailureCustomersCertificateProvisioningProcesses: API.OperationMethod<
@@ -8126,7 +8313,14 @@ export const setFailureCustomersCertificateProvisioningProcesses: API.OperationM
 > = /*@__PURE__*/ API.make(() => ({
   input: SetFailureCustomersCertificateProvisioningProcessesRequest,
   output: GoogleChromeManagementVersionsV1SetFailureResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8136,6 +8330,7 @@ export type SignDataCustomersCertificateProvisioningProcessesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Requests the client that initiated a certificate provisioning process to sign data. This should only be called after `ClaimCertificateProvisioningProcess` has been successfully executed. */
 export const signDataCustomersCertificateProvisioningProcesses: API.OperationMethod<
@@ -8146,7 +8341,14 @@ export const signDataCustomersCertificateProvisioningProcesses: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: SignDataCustomersCertificateProvisioningProcessesRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8156,6 +8358,7 @@ export type UploadCertificateCustomersCertificateProvisioningProcessesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Uploads a successfully issued certificate for a certificate provisioning process. */
 export const uploadCertificateCustomersCertificateProvisioningProcesses: API.OperationMethod<
@@ -8166,7 +8369,14 @@ export const uploadCertificateCustomersCertificateProvisioningProcesses: API.Ope
 > = /*@__PURE__*/ API.make(() => ({
   input: UploadCertificateCustomersCertificateProvisioningProcessesRequest,
   output: GoogleChromeManagementVersionsV1UploadCertificateResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

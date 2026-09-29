@@ -39,6 +39,23 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** Entity operations are not available for this connection (HTTP 501 UNIMPLEMENTED: 'Operation is not implemented, or supported, or enabled.'), e.g. because the connection does not exist. Not retryable. */
+export class EntitiesNotImplemented
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<EntitiesNotImplemented>()(
+      "EntitiesNotImplemented",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ),
+    [{ status: 501 }],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -2160,6 +2177,7 @@ export type CreateProjectsLocationsConnectionsEntityTypesEntitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | EntitiesNotImplemented
   | GcpOpError;
 /** Creates a new entity row of the specified entity type in the external system. The field values for creating the row are contained in the body of the request. The response message contains a `Entity` message object returned as a response by the external system. */
 export const createProjectsLocationsConnectionsEntityTypesEntities: API.OperationMethod<
@@ -2170,7 +2188,14 @@ export const createProjectsLocationsConnectionsEntityTypesEntities: API.Operatio
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsConnectionsEntityTypesEntitiesRequest,
   output: Entity,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    EntitiesNotImplemented,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2201,6 +2226,7 @@ export type DeleteProjectsLocationsConnectionsEntityTypesEntitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | EntitiesNotImplemented
   | GcpOpError;
 /** Deletes an existing entity row matching the entity type and entity id specified in the request. */
 export const deleteProjectsLocationsConnectionsEntityTypesEntities: API.OperationMethod<
@@ -2211,7 +2237,14 @@ export const deleteProjectsLocationsConnectionsEntityTypesEntities: API.Operatio
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsConnectionsEntityTypesEntitiesRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    EntitiesNotImplemented,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2375,6 +2408,7 @@ export const getProjectsLocationsConnectionsEntityTypes: API.OperationMethod<
 export type GetProjectsLocationsConnectionsEntityTypesEntitiesError =
   | NotFound
   | Forbidden
+  | EntitiesNotImplemented
   | GcpOpError;
 /** Gets a single entity row matching the entity type and entity id specified in the request. */
 export const getProjectsLocationsConnectionsEntityTypesEntities: API.OperationMethod<
@@ -2385,7 +2419,7 @@ export const getProjectsLocationsConnectionsEntityTypesEntities: API.OperationMe
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsConnectionsEntityTypesEntitiesRequest,
   output: Entity,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, EntitiesNotImplemented, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2495,6 +2529,7 @@ export const listProjectsLocationsConnectionsEntityTypes: API.PaginatedOperation
 export type ListProjectsLocationsConnectionsEntityTypesEntitiesError =
   | NotFound
   | Forbidden
+  | EntitiesNotImplemented
   | GcpOpError;
 /** Lists entity rows of a particular entity type contained in the request. Note: 1. Currently, only max of one 'sort_by' column is supported. 2. If no 'sort_by' column is provided, the primary key of the table is used. If zero or more than one primary key is available, we default to the unpaginated list entities logic which only returns the first page. 3. The values of the 'sort_by' columns must uniquely identify an entity row, otherwise undefined behaviors may be observed during pagination. 4. Since transactions are not supported, any updates, inserts or deletes during pagination can lead to stale data being returned or other unexpected behaviors. */
 export const listProjectsLocationsConnectionsEntityTypesEntities: API.PaginatedOperationMethod<
@@ -2506,7 +2541,7 @@ export const listProjectsLocationsConnectionsEntityTypesEntities: API.PaginatedO
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsConnectionsEntityTypesEntitiesRequest,
   output: ListEntitiesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, EntitiesNotImplemented, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2566,6 +2601,7 @@ export type PatchProjectsLocationsConnectionsEntityTypesEntitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | EntitiesNotImplemented
   | GcpOpError;
 /** Updates an existing entity row matching the entity type and entity id specified in the request. The fields in the entity row that need to be modified are contained in the body of the request. All unspecified fields are left unchanged. The response message contains a `Entity` message object returned as a response by the external system. */
 export const patchProjectsLocationsConnectionsEntityTypesEntities: API.OperationMethod<
@@ -2576,7 +2612,14 @@ export const patchProjectsLocationsConnectionsEntityTypesEntities: API.Operation
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsConnectionsEntityTypesEntitiesRequest,
   output: Entity,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    EntitiesNotImplemented,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

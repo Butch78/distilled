@@ -65,6 +65,56 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** Undelete was called on a service that is active (HTTP 400 FAILED_PRECONDITION). */
+export class ServiceAlreadyActive
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceAlreadyActive>()(
+      "ServiceAlreadyActive",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "already exists and is active" } }],
+  ) {}
+
+/** The managed service does not exist (or the caller cannot see it). Service Management answers a missing service with HTTP 403 PERMISSION_DENIED: "Service '<name>' not found or permission denied." */
+export class ServiceNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceNotFound>()("ServiceNotFound", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "not found or permission denied" } }],
+  ) {}
+
+/** The service name was deleted within the last 30 days and must be undeleted before reuse (HTTP 400 FAILED_PRECONDITION). */
+export class ServiceSoftDeleted
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceSoftDeleted>()("ServiceSoftDeleted", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "has been deleted and will be purged" },
+      },
+    ],
+  ) {}
+
 /** The full representation of a Service that is managed by Google Service Management. */
 export interface ManagedService {
   /** The name of the service. See the [overview](https://cloud.google.com/service-infrastructure/docs/overview) for naming requirements. */
@@ -3033,6 +3083,7 @@ export type CreateServicesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceSoftDeleted
   | GcpOpError;
 /** Creates a new managed service. A managed service is immutable, and is subject to mandatory 30-day data retention. You cannot move a service or recreate it within 30 days after deletion. One producer project can own no more than 500 services. For security and reliability purposes, a production service should be hosted in a dedicated producer project. Operation */
 export const createServices: API.OperationMethod<
@@ -3043,7 +3094,14 @@ export const createServices: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateServicesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceSoftDeleted,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3053,6 +3111,7 @@ export type CreateServicesConfigsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceNotFound
   | GcpOpError;
 /** Creates a new service configuration (version) for a managed service. This method only stores the service configuration. To roll out the service configuration to backend systems please call CreateServiceRollout. Only the 100 most recent service configurations and ones referenced by existing rollouts are kept for each service. The rest will be deleted eventually. */
 export const createServicesConfigs: API.OperationMethod<
@@ -3063,7 +3122,14 @@ export const createServicesConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateServicesConfigsRequest,
   output: Service,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3093,6 +3159,7 @@ export type DeleteServicesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceNotFound
   | GcpOpError;
 /** Deletes a managed service. This method will change the service to the `Soft-Delete` state for 30 days. Within this period, service producers may call UndeleteService to restore the service. After 30 days, the service will be permanently deleted. Operation */
 export const deleteServices: API.OperationMethod<
@@ -3103,7 +3170,14 @@ export const deleteServices: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteServicesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3198,7 +3272,11 @@ export const getOperations: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetServicesError = NotFound | Forbidden | GcpOpError;
+export type GetServicesError =
+  | NotFound
+  | Forbidden
+  | ServiceNotFound
+  | GcpOpError;
 /** Gets a managed service. Authentication is required unless the service is public. */
 export const getServices: API.OperationMethod<
   GetServicesRequest,
@@ -3208,12 +3286,16 @@ export const getServices: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetServicesRequest,
   output: ManagedService,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetServicesConfigsError = NotFound | Forbidden | GcpOpError;
+export type GetServicesConfigsError =
+  | NotFound
+  | Forbidden
+  | ServiceNotFound
+  | GcpOpError;
 /** Gets a service configuration (version) for a managed service. */
 export const getServicesConfigs: API.OperationMethod<
   GetServicesConfigsRequest,
@@ -3223,7 +3305,7 @@ export const getServicesConfigs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetServicesConfigsRequest,
   output: Service,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3283,7 +3365,11 @@ export const listServices: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListServicesConfigsError = NotFound | Forbidden | GcpOpError;
+export type ListServicesConfigsError =
+  | NotFound
+  | Forbidden
+  | ServiceNotFound
+  | GcpOpError;
 /** Lists the history of the service configuration for a managed service, from the newest to the oldest. */
 export const listServicesConfigs: API.PaginatedOperationMethod<
   ListServicesConfigsRequest,
@@ -3294,7 +3380,7 @@ export const listServicesConfigs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListServicesConfigsRequest,
   output: ListServiceConfigsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -3428,6 +3514,8 @@ export type UndeleteServicesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceAlreadyActive
+  | ServiceNotFound
   | GcpOpError;
 /** Revives a previously deleted managed service. The method restores the service using the configuration at the time the service was deleted. The target service must exist and must have been deleted within the last 30 days. Operation */
 export const undeleteServices: API.OperationMethod<
@@ -3438,7 +3526,15 @@ export const undeleteServices: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UndeleteServicesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceAlreadyActive,
+    ServiceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

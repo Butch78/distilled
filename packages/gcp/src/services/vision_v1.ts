@@ -65,6 +65,28 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The project was not onboarded to Product Search before it closed to new projects (HTTP 400 INVALID_ARGUMENT: "Product Search doesn't onboard new projects."). Not retryable; use Vision Warehouse or an onboarded project. */
+export class ProductSearchNotOnboarded
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ProductSearchNotOnboarded>()(
+      "ProductSearchNotOnboarded",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "Product Search doesn't onboard new projects" },
+      },
+    ],
+  ) {}
+
 /** Request message for the `AddProductToProductSet` method. */
 export interface AddProductToProductSetRequest {
   /** Required. The resource name for the Product to be added to this ProductSet. Format is: `projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID` */
@@ -2997,6 +3019,7 @@ export type CreateProjectsLocationsProductsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProductSearchNotOnboarded
   | GcpOpError;
 /** Creates and returns a new product resource. Possible errors: * Returns INVALID_ARGUMENT if display_name is missing or longer than 4096 characters. * Returns INVALID_ARGUMENT if description is longer than 4096 characters. * Returns INVALID_ARGUMENT if product_category is missing or invalid. */
 export const createProjectsLocationsProducts: API.OperationMethod<
@@ -3007,7 +3030,14 @@ export const createProjectsLocationsProducts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsProductsRequest,
   output: Product,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProductSearchNotOnboarded,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3017,6 +3047,7 @@ export type CreateProjectsLocationsProductSetsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProductSearchNotOnboarded
   | GcpOpError;
 /** Creates and returns a new ProductSet resource. Possible errors: * Returns INVALID_ARGUMENT if display_name is missing, or is longer than 4096 characters. */
 export const createProjectsLocationsProductSets: API.OperationMethod<
@@ -3027,7 +3058,14 @@ export const createProjectsLocationsProductSets: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsProductSetsRequest,
   output: ProductSet,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProductSearchNotOnboarded,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3037,6 +3075,7 @@ export type CreateProjectsLocationsProductsReferenceImagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ProductSearchNotOnboarded
   | GcpOpError;
 /** Creates and returns a new ReferenceImage resource. The `bounding_poly` field is optional. If `bounding_poly` is not specified, the system will try to detect regions of interest in the image that are compatible with the product_category on the parent product. If it is specified, detection is ALWAYS skipped. The system converts polygons into non-rotated rectangles. Note that the pipeline will resize the image if the image resolution is too large to process (above 50MP). Possible errors: * Returns INVALID_ARGUMENT if the image_uri is missing or longer than 4096 characters. * Returns INVALID_ARGUMENT if the product does not exist. * Returns INVALID_ARGUMENT if bounding_poly is not provided, and nothing compatible with the parent product's product_category is detected. * Returns INVALID_ARGUMENT if bounding_poly contains more than 10 polygons. */
 export const createProjectsLocationsProductsReferenceImages: API.OperationMethod<
@@ -3047,7 +3086,14 @@ export const createProjectsLocationsProductsReferenceImages: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsProductsReferenceImagesRequest,
   output: ReferenceImage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ProductSearchNotOnboarded,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

@@ -52,6 +52,25 @@ export class Forbidden
     [{ status: 403 }],
   ) {}
 
+/** The OAuth token lacks the dfatrafficking/dfareporting scope (HTTP 403: "Request had insufficient authentication scopes."). Service-account tokens with only cloud-platform scope hit this. */
+export class InsufficientScopes
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<InsufficientScopes>()("InsufficientScopes", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "insufficient authentication scopes" },
+      },
+    ],
+  ) {}
+
 export class NotFound
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<NotFound>()("NotFound", {
@@ -15873,6 +15892,7 @@ export type BatchinsertConversionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts conversions. */
 export const batchinsertConversions: API.OperationMethod<
@@ -15883,7 +15903,14 @@ export const batchinsertConversions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchinsertConversionsRequest,
   output: ConversionsBatchInsertResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -15893,6 +15920,7 @@ export type BatchupdateConversionsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates existing conversions. */
 export const batchupdateConversions: API.OperationMethod<
@@ -15903,7 +15931,14 @@ export const batchupdateConversions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchupdateConversionsRequest,
   output: ConversionsBatchUpdateResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -15913,6 +15948,7 @@ export type DeleteAdvertiserGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing advertiser group. */
 export const deleteAdvertiserGroups: API.OperationMethod<
@@ -15923,7 +15959,14 @@ export const deleteAdvertiserGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteAdvertiserGroupsRequest,
   output: DeleteAdvertiserGroupsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -15933,6 +15976,7 @@ export type DeleteContentCategoriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing content category. */
 export const deleteContentCategories: API.OperationMethod<
@@ -15943,7 +15987,14 @@ export const deleteContentCategories: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteContentCategoriesRequest,
   output: DeleteContentCategoriesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -15953,6 +16004,7 @@ export type DeleteCreativeFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing creative field. */
 export const deleteCreativeFields: API.OperationMethod<
@@ -15963,7 +16015,14 @@ export const deleteCreativeFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteCreativeFieldsRequest,
   output: DeleteCreativeFieldsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -15973,6 +16032,7 @@ export type DeleteCreativeFieldValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing creative field value. */
 export const deleteCreativeFieldValues: API.OperationMethod<
@@ -15983,7 +16043,14 @@ export const deleteCreativeFieldValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteCreativeFieldValuesRequest,
   output: DeleteCreativeFieldValuesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -15993,6 +16060,7 @@ export type DeleteDynamicTargetingKeysError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing dynamic targeting key. */
 export const deleteDynamicTargetingKeys: API.OperationMethod<
@@ -16003,7 +16071,14 @@ export const deleteDynamicTargetingKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteDynamicTargetingKeysRequest,
   output: DeleteDynamicTargetingKeysResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16013,6 +16088,7 @@ export type DeleteEventTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing event tag. */
 export const deleteEventTags: API.OperationMethod<
@@ -16023,7 +16099,14 @@ export const deleteEventTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteEventTagsRequest,
   output: DeleteEventTagsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16033,6 +16116,7 @@ export type DeleteFloodlightActivitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing floodlight activity. */
 export const deleteFloodlightActivities: API.OperationMethod<
@@ -16043,7 +16127,14 @@ export const deleteFloodlightActivities: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteFloodlightActivitiesRequest,
   output: DeleteFloodlightActivitiesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16053,6 +16144,7 @@ export type DeletePlacementStrategiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing placement strategy. */
 export const deletePlacementStrategies: API.OperationMethod<
@@ -16063,7 +16155,14 @@ export const deletePlacementStrategies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeletePlacementStrategiesRequest,
   output: DeletePlacementStrategiesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16073,6 +16172,7 @@ export type DeleteReportsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes a report by its ID. */
 export const deleteReports: API.OperationMethod<
@@ -16083,7 +16183,14 @@ export const deleteReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteReportsRequest,
   output: DeleteReportsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16093,6 +16200,7 @@ export type DeleteUserRolesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes an existing user role. */
 export const deleteUserRoles: API.OperationMethod<
@@ -16103,7 +16211,14 @@ export const deleteUserRoles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteUserRolesRequest,
   output: DeleteUserRolesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16111,6 +16226,7 @@ export const deleteUserRoles: API.OperationMethod<
 export type GenerateCodeDynamicProfilesError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Generates code for a dynamic profile, which will need unescaping. */
 export const generateCodeDynamicProfiles: API.OperationMethod<
@@ -16121,7 +16237,7 @@ export const generateCodeDynamicProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GenerateCodeDynamicProfilesRequest,
   output: DynamicProfileGenerateCodeResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16131,6 +16247,7 @@ export type GeneratetagFloodlightActivitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Generates a tag for a floodlight activity. */
 export const generatetagFloodlightActivities: API.OperationMethod<
@@ -16141,7 +16258,14 @@ export const generatetagFloodlightActivities: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GeneratetagFloodlightActivitiesRequest,
   output: FloodlightActivitiesGenerateTagResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16151,6 +16275,7 @@ export type GeneratetagsPlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Generates tags for a placement. */
 export const generatetagsPlacements: API.OperationMethod<
@@ -16161,7 +16286,14 @@ export const generatetagsPlacements: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GeneratetagsPlacementsRequest,
   output: PlacementsGenerateTagsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16169,6 +16301,7 @@ export const generatetagsPlacements: API.OperationMethod<
 export type GetAccountActiveAdSummariesError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets the account's active ad summary by account ID. */
 export const getAccountActiveAdSummaries: API.OperationMethod<
@@ -16179,12 +16312,16 @@ export const getAccountActiveAdSummaries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountActiveAdSummariesRequest,
   output: AccountActiveAdSummary,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAccountPermissionGroupsError = NotFound | Forbidden | GcpOpError;
+export type GetAccountPermissionGroupsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one account permission group by ID. */
 export const getAccountPermissionGroups: API.OperationMethod<
   GetAccountPermissionGroupsRequest,
@@ -16194,12 +16331,16 @@ export const getAccountPermissionGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountPermissionGroupsRequest,
   output: AccountPermissionGroup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAccountPermissionsError = NotFound | Forbidden | GcpOpError;
+export type GetAccountPermissionsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one account permission by ID. */
 export const getAccountPermissions: API.OperationMethod<
   GetAccountPermissionsRequest,
@@ -16209,12 +16350,16 @@ export const getAccountPermissions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountPermissionsRequest,
   output: AccountPermission,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAccountsError = NotFound | Forbidden | GcpOpError;
+export type GetAccountsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one account by ID. */
 export const getAccounts: API.OperationMethod<
   GetAccountsRequest,
@@ -16224,12 +16369,16 @@ export const getAccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountsRequest,
   output: Account,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAccountUserProfilesError = NotFound | Forbidden | GcpOpError;
+export type GetAccountUserProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one account user profile by ID. */
 export const getAccountUserProfiles: API.OperationMethod<
   GetAccountUserProfilesRequest,
@@ -16239,12 +16388,16 @@ export const getAccountUserProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountUserProfilesRequest,
   output: AccountUserProfile,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAdsError = NotFound | Forbidden | GcpOpError;
+export type GetAdsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one ad by ID. */
 export const getAds: API.OperationMethod<
   GetAdsRequest,
@@ -16254,12 +16407,16 @@ export const getAds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAdsRequest,
   output: Ad,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAdvertiserGroupsError = NotFound | Forbidden | GcpOpError;
+export type GetAdvertiserGroupsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one advertiser group by ID. */
 export const getAdvertiserGroups: API.OperationMethod<
   GetAdvertiserGroupsRequest,
@@ -16269,12 +16426,16 @@ export const getAdvertiserGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAdvertiserGroupsRequest,
   output: AdvertiserGroup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAdvertiserLandingPagesError = NotFound | Forbidden | GcpOpError;
+export type GetAdvertiserLandingPagesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one landing page by ID. */
 export const getAdvertiserLandingPages: API.OperationMethod<
   GetAdvertiserLandingPagesRequest,
@@ -16284,12 +16445,16 @@ export const getAdvertiserLandingPages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAdvertiserLandingPagesRequest,
   output: LandingPage,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAdvertisersError = NotFound | Forbidden | GcpOpError;
+export type GetAdvertisersError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one advertiser by ID. */
 export const getAdvertisers: API.OperationMethod<
   GetAdvertisersRequest,
@@ -16299,12 +16464,16 @@ export const getAdvertisers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAdvertisersRequest,
   output: Advertiser,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBillingProfilesError = NotFound | Forbidden | GcpOpError;
+export type GetBillingProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one billing profile by ID. */
 export const getBillingProfiles: API.OperationMethod<
   GetBillingProfilesRequest,
@@ -16314,12 +16483,16 @@ export const getBillingProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBillingProfilesRequest,
   output: BillingProfile,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCampaignsError = NotFound | Forbidden | GcpOpError;
+export type GetCampaignsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one campaign by ID. */
 export const getCampaigns: API.OperationMethod<
   GetCampaignsRequest,
@@ -16329,12 +16502,16 @@ export const getCampaigns: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCampaignsRequest,
   output: Campaign,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetChangeLogsError = NotFound | Forbidden | GcpOpError;
+export type GetChangeLogsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one change log by ID. */
 export const getChangeLogs: API.OperationMethod<
   GetChangeLogsRequest,
@@ -16344,12 +16521,16 @@ export const getChangeLogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetChangeLogsRequest,
   output: ChangeLog,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetConnectionTypesError = NotFound | Forbidden | GcpOpError;
+export type GetConnectionTypesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one connection type by ID. */
 export const getConnectionTypes: API.OperationMethod<
   GetConnectionTypesRequest,
@@ -16359,12 +16540,16 @@ export const getConnectionTypes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetConnectionTypesRequest,
   output: ConnectionType,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetContentCategoriesError = NotFound | Forbidden | GcpOpError;
+export type GetContentCategoriesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one content category by ID. */
 export const getContentCategories: API.OperationMethod<
   GetContentCategoriesRequest,
@@ -16374,12 +16559,16 @@ export const getContentCategories: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetContentCategoriesRequest,
   output: ContentCategory,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCountriesError = NotFound | Forbidden | GcpOpError;
+export type GetCountriesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one country by ID. */
 export const getCountries: API.OperationMethod<
   GetCountriesRequest,
@@ -16389,12 +16578,16 @@ export const getCountries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCountriesRequest,
   output: Country,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCreativeFieldsError = NotFound | Forbidden | GcpOpError;
+export type GetCreativeFieldsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one creative field by ID. */
 export const getCreativeFields: API.OperationMethod<
   GetCreativeFieldsRequest,
@@ -16404,12 +16597,16 @@ export const getCreativeFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCreativeFieldsRequest,
   output: CreativeField,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCreativeFieldValuesError = NotFound | Forbidden | GcpOpError;
+export type GetCreativeFieldValuesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one creative field value by ID. */
 export const getCreativeFieldValues: API.OperationMethod<
   GetCreativeFieldValuesRequest,
@@ -16419,12 +16616,16 @@ export const getCreativeFieldValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCreativeFieldValuesRequest,
   output: CreativeFieldValue,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCreativeGroupsError = NotFound | Forbidden | GcpOpError;
+export type GetCreativeGroupsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one creative group by ID. */
 export const getCreativeGroups: API.OperationMethod<
   GetCreativeGroupsRequest,
@@ -16434,12 +16635,16 @@ export const getCreativeGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCreativeGroupsRequest,
   output: CreativeGroup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetCreativesError = NotFound | Forbidden | GcpOpError;
+export type GetCreativesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one creative by ID. */
 export const getCreatives: API.OperationMethod<
   GetCreativesRequest,
@@ -16449,12 +16654,16 @@ export const getCreatives: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetCreativesRequest,
   output: Creative,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetDirectorySitesError = NotFound | Forbidden | GcpOpError;
+export type GetDirectorySitesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one directory site by ID. */
 export const getDirectorySites: API.OperationMethod<
   GetDirectorySitesRequest,
@@ -16464,12 +16673,16 @@ export const getDirectorySites: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetDirectorySitesRequest,
   output: DirectorySite,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetDynamicFeedsError = NotFound | Forbidden | GcpOpError;
+export type GetDynamicFeedsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a dynamic feed by ID. */
 export const getDynamicFeeds: API.OperationMethod<
   GetDynamicFeedsRequest,
@@ -16479,12 +16692,16 @@ export const getDynamicFeeds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetDynamicFeedsRequest,
   output: DynamicFeed,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetDynamicProfilesError = NotFound | Forbidden | GcpOpError;
+export type GetDynamicProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a dynamic profile by ID. */
 export const getDynamicProfiles: API.OperationMethod<
   GetDynamicProfilesRequest,
@@ -16494,12 +16711,16 @@ export const getDynamicProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetDynamicProfilesRequest,
   output: DynamicProfile,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetEventTagsError = NotFound | Forbidden | GcpOpError;
+export type GetEventTagsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one event tag by ID. */
 export const getEventTags: API.OperationMethod<
   GetEventTagsRequest,
@@ -16509,12 +16730,16 @@ export const getEventTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetEventTagsRequest,
   output: EventTag,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetFilesError = NotFound | Forbidden | GcpOpError;
+export type GetFilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a report file by its report ID and file ID. This method supports media download. */
 export const getFiles: API.OperationMethod<
   GetFilesRequest,
@@ -16524,12 +16749,16 @@ export const getFiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetFilesRequest,
   output: File,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetFloodlightActivitiesError = NotFound | Forbidden | GcpOpError;
+export type GetFloodlightActivitiesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one floodlight activity by ID. */
 export const getFloodlightActivities: API.OperationMethod<
   GetFloodlightActivitiesRequest,
@@ -16539,7 +16768,7 @@ export const getFloodlightActivities: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetFloodlightActivitiesRequest,
   output: FloodlightActivity,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16547,6 +16776,7 @@ export const getFloodlightActivities: API.OperationMethod<
 export type GetFloodlightActivityGroupsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets one floodlight activity group by ID. */
 export const getFloodlightActivityGroups: API.OperationMethod<
@@ -16557,7 +16787,7 @@ export const getFloodlightActivityGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetFloodlightActivityGroupsRequest,
   output: FloodlightActivityGroup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16565,6 +16795,7 @@ export const getFloodlightActivityGroups: API.OperationMethod<
 export type GetFloodlightConfigurationsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets one floodlight configuration by ID. */
 export const getFloodlightConfigurations: API.OperationMethod<
@@ -16575,12 +16806,16 @@ export const getFloodlightConfigurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetFloodlightConfigurationsRequest,
   output: FloodlightConfiguration,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetMobileAppsError = NotFound | Forbidden | GcpOpError;
+export type GetMobileAppsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one mobile app by ID. */
 export const getMobileApps: API.OperationMethod<
   GetMobileAppsRequest,
@@ -16590,12 +16825,16 @@ export const getMobileApps: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetMobileAppsRequest,
   output: MobileApp,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetMobileCarriersError = NotFound | Forbidden | GcpOpError;
+export type GetMobileCarriersError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one mobile carrier by ID. */
 export const getMobileCarriers: API.OperationMethod<
   GetMobileCarriersRequest,
@@ -16605,12 +16844,16 @@ export const getMobileCarriers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetMobileCarriersRequest,
   output: MobileCarrier,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetOperatingSystemsError = NotFound | Forbidden | GcpOpError;
+export type GetOperatingSystemsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one operating system by DART ID. */
 export const getOperatingSystems: API.OperationMethod<
   GetOperatingSystemsRequest,
@@ -16620,12 +16863,16 @@ export const getOperatingSystems: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetOperatingSystemsRequest,
   output: OperatingSystem,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetOperatingSystemVersionsError = NotFound | Forbidden | GcpOpError;
+export type GetOperatingSystemVersionsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one operating system version by ID. */
 export const getOperatingSystemVersions: API.OperationMethod<
   GetOperatingSystemVersionsRequest,
@@ -16635,12 +16882,16 @@ export const getOperatingSystemVersions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetOperatingSystemVersionsRequest,
   output: OperatingSystemVersion,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetPlacementGroupsError = NotFound | Forbidden | GcpOpError;
+export type GetPlacementGroupsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one placement group by ID. */
 export const getPlacementGroups: API.OperationMethod<
   GetPlacementGroupsRequest,
@@ -16650,12 +16901,16 @@ export const getPlacementGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetPlacementGroupsRequest,
   output: PlacementGroup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetPlacementsError = NotFound | Forbidden | GcpOpError;
+export type GetPlacementsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one placement by ID. */
 export const getPlacements: API.OperationMethod<
   GetPlacementsRequest,
@@ -16665,12 +16920,16 @@ export const getPlacements: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetPlacementsRequest,
   output: Placement,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetPlacementStrategiesError = NotFound | Forbidden | GcpOpError;
+export type GetPlacementStrategiesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one placement strategy by ID. */
 export const getPlacementStrategies: API.OperationMethod<
   GetPlacementStrategiesRequest,
@@ -16680,12 +16939,16 @@ export const getPlacementStrategies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetPlacementStrategiesRequest,
   output: PlacementStrategy,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetPlatformTypesError = NotFound | Forbidden | GcpOpError;
+export type GetPlatformTypesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one platform type by ID. */
 export const getPlatformTypes: API.OperationMethod<
   GetPlatformTypesRequest,
@@ -16695,12 +16958,16 @@ export const getPlatformTypes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetPlatformTypesRequest,
   output: PlatformType,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetPostalCodesError = NotFound | Forbidden | GcpOpError;
+export type GetPostalCodesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one postal code by ID. */
 export const getPostalCodes: API.OperationMethod<
   GetPostalCodesRequest,
@@ -16710,12 +16977,16 @@ export const getPostalCodes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetPostalCodesRequest,
   output: PostalCode,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetRemarketingListsError = NotFound | Forbidden | GcpOpError;
+export type GetRemarketingListsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one remarketing list by ID. */
 export const getRemarketingLists: API.OperationMethod<
   GetRemarketingListsRequest,
@@ -16725,12 +16996,16 @@ export const getRemarketingLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetRemarketingListsRequest,
   output: RemarketingList,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetRemarketingListSharesError = NotFound | Forbidden | GcpOpError;
+export type GetRemarketingListSharesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one remarketing list share by remarketing list ID. */
 export const getRemarketingListShares: API.OperationMethod<
   GetRemarketingListSharesRequest,
@@ -16740,12 +17015,16 @@ export const getRemarketingListShares: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetRemarketingListSharesRequest,
   output: RemarketingListShare,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetReportsError = NotFound | Forbidden | GcpOpError;
+export type GetReportsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a report by its ID. */
 export const getReports: API.OperationMethod<
   GetReportsRequest,
@@ -16755,12 +17034,16 @@ export const getReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetReportsRequest,
   output: Report,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetReportsFilesError = NotFound | Forbidden | GcpOpError;
+export type GetReportsFilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a report file by its report ID and file ID. This method supports media download. */
 export const getReportsFiles: API.OperationMethod<
   GetReportsFilesRequest,
@@ -16770,12 +17053,16 @@ export const getReportsFiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetReportsFilesRequest,
   output: File,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetSitesError = NotFound | Forbidden | GcpOpError;
+export type GetSitesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one site by ID. */
 export const getSites: API.OperationMethod<
   GetSitesRequest,
@@ -16785,12 +17072,16 @@ export const getSites: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetSitesRequest,
   output: Site,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetSizesError = NotFound | Forbidden | GcpOpError;
+export type GetSizesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one size by ID. */
 export const getSizes: API.OperationMethod<
   GetSizesRequest,
@@ -16800,12 +17091,16 @@ export const getSizes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetSizesRequest,
   output: Size,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetStudioCreativesError = NotFound | Forbidden | GcpOpError;
+export type GetStudioCreativesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a studio creative by ID. */
 export const getStudioCreatives: API.OperationMethod<
   GetStudioCreativesRequest,
@@ -16815,12 +17110,16 @@ export const getStudioCreatives: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetStudioCreativesRequest,
   output: StudioCreative,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetSubaccountsError = NotFound | Forbidden | GcpOpError;
+export type GetSubaccountsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one subaccount by ID. */
 export const getSubaccounts: API.OperationMethod<
   GetSubaccountsRequest,
@@ -16830,7 +17129,7 @@ export const getSubaccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetSubaccountsRequest,
   output: Subaccount,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16838,6 +17137,7 @@ export const getSubaccounts: API.OperationMethod<
 export type GetTargetableRemarketingListsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets one remarketing list by ID. */
 export const getTargetableRemarketingLists: API.OperationMethod<
@@ -16848,12 +17148,16 @@ export const getTargetableRemarketingLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetTargetableRemarketingListsRequest,
   output: TargetableRemarketingList,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetTargetingTemplatesError = NotFound | Forbidden | GcpOpError;
+export type GetTargetingTemplatesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one targeting template by ID. */
 export const getTargetingTemplates: API.OperationMethod<
   GetTargetingTemplatesRequest,
@@ -16863,12 +17167,16 @@ export const getTargetingTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetTargetingTemplatesRequest,
   output: TargetingTemplate,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetTvCampaignDetailsError = NotFound | Forbidden | GcpOpError;
+export type GetTvCampaignDetailsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one TvCampaignDetail by ID. */
 export const getTvCampaignDetails: API.OperationMethod<
   GetTvCampaignDetailsRequest,
@@ -16878,12 +17186,16 @@ export const getTvCampaignDetails: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetTvCampaignDetailsRequest,
   output: TvCampaignDetail,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetUserProfilesError = NotFound | Forbidden | GcpOpError;
+export type GetUserProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one user profile by ID. */
 export const getUserProfiles: API.OperationMethod<
   GetUserProfilesRequest,
@@ -16893,7 +17205,7 @@ export const getUserProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetUserProfilesRequest,
   output: UserProfile,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16901,6 +17213,7 @@ export const getUserProfiles: API.OperationMethod<
 export type GetUserRolePermissionGroupsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets one user role permission group by ID. */
 export const getUserRolePermissionGroups: API.OperationMethod<
@@ -16911,12 +17224,16 @@ export const getUserRolePermissionGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetUserRolePermissionGroupsRequest,
   output: UserRolePermissionGroup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetUserRolePermissionsError = NotFound | Forbidden | GcpOpError;
+export type GetUserRolePermissionsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one user role permission by ID. */
 export const getUserRolePermissions: API.OperationMethod<
   GetUserRolePermissionsRequest,
@@ -16926,12 +17243,16 @@ export const getUserRolePermissions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetUserRolePermissionsRequest,
   output: UserRolePermission,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetUserRolesError = NotFound | Forbidden | GcpOpError;
+export type GetUserRolesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one user role by ID. */
 export const getUserRoles: API.OperationMethod<
   GetUserRolesRequest,
@@ -16941,12 +17262,16 @@ export const getUserRoles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetUserRolesRequest,
   output: UserRole,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetVideoFormatsError = NotFound | Forbidden | GcpOpError;
+export type GetVideoFormatsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets one video format by ID. */
 export const getVideoFormats: API.OperationMethod<
   GetVideoFormatsRequest,
@@ -16956,7 +17281,7 @@ export const getVideoFormats: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetVideoFormatsRequest,
   output: VideoFormat,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16966,6 +17291,7 @@ export type InsertAccountUserProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new account user profile. */
 export const insertAccountUserProfiles: API.OperationMethod<
@@ -16976,7 +17302,14 @@ export const insertAccountUserProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertAccountUserProfilesRequest,
   output: AccountUserProfile,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -16986,6 +17319,7 @@ export type InsertAdsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new ad. */
 export const insertAds: API.OperationMethod<
@@ -16996,7 +17330,14 @@ export const insertAds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertAdsRequest,
   output: Ad,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17006,6 +17347,7 @@ export type InsertAdvertiserGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new advertiser group. */
 export const insertAdvertiserGroups: API.OperationMethod<
@@ -17016,7 +17358,14 @@ export const insertAdvertiserGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertAdvertiserGroupsRequest,
   output: AdvertiserGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17026,6 +17375,7 @@ export type InsertAdvertiserLandingPagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new landing page. */
 export const insertAdvertiserLandingPages: API.OperationMethod<
@@ -17036,7 +17386,14 @@ export const insertAdvertiserLandingPages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertAdvertiserLandingPagesRequest,
   output: LandingPage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17046,6 +17403,7 @@ export type InsertAdvertisersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new advertiser. */
 export const insertAdvertisers: API.OperationMethod<
@@ -17056,7 +17414,14 @@ export const insertAdvertisers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertAdvertisersRequest,
   output: Advertiser,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17066,6 +17431,7 @@ export type InsertBillingAssignmentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new billing assignment and returns the new assignment. Only one of advertiser_id or campaign_id is support per request. If the new assignment has no effect (assigning a campaign to the parent advertiser billing profile or assigning an advertiser to the account billing profile), no assignment will be returned. */
 export const insertBillingAssignments: API.OperationMethod<
@@ -17076,7 +17442,14 @@ export const insertBillingAssignments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertBillingAssignmentsRequest,
   output: BillingAssignment,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17086,6 +17459,7 @@ export type InsertCampaignCreativeAssociationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Associates a creative with the specified campaign. This method creates a default ad with dimensions matching the creative in the campaign if such a default ad does not exist already. */
 export const insertCampaignCreativeAssociations: API.OperationMethod<
@@ -17096,7 +17470,14 @@ export const insertCampaignCreativeAssociations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertCampaignCreativeAssociationsRequest,
   output: CampaignCreativeAssociation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17106,6 +17487,7 @@ export type InsertCampaignsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new campaign. */
 export const insertCampaigns: API.OperationMethod<
@@ -17116,7 +17498,14 @@ export const insertCampaigns: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertCampaignsRequest,
   output: Campaign,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17126,6 +17515,7 @@ export type InsertContentCategoriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new content category. */
 export const insertContentCategories: API.OperationMethod<
@@ -17136,7 +17526,14 @@ export const insertContentCategories: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertContentCategoriesRequest,
   output: ContentCategory,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17146,6 +17543,7 @@ export type InsertCreativeAssetsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new creative asset. */
 export const insertCreativeAssets: API.OperationMethod<
@@ -17156,7 +17554,14 @@ export const insertCreativeAssets: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertCreativeAssetsRequest,
   output: CreativeAssetMetadata,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17166,6 +17571,7 @@ export type InsertCreativeFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new creative field. */
 export const insertCreativeFields: API.OperationMethod<
@@ -17176,7 +17582,14 @@ export const insertCreativeFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertCreativeFieldsRequest,
   output: CreativeField,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17186,6 +17599,7 @@ export type InsertCreativeFieldValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new creative field value. */
 export const insertCreativeFieldValues: API.OperationMethod<
@@ -17196,7 +17610,14 @@ export const insertCreativeFieldValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertCreativeFieldValuesRequest,
   output: CreativeFieldValue,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17206,6 +17627,7 @@ export type InsertCreativeGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new creative group. */
 export const insertCreativeGroups: API.OperationMethod<
@@ -17216,7 +17638,14 @@ export const insertCreativeGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertCreativeGroupsRequest,
   output: CreativeGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17226,6 +17655,7 @@ export type InsertCreativesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new creative. */
 export const insertCreatives: API.OperationMethod<
@@ -17236,7 +17666,14 @@ export const insertCreatives: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertCreativesRequest,
   output: Creative,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17246,6 +17683,7 @@ export type InsertDirectorySitesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new directory site. */
 export const insertDirectorySites: API.OperationMethod<
@@ -17256,7 +17694,14 @@ export const insertDirectorySites: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertDirectorySitesRequest,
   output: DirectorySite,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17266,6 +17711,7 @@ export type InsertDynamicFeedsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new dynamic feed. */
 export const insertDynamicFeeds: API.OperationMethod<
@@ -17276,7 +17722,14 @@ export const insertDynamicFeeds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertDynamicFeedsRequest,
   output: DynamicFeed,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17286,6 +17739,7 @@ export type InsertDynamicProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new dynamic profile. */
 export const insertDynamicProfiles: API.OperationMethod<
@@ -17296,7 +17750,14 @@ export const insertDynamicProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertDynamicProfilesRequest,
   output: DynamicProfile,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17306,6 +17767,7 @@ export type InsertDynamicTargetingKeysError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new dynamic targeting key. Keys must be created at the advertiser level before being assigned to the advertiser's ads, creatives, or placements. There is a maximum of 1000 keys per advertiser, out of which a maximum of 20 keys can be assigned per ad, creative, or placement. */
 export const insertDynamicTargetingKeys: API.OperationMethod<
@@ -17316,7 +17778,14 @@ export const insertDynamicTargetingKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertDynamicTargetingKeysRequest,
   output: DynamicTargetingKey,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17326,6 +17795,7 @@ export type InsertEventTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new event tag. */
 export const insertEventTags: API.OperationMethod<
@@ -17336,7 +17806,14 @@ export const insertEventTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertEventTagsRequest,
   output: EventTag,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17346,6 +17823,7 @@ export type InsertFloodlightActivitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new floodlight activity. */
 export const insertFloodlightActivities: API.OperationMethod<
@@ -17356,7 +17834,14 @@ export const insertFloodlightActivities: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertFloodlightActivitiesRequest,
   output: FloodlightActivity,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17366,6 +17851,7 @@ export type InsertFloodlightActivityGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new floodlight activity group. */
 export const insertFloodlightActivityGroups: API.OperationMethod<
@@ -17376,7 +17862,14 @@ export const insertFloodlightActivityGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertFloodlightActivityGroupsRequest,
   output: FloodlightActivityGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17386,6 +17879,7 @@ export type InsertPlacementGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new placement group. */
 export const insertPlacementGroups: API.OperationMethod<
@@ -17396,7 +17890,14 @@ export const insertPlacementGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertPlacementGroupsRequest,
   output: PlacementGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17406,6 +17907,7 @@ export type InsertPlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new placement. */
 export const insertPlacements: API.OperationMethod<
@@ -17416,7 +17918,14 @@ export const insertPlacements: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertPlacementsRequest,
   output: Placement,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17426,6 +17935,7 @@ export type InsertPlacementStrategiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new placement strategy. */
 export const insertPlacementStrategies: API.OperationMethod<
@@ -17436,7 +17946,14 @@ export const insertPlacementStrategies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertPlacementStrategiesRequest,
   output: PlacementStrategy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17446,6 +17963,7 @@ export type InsertRemarketingListsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new remarketing list. */
 export const insertRemarketingLists: API.OperationMethod<
@@ -17456,7 +17974,14 @@ export const insertRemarketingLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertRemarketingListsRequest,
   output: RemarketingList,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17466,6 +17991,7 @@ export type InsertReportsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Creates a report. */
 export const insertReports: API.OperationMethod<
@@ -17476,7 +18002,14 @@ export const insertReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertReportsRequest,
   output: Report,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17486,6 +18019,7 @@ export type InsertSitesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new site. */
 export const insertSites: API.OperationMethod<
@@ -17496,7 +18030,14 @@ export const insertSites: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertSitesRequest,
   output: Site,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17506,6 +18047,7 @@ export type InsertSizesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new size. */
 export const insertSizes: API.OperationMethod<
@@ -17516,7 +18058,14 @@ export const insertSizes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertSizesRequest,
   output: Size,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17526,6 +18075,7 @@ export type InsertStudioCreativeAssetsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new studio creative asset. */
 export const insertStudioCreativeAssets: API.OperationMethod<
@@ -17536,7 +18086,14 @@ export const insertStudioCreativeAssets: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertStudioCreativeAssetsRequest,
   output: StudioCreativeAssetsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17546,6 +18103,7 @@ export type InsertStudioCreativesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new studio creative. */
 export const insertStudioCreatives: API.OperationMethod<
@@ -17556,7 +18114,14 @@ export const insertStudioCreatives: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertStudioCreativesRequest,
   output: StudioCreative,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17566,6 +18131,7 @@ export type InsertSubaccountsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new subaccount. */
 export const insertSubaccounts: API.OperationMethod<
@@ -17576,7 +18142,14 @@ export const insertSubaccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertSubaccountsRequest,
   output: Subaccount,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17586,6 +18159,7 @@ export type InsertTargetingTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new targeting template. */
 export const insertTargetingTemplates: API.OperationMethod<
@@ -17596,7 +18170,14 @@ export const insertTargetingTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertTargetingTemplatesRequest,
   output: TargetingTemplate,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17606,6 +18187,7 @@ export type InsertUserRolesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a new user role. */
 export const insertUserRoles: API.OperationMethod<
@@ -17616,7 +18198,14 @@ export const insertUserRoles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertUserRolesRequest,
   output: UserRole,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17624,6 +18213,7 @@ export const insertUserRoles: API.OperationMethod<
 export type ListAccountPermissionGroupsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves the list of account permission groups. */
 export const listAccountPermissionGroups: API.OperationMethod<
@@ -17634,12 +18224,16 @@ export const listAccountPermissionGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListAccountPermissionGroupsRequest,
   output: AccountPermissionGroupsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListAccountPermissionsError = NotFound | Forbidden | GcpOpError;
+export type ListAccountPermissionsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves the list of account permissions. */
 export const listAccountPermissions: API.OperationMethod<
   ListAccountPermissionsRequest,
@@ -17649,12 +18243,16 @@ export const listAccountPermissions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListAccountPermissionsRequest,
   output: AccountPermissionsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListAccountsError = NotFound | Forbidden | GcpOpError;
+export type ListAccountsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves the list of accounts, possibly filtered. This method supports paging. */
 export const listAccounts: API.PaginatedOperationMethod<
   ListAccountsRequest,
@@ -17665,7 +18263,7 @@ export const listAccounts: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAccountsRequest,
   output: AccountsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17674,7 +18272,11 @@ export const listAccounts: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListAccountUserProfilesError = NotFound | Forbidden | GcpOpError;
+export type ListAccountUserProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of account user profiles, possibly filtered. This method supports paging. */
 export const listAccountUserProfiles: API.PaginatedOperationMethod<
   ListAccountUserProfilesRequest,
@@ -17685,7 +18287,7 @@ export const listAccountUserProfiles: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAccountUserProfilesRequest,
   output: AccountUserProfilesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17694,7 +18296,11 @@ export const listAccountUserProfiles: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListAdsError = NotFound | Forbidden | GcpOpError;
+export type ListAdsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of ads, possibly filtered. This method supports paging. */
 export const listAds: API.PaginatedOperationMethod<
   ListAdsRequest,
@@ -17705,7 +18311,7 @@ export const listAds: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAdsRequest,
   output: AdsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17714,7 +18320,11 @@ export const listAds: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListAdvertiserGroupsError = NotFound | Forbidden | GcpOpError;
+export type ListAdvertiserGroupsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of advertiser groups, possibly filtered. This method supports paging. */
 export const listAdvertiserGroups: API.PaginatedOperationMethod<
   ListAdvertiserGroupsRequest,
@@ -17725,7 +18335,7 @@ export const listAdvertiserGroups: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAdvertiserGroupsRequest,
   output: AdvertiserGroupsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17734,7 +18344,11 @@ export const listAdvertiserGroups: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListAdvertiserInvoicesError = NotFound | Forbidden | GcpOpError;
+export type ListAdvertiserInvoicesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of invoices for a particular issue month. The api only works if the billing profile invoice level is set to either advertiser or campaign non-consolidated invoice level. */
 export const listAdvertiserInvoices: API.PaginatedOperationMethod<
   ListAdvertiserInvoicesRequest,
@@ -17745,7 +18359,7 @@ export const listAdvertiserInvoices: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAdvertiserInvoicesRequest,
   output: AdvertiserInvoicesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17754,7 +18368,11 @@ export const listAdvertiserInvoices: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListAdvertiserLandingPagesError = NotFound | Forbidden | GcpOpError;
+export type ListAdvertiserLandingPagesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of landing pages. */
 export const listAdvertiserLandingPages: API.PaginatedOperationMethod<
   ListAdvertiserLandingPagesRequest,
@@ -17765,7 +18383,7 @@ export const listAdvertiserLandingPages: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAdvertiserLandingPagesRequest,
   output: AdvertiserLandingPagesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17774,7 +18392,11 @@ export const listAdvertiserLandingPages: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListAdvertisersError = NotFound | Forbidden | GcpOpError;
+export type ListAdvertisersError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of advertisers, possibly filtered. This method supports paging. */
 export const listAdvertisers: API.PaginatedOperationMethod<
   ListAdvertisersRequest,
@@ -17785,7 +18407,7 @@ export const listAdvertisers: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAdvertisersRequest,
   output: AdvertisersListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17794,7 +18416,11 @@ export const listAdvertisers: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBillingAssignmentsError = NotFound | Forbidden | GcpOpError;
+export type ListBillingAssignmentsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of billing assignments. */
 export const listBillingAssignments: API.OperationMethod<
   ListBillingAssignmentsRequest,
@@ -17804,12 +18430,16 @@ export const listBillingAssignments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListBillingAssignmentsRequest,
   output: BillingAssignmentsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListBillingProfilesError = NotFound | Forbidden | GcpOpError;
+export type ListBillingProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of billing profiles, possibly filtered. This method supports paging. */
 export const listBillingProfiles: API.PaginatedOperationMethod<
   ListBillingProfilesRequest,
@@ -17820,7 +18450,7 @@ export const listBillingProfiles: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBillingProfilesRequest,
   output: BillingProfilesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17829,7 +18459,11 @@ export const listBillingProfiles: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBillingRatesError = NotFound | Forbidden | GcpOpError;
+export type ListBillingRatesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of billing rates. This method supports paging. */
 export const listBillingRates: API.OperationMethod<
   ListBillingRatesRequest,
@@ -17839,12 +18473,16 @@ export const listBillingRates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListBillingRatesRequest,
   output: BillingRatesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListBrowsersError = NotFound | Forbidden | GcpOpError;
+export type ListBrowsersError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of browsers. */
 export const listBrowsers: API.OperationMethod<
   ListBrowsersRequest,
@@ -17854,7 +18492,7 @@ export const listBrowsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListBrowsersRequest,
   output: BrowsersListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -17862,6 +18500,7 @@ export const listBrowsers: API.OperationMethod<
 export type ListCampaignCreativeAssociationsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves the list of creative IDs associated with the specified campaign. This method supports paging. */
 export const listCampaignCreativeAssociations: API.PaginatedOperationMethod<
@@ -17873,7 +18512,7 @@ export const listCampaignCreativeAssociations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCampaignCreativeAssociationsRequest,
   output: CampaignCreativeAssociationsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17882,7 +18521,11 @@ export const listCampaignCreativeAssociations: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListCampaignsError = NotFound | Forbidden | GcpOpError;
+export type ListCampaignsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of campaigns, possibly filtered. This method supports paging. */
 export const listCampaigns: API.PaginatedOperationMethod<
   ListCampaignsRequest,
@@ -17893,7 +18536,7 @@ export const listCampaigns: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCampaignsRequest,
   output: CampaignsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17902,7 +18545,11 @@ export const listCampaigns: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListChangeLogsError = NotFound | Forbidden | GcpOpError;
+export type ListChangeLogsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of change logs. This method supports paging. */
 export const listChangeLogs: API.PaginatedOperationMethod<
   ListChangeLogsRequest,
@@ -17913,7 +18560,7 @@ export const listChangeLogs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListChangeLogsRequest,
   output: ChangeLogsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17922,7 +18569,11 @@ export const listChangeLogs: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListCitiesError = NotFound | Forbidden | GcpOpError;
+export type ListCitiesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of cities, possibly filtered. */
 export const listCities: API.OperationMethod<
   ListCitiesRequest,
@@ -17932,12 +18583,16 @@ export const listCities: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListCitiesRequest,
   output: CitiesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListConnectionTypesError = NotFound | Forbidden | GcpOpError;
+export type ListConnectionTypesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of connection types. */
 export const listConnectionTypes: API.OperationMethod<
   ListConnectionTypesRequest,
@@ -17947,12 +18602,16 @@ export const listConnectionTypes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListConnectionTypesRequest,
   output: ConnectionTypesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListContentCategoriesError = NotFound | Forbidden | GcpOpError;
+export type ListContentCategoriesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of content categories, possibly filtered. This method supports paging. */
 export const listContentCategories: API.PaginatedOperationMethod<
   ListContentCategoriesRequest,
@@ -17963,7 +18622,7 @@ export const listContentCategories: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListContentCategoriesRequest,
   output: ContentCategoriesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -17972,7 +18631,11 @@ export const listContentCategories: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListCountriesError = NotFound | Forbidden | GcpOpError;
+export type ListCountriesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of countries. */
 export const listCountries: API.OperationMethod<
   ListCountriesRequest,
@@ -17982,12 +18645,16 @@ export const listCountries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListCountriesRequest,
   output: CountriesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListCreativeFieldsError = NotFound | Forbidden | GcpOpError;
+export type ListCreativeFieldsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of creative fields, possibly filtered. This method supports paging. */
 export const listCreativeFields: API.PaginatedOperationMethod<
   ListCreativeFieldsRequest,
@@ -17998,7 +18665,7 @@ export const listCreativeFields: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCreativeFieldsRequest,
   output: CreativeFieldsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18007,7 +18674,11 @@ export const listCreativeFields: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListCreativeFieldValuesError = NotFound | Forbidden | GcpOpError;
+export type ListCreativeFieldValuesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of creative field values, possibly filtered. This method supports paging. */
 export const listCreativeFieldValues: API.PaginatedOperationMethod<
   ListCreativeFieldValuesRequest,
@@ -18018,7 +18689,7 @@ export const listCreativeFieldValues: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCreativeFieldValuesRequest,
   output: CreativeFieldValuesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18027,7 +18698,11 @@ export const listCreativeFieldValues: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListCreativeGroupsError = NotFound | Forbidden | GcpOpError;
+export type ListCreativeGroupsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of creative groups, possibly filtered. This method supports paging. */
 export const listCreativeGroups: API.PaginatedOperationMethod<
   ListCreativeGroupsRequest,
@@ -18038,7 +18713,7 @@ export const listCreativeGroups: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCreativeGroupsRequest,
   output: CreativeGroupsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18047,7 +18722,11 @@ export const listCreativeGroups: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListCreativesError = NotFound | Forbidden | GcpOpError;
+export type ListCreativesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of creatives, possibly filtered. This method supports paging. */
 export const listCreatives: API.PaginatedOperationMethod<
   ListCreativesRequest,
@@ -18058,7 +18737,7 @@ export const listCreatives: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListCreativesRequest,
   output: CreativesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18067,7 +18746,11 @@ export const listCreatives: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListDirectorySitesError = NotFound | Forbidden | GcpOpError;
+export type ListDirectorySitesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of directory sites, possibly filtered. This method supports paging. */
 export const listDirectorySites: API.PaginatedOperationMethod<
   ListDirectorySitesRequest,
@@ -18078,7 +18761,7 @@ export const listDirectorySites: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListDirectorySitesRequest,
   output: DirectorySitesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18087,7 +18770,11 @@ export const listDirectorySites: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListDynamicTargetingKeysError = NotFound | Forbidden | GcpOpError;
+export type ListDynamicTargetingKeysError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of dynamic targeting keys. */
 export const listDynamicTargetingKeys: API.OperationMethod<
   ListDynamicTargetingKeysRequest,
@@ -18097,12 +18784,16 @@ export const listDynamicTargetingKeys: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListDynamicTargetingKeysRequest,
   output: DynamicTargetingKeysListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListEventTagsError = NotFound | Forbidden | GcpOpError;
+export type ListEventTagsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of event tags, possibly filtered. */
 export const listEventTags: API.OperationMethod<
   ListEventTagsRequest,
@@ -18112,12 +18803,16 @@ export const listEventTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListEventTagsRequest,
   output: EventTagsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListFilesError = NotFound | Forbidden | GcpOpError;
+export type ListFilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Lists files for a user profile. */
 export const listFiles: API.PaginatedOperationMethod<
   ListFilesRequest,
@@ -18128,7 +18823,7 @@ export const listFiles: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListFilesRequest,
   output: FileList,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18138,7 +18833,11 @@ export const listFiles: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListFloodlightActivitiesError = NotFound | Forbidden | GcpOpError;
+export type ListFloodlightActivitiesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of floodlight activities, possibly filtered. This method supports paging. */
 export const listFloodlightActivities: API.PaginatedOperationMethod<
   ListFloodlightActivitiesRequest,
@@ -18149,7 +18848,7 @@ export const listFloodlightActivities: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListFloodlightActivitiesRequest,
   output: FloodlightActivitiesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18161,6 +18860,7 @@ export const listFloodlightActivities: API.PaginatedOperationMethod<
 export type ListFloodlightActivityGroupsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves a list of floodlight activity groups, possibly filtered. This method supports paging. */
 export const listFloodlightActivityGroups: API.PaginatedOperationMethod<
@@ -18172,7 +18872,7 @@ export const listFloodlightActivityGroups: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListFloodlightActivityGroupsRequest,
   output: FloodlightActivityGroupsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18184,6 +18884,7 @@ export const listFloodlightActivityGroups: API.PaginatedOperationMethod<
 export type ListFloodlightConfigurationsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves a list of floodlight configurations, possibly filtered. */
 export const listFloodlightConfigurations: API.OperationMethod<
@@ -18194,12 +18895,16 @@ export const listFloodlightConfigurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListFloodlightConfigurationsRequest,
   output: FloodlightConfigurationsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListLanguagesError = NotFound | Forbidden | GcpOpError;
+export type ListLanguagesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of languages. */
 export const listLanguages: API.OperationMethod<
   ListLanguagesRequest,
@@ -18209,12 +18914,16 @@ export const listLanguages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListLanguagesRequest,
   output: LanguagesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListMetrosError = NotFound | Forbidden | GcpOpError;
+export type ListMetrosError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of metros. */
 export const listMetros: API.OperationMethod<
   ListMetrosRequest,
@@ -18224,12 +18933,16 @@ export const listMetros: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListMetrosRequest,
   output: MetrosListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListMobileAppsError = NotFound | Forbidden | GcpOpError;
+export type ListMobileAppsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves list of available mobile apps. */
 export const listMobileApps: API.PaginatedOperationMethod<
   ListMobileAppsRequest,
@@ -18240,7 +18953,7 @@ export const listMobileApps: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListMobileAppsRequest,
   output: MobileAppsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18249,7 +18962,11 @@ export const listMobileApps: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListMobileCarriersError = NotFound | Forbidden | GcpOpError;
+export type ListMobileCarriersError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of mobile carriers. */
 export const listMobileCarriers: API.OperationMethod<
   ListMobileCarriersRequest,
@@ -18259,12 +18976,16 @@ export const listMobileCarriers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListMobileCarriersRequest,
   output: MobileCarriersListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListOperatingSystemsError = NotFound | Forbidden | GcpOpError;
+export type ListOperatingSystemsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of operating systems. */
 export const listOperatingSystems: API.OperationMethod<
   ListOperatingSystemsRequest,
@@ -18274,7 +18995,7 @@ export const listOperatingSystems: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListOperatingSystemsRequest,
   output: OperatingSystemsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18282,6 +19003,7 @@ export const listOperatingSystems: API.OperationMethod<
 export type ListOperatingSystemVersionsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves a list of operating system versions. */
 export const listOperatingSystemVersions: API.OperationMethod<
@@ -18292,12 +19014,16 @@ export const listOperatingSystemVersions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListOperatingSystemVersionsRequest,
   output: OperatingSystemVersionsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListPlacementGroupsError = NotFound | Forbidden | GcpOpError;
+export type ListPlacementGroupsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of placement groups, possibly filtered. This method supports paging. */
 export const listPlacementGroups: API.PaginatedOperationMethod<
   ListPlacementGroupsRequest,
@@ -18308,7 +19034,7 @@ export const listPlacementGroups: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListPlacementGroupsRequest,
   output: PlacementGroupsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18317,7 +19043,11 @@ export const listPlacementGroups: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListPlacementsError = NotFound | Forbidden | GcpOpError;
+export type ListPlacementsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of placements, possibly filtered. This method supports paging. */
 export const listPlacements: API.PaginatedOperationMethod<
   ListPlacementsRequest,
@@ -18328,7 +19058,7 @@ export const listPlacements: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListPlacementsRequest,
   output: PlacementsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18337,7 +19067,11 @@ export const listPlacements: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListPlacementStrategiesError = NotFound | Forbidden | GcpOpError;
+export type ListPlacementStrategiesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of placement strategies, possibly filtered. This method supports paging. */
 export const listPlacementStrategies: API.PaginatedOperationMethod<
   ListPlacementStrategiesRequest,
@@ -18348,7 +19082,7 @@ export const listPlacementStrategies: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListPlacementStrategiesRequest,
   output: PlacementStrategiesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18357,7 +19091,11 @@ export const listPlacementStrategies: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListPlatformTypesError = NotFound | Forbidden | GcpOpError;
+export type ListPlatformTypesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of platform types. */
 export const listPlatformTypes: API.OperationMethod<
   ListPlatformTypesRequest,
@@ -18367,12 +19105,16 @@ export const listPlatformTypes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListPlatformTypesRequest,
   output: PlatformTypesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListPostalCodesError = NotFound | Forbidden | GcpOpError;
+export type ListPostalCodesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of postal codes. */
 export const listPostalCodes: API.OperationMethod<
   ListPostalCodesRequest,
@@ -18382,12 +19124,16 @@ export const listPostalCodes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListPostalCodesRequest,
   output: PostalCodesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListRegionsError = NotFound | Forbidden | GcpOpError;
+export type ListRegionsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of regions. */
 export const listRegions: API.OperationMethod<
   ListRegionsRequest,
@@ -18397,12 +19143,16 @@ export const listRegions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListRegionsRequest,
   output: RegionsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListRemarketingListsError = NotFound | Forbidden | GcpOpError;
+export type ListRemarketingListsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of remarketing lists, possibly filtered. This method supports paging. */
 export const listRemarketingLists: API.PaginatedOperationMethod<
   ListRemarketingListsRequest,
@@ -18413,7 +19163,7 @@ export const listRemarketingLists: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListRemarketingListsRequest,
   output: RemarketingListsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18422,7 +19172,11 @@ export const listRemarketingLists: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListReportsError = NotFound | Forbidden | GcpOpError;
+export type ListReportsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves list of reports. */
 export const listReports: API.PaginatedOperationMethod<
   ListReportsRequest,
@@ -18433,7 +19187,7 @@ export const listReports: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListReportsRequest,
   output: ReportList,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18443,7 +19197,11 @@ export const listReports: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListReportsFilesError = NotFound | Forbidden | GcpOpError;
+export type ListReportsFilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Lists files for a report. */
 export const listReportsFiles: API.PaginatedOperationMethod<
   ListReportsFilesRequest,
@@ -18454,7 +19212,7 @@ export const listReportsFiles: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListReportsFilesRequest,
   output: FileList,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18464,7 +19222,11 @@ export const listReportsFiles: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListSitesError = NotFound | Forbidden | GcpOpError;
+export type ListSitesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of sites, possibly filtered. This method supports paging. */
 export const listSites: API.PaginatedOperationMethod<
   ListSitesRequest,
@@ -18475,7 +19237,7 @@ export const listSites: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListSitesRequest,
   output: SitesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18484,7 +19246,11 @@ export const listSites: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListSizesError = NotFound | Forbidden | GcpOpError;
+export type ListSizesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of sizes, possibly filtered. Retrieved sizes are globally unique and may include values not currently in use by your account. Due to this, the list of sizes returned by this method may differ from the list seen in the Trafficking UI. */
 export const listSizes: API.OperationMethod<
   ListSizesRequest,
@@ -18494,12 +19260,16 @@ export const listSizes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListSizesRequest,
   output: SizesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListSubaccountsError = NotFound | Forbidden | GcpOpError;
+export type ListSubaccountsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a list of subaccounts, possibly filtered. This method supports paging. */
 export const listSubaccounts: API.PaginatedOperationMethod<
   ListSubaccountsRequest,
@@ -18510,7 +19280,7 @@ export const listSubaccounts: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListSubaccountsRequest,
   output: SubaccountsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18522,6 +19292,7 @@ export const listSubaccounts: API.PaginatedOperationMethod<
 export type ListTargetableRemarketingListsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves a list of targetable remarketing lists, possibly filtered. This method supports paging. */
 export const listTargetableRemarketingLists: API.PaginatedOperationMethod<
@@ -18533,7 +19304,7 @@ export const listTargetableRemarketingLists: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListTargetableRemarketingListsRequest,
   output: TargetableRemarketingListsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18542,7 +19313,11 @@ export const listTargetableRemarketingLists: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListTargetingTemplatesError = NotFound | Forbidden | GcpOpError;
+export type ListTargetingTemplatesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of targeting templates, optionally filtered. This method supports paging. */
 export const listTargetingTemplates: API.PaginatedOperationMethod<
   ListTargetingTemplatesRequest,
@@ -18553,7 +19328,7 @@ export const listTargetingTemplates: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListTargetingTemplatesRequest,
   output: TargetingTemplatesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18562,7 +19337,11 @@ export const listTargetingTemplates: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListTvCampaignSummariesError = NotFound | Forbidden | GcpOpError;
+export type ListTvCampaignSummariesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of TV campaign summaries. */
 export const listTvCampaignSummaries: API.OperationMethod<
   ListTvCampaignSummariesRequest,
@@ -18572,12 +19351,16 @@ export const listTvCampaignSummaries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListTvCampaignSummariesRequest,
   output: TvCampaignSummariesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListUserProfilesError = NotFound | Forbidden | GcpOpError;
+export type ListUserProfilesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves list of user profiles for a user. */
 export const listUserProfiles: API.OperationMethod<
   ListUserProfilesRequest,
@@ -18587,7 +19370,7 @@ export const listUserProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListUserProfilesRequest,
   output: UserProfileList,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18595,6 +19378,7 @@ export const listUserProfiles: API.OperationMethod<
 export type ListUserRolePermissionGroupsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Gets a list of all supported user role permission groups. */
 export const listUserRolePermissionGroups: API.OperationMethod<
@@ -18605,12 +19389,16 @@ export const listUserRolePermissionGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListUserRolePermissionGroupsRequest,
   output: UserRolePermissionGroupsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListUserRolePermissionsError = NotFound | Forbidden | GcpOpError;
+export type ListUserRolePermissionsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a list of user role permissions, possibly filtered. */
 export const listUserRolePermissions: API.OperationMethod<
   ListUserRolePermissionsRequest,
@@ -18620,12 +19408,16 @@ export const listUserRolePermissions: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListUserRolePermissionsRequest,
   output: UserRolePermissionsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListUserRolesError = NotFound | Forbidden | GcpOpError;
+export type ListUserRolesError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Retrieves a list of user roles, possibly filtered. This method supports paging. */
 export const listUserRoles: API.PaginatedOperationMethod<
   ListUserRolesRequest,
@@ -18636,7 +19428,7 @@ export const listUserRoles: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListUserRolesRequest,
   output: UserRolesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -18645,7 +19437,11 @@ export const listUserRoles: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListVideoFormatsError = NotFound | Forbidden | GcpOpError;
+export type ListVideoFormatsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Lists available video formats. */
 export const listVideoFormats: API.OperationMethod<
   ListVideoFormatsRequest,
@@ -18655,7 +19451,7 @@ export const listVideoFormats: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListVideoFormatsRequest,
   output: VideoFormatsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18665,6 +19461,7 @@ export type PatchAccountsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing account. This method supports patch semantics. */
 export const patchAccounts: API.OperationMethod<
@@ -18675,7 +19472,14 @@ export const patchAccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchAccountsRequest,
   output: Account,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18685,6 +19489,7 @@ export type PatchAccountUserProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing account user profile. This method supports patch semantics. */
 export const patchAccountUserProfiles: API.OperationMethod<
@@ -18695,7 +19500,14 @@ export const patchAccountUserProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchAccountUserProfilesRequest,
   output: AccountUserProfile,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18705,6 +19517,7 @@ export type PatchAdsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing ad. This method supports patch semantics. */
 export const patchAds: API.OperationMethod<
@@ -18715,7 +19528,14 @@ export const patchAds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchAdsRequest,
   output: Ad,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18725,6 +19545,7 @@ export type PatchAdvertiserGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing advertiser group. This method supports patch semantics. */
 export const patchAdvertiserGroups: API.OperationMethod<
@@ -18735,7 +19556,14 @@ export const patchAdvertiserGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchAdvertiserGroupsRequest,
   output: AdvertiserGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18745,6 +19573,7 @@ export type PatchAdvertiserLandingPagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing landing page. This method supports patch semantics. */
 export const patchAdvertiserLandingPages: API.OperationMethod<
@@ -18755,7 +19584,14 @@ export const patchAdvertiserLandingPages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchAdvertiserLandingPagesRequest,
   output: LandingPage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18765,6 +19601,7 @@ export type PatchAdvertisersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing advertiser. This method supports patch semantics. */
 export const patchAdvertisers: API.OperationMethod<
@@ -18775,7 +19612,14 @@ export const patchAdvertisers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchAdvertisersRequest,
   output: Advertiser,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18785,6 +19629,7 @@ export type PatchCampaignsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing campaign. This method supports patch semantics. */
 export const patchCampaigns: API.OperationMethod<
@@ -18795,7 +19640,14 @@ export const patchCampaigns: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchCampaignsRequest,
   output: Campaign,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18805,6 +19657,7 @@ export type PatchContentCategoriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing content category. This method supports patch semantics. */
 export const patchContentCategories: API.OperationMethod<
@@ -18815,7 +19668,14 @@ export const patchContentCategories: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchContentCategoriesRequest,
   output: ContentCategory,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18825,6 +19685,7 @@ export type PatchCreativeFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative field. This method supports patch semantics. */
 export const patchCreativeFields: API.OperationMethod<
@@ -18835,7 +19696,14 @@ export const patchCreativeFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchCreativeFieldsRequest,
   output: CreativeField,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18845,6 +19713,7 @@ export type PatchCreativeFieldValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative field value. This method supports patch semantics. */
 export const patchCreativeFieldValues: API.OperationMethod<
@@ -18855,7 +19724,14 @@ export const patchCreativeFieldValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchCreativeFieldValuesRequest,
   output: CreativeFieldValue,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18865,6 +19741,7 @@ export type PatchCreativeGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative group. This method supports patch semantics. */
 export const patchCreativeGroups: API.OperationMethod<
@@ -18875,7 +19752,14 @@ export const patchCreativeGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchCreativeGroupsRequest,
   output: CreativeGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18885,6 +19769,7 @@ export type PatchCreativesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative. This method supports patch semantics. */
 export const patchCreatives: API.OperationMethod<
@@ -18895,7 +19780,14 @@ export const patchCreatives: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchCreativesRequest,
   output: Creative,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18905,6 +19797,7 @@ export type PatchEventTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing event tag. This method supports patch semantics. */
 export const patchEventTags: API.OperationMethod<
@@ -18915,7 +19808,14 @@ export const patchEventTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchEventTagsRequest,
   output: EventTag,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18925,6 +19825,7 @@ export type PatchFloodlightActivitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing floodlight activity. This method supports patch semantics. */
 export const patchFloodlightActivities: API.OperationMethod<
@@ -18935,7 +19836,14 @@ export const patchFloodlightActivities: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchFloodlightActivitiesRequest,
   output: FloodlightActivity,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18945,6 +19853,7 @@ export type PatchFloodlightActivityGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing floodlight activity group. This method supports patch semantics. */
 export const patchFloodlightActivityGroups: API.OperationMethod<
@@ -18955,7 +19864,14 @@ export const patchFloodlightActivityGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchFloodlightActivityGroupsRequest,
   output: FloodlightActivityGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18965,6 +19881,7 @@ export type PatchFloodlightConfigurationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing floodlight configuration. This method supports patch semantics. */
 export const patchFloodlightConfigurations: API.OperationMethod<
@@ -18975,7 +19892,14 @@ export const patchFloodlightConfigurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchFloodlightConfigurationsRequest,
   output: FloodlightConfiguration,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -18985,6 +19909,7 @@ export type PatchPlacementGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing placement group. This method supports patch semantics. */
 export const patchPlacementGroups: API.OperationMethod<
@@ -18995,7 +19920,14 @@ export const patchPlacementGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchPlacementGroupsRequest,
   output: PlacementGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19005,6 +19937,7 @@ export type PatchPlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing placement. This method supports patch semantics. */
 export const patchPlacements: API.OperationMethod<
@@ -19015,7 +19948,14 @@ export const patchPlacements: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchPlacementsRequest,
   output: Placement,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19025,6 +19965,7 @@ export type PatchPlacementStrategiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing placement strategy. This method supports patch semantics. */
 export const patchPlacementStrategies: API.OperationMethod<
@@ -19035,7 +19976,14 @@ export const patchPlacementStrategies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchPlacementStrategiesRequest,
   output: PlacementStrategy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19045,6 +19993,7 @@ export type PatchRemarketingListsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing remarketing list. This method supports patch semantics. */
 export const patchRemarketingLists: API.OperationMethod<
@@ -19055,7 +20004,14 @@ export const patchRemarketingLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchRemarketingListsRequest,
   output: RemarketingList,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19065,6 +20021,7 @@ export type PatchRemarketingListSharesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing remarketing list share. This method supports patch semantics. */
 export const patchRemarketingListShares: API.OperationMethod<
@@ -19075,7 +20032,14 @@ export const patchRemarketingListShares: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchRemarketingListSharesRequest,
   output: RemarketingListShare,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19085,6 +20049,7 @@ export type PatchSitesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing site. This method supports patch semantics. */
 export const patchSites: API.OperationMethod<
@@ -19095,7 +20060,14 @@ export const patchSites: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchSitesRequest,
   output: Site,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19105,6 +20077,7 @@ export type PatchSubaccountsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing subaccount. This method supports patch semantics. */
 export const patchSubaccounts: API.OperationMethod<
@@ -19115,7 +20088,14 @@ export const patchSubaccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchSubaccountsRequest,
   output: Subaccount,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19125,6 +20105,7 @@ export type PatchTargetingTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing targeting template. This method supports patch semantics. */
 export const patchTargetingTemplates: API.OperationMethod<
@@ -19135,7 +20116,14 @@ export const patchTargetingTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchTargetingTemplatesRequest,
   output: TargetingTemplate,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19145,6 +20133,7 @@ export type PatchUserRolesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing user role. This method supports patch semantics. */
 export const patchUserRoles: API.OperationMethod<
@@ -19155,7 +20144,14 @@ export const patchUserRoles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchUserRolesRequest,
   output: UserRole,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19165,6 +20161,7 @@ export type PublishDynamicProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Publish for a dynamic profile. */
 export const publishDynamicProfiles: API.OperationMethod<
@@ -19175,7 +20172,14 @@ export const publishDynamicProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PublishDynamicProfilesRequest,
   output: PublishDynamicProfilesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19185,6 +20189,7 @@ export type PublishStudioCreativesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Publish for a studio creative. */
 export const publishStudioCreatives: API.OperationMethod<
@@ -19195,7 +20200,14 @@ export const publishStudioCreatives: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PublishStudioCreativesRequest,
   output: PublishStudioCreativesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19205,6 +20217,7 @@ export type QueryDimensionValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Retrieves list of report dimension values for a list of filters. */
 export const queryDimensionValues: API.PaginatedOperationMethod<
@@ -19216,7 +20229,14 @@ export const queryDimensionValues: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: QueryDimensionValuesRequest,
   output: DimensionValueList,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -19231,6 +20251,7 @@ export type QueryReportDataError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Executes an ad-hoc query and returns structured JSON payload data. */
 export const queryReportData: API.OperationMethod<
@@ -19241,7 +20262,14 @@ export const queryReportData: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: QueryReportDataRequest,
   output: ReportDataResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19251,6 +20279,7 @@ export type QueryReportsCompatibleFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Returns the fields that are compatible to be selected in the respective sections of a report criteria, given the fields already selected in the input report and user permissions. */
 export const queryReportsCompatibleFields: API.OperationMethod<
@@ -19261,7 +20290,14 @@ export const queryReportsCompatibleFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: QueryReportsCompatibleFieldsRequest,
   output: CompatibleFields,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19271,6 +20307,7 @@ export type RetransformDynamicFeedsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Retransforms a dynamic feed. Only draft feeds can be retransformed (i.e. the feed has not been published). */
 export const retransformDynamicFeeds: API.OperationMethod<
@@ -19281,7 +20318,14 @@ export const retransformDynamicFeeds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: RetransformDynamicFeedsRequest,
   output: DynamicFeed,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19291,6 +20335,7 @@ export type RunReportsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Runs a report. */
 export const runReports: API.OperationMethod<
@@ -19301,7 +20346,14 @@ export const runReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: RunReportsRequest,
   output: File,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19311,6 +20363,7 @@ export type UpdateAccountsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing account. */
 export const updateAccounts: API.OperationMethod<
@@ -19321,7 +20374,14 @@ export const updateAccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateAccountsRequest,
   output: Account,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19331,6 +20391,7 @@ export type UpdateAccountUserProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing account user profile. */
 export const updateAccountUserProfiles: API.OperationMethod<
@@ -19341,7 +20402,14 @@ export const updateAccountUserProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateAccountUserProfilesRequest,
   output: AccountUserProfile,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19351,6 +20419,7 @@ export type UpdateAdsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing ad. */
 export const updateAds: API.OperationMethod<
@@ -19361,7 +20430,14 @@ export const updateAds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateAdsRequest,
   output: Ad,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19371,6 +20447,7 @@ export type UpdateAdvertiserGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing advertiser group. */
 export const updateAdvertiserGroups: API.OperationMethod<
@@ -19381,7 +20458,14 @@ export const updateAdvertiserGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateAdvertiserGroupsRequest,
   output: AdvertiserGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19391,6 +20475,7 @@ export type UpdateAdvertiserLandingPagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing landing page. */
 export const updateAdvertiserLandingPages: API.OperationMethod<
@@ -19401,7 +20486,14 @@ export const updateAdvertiserLandingPages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateAdvertiserLandingPagesRequest,
   output: LandingPage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19411,6 +20503,7 @@ export type UpdateAdvertisersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing advertiser. */
 export const updateAdvertisers: API.OperationMethod<
@@ -19421,7 +20514,14 @@ export const updateAdvertisers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateAdvertisersRequest,
   output: Advertiser,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19431,6 +20531,7 @@ export type UpdateBillingProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing billing profile. */
 export const updateBillingProfiles: API.OperationMethod<
@@ -19441,7 +20542,14 @@ export const updateBillingProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateBillingProfilesRequest,
   output: BillingProfile,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19451,6 +20559,7 @@ export type UpdateCampaignsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing campaign. */
 export const updateCampaigns: API.OperationMethod<
@@ -19461,7 +20570,14 @@ export const updateCampaigns: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateCampaignsRequest,
   output: Campaign,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19471,6 +20587,7 @@ export type UpdateContentCategoriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing content category. */
 export const updateContentCategories: API.OperationMethod<
@@ -19481,7 +20598,14 @@ export const updateContentCategories: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateContentCategoriesRequest,
   output: ContentCategory,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19491,6 +20615,7 @@ export type UpdateCreativeFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative field. */
 export const updateCreativeFields: API.OperationMethod<
@@ -19501,7 +20626,14 @@ export const updateCreativeFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateCreativeFieldsRequest,
   output: CreativeField,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19511,6 +20643,7 @@ export type UpdateCreativeFieldValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative field value. */
 export const updateCreativeFieldValues: API.OperationMethod<
@@ -19521,7 +20654,14 @@ export const updateCreativeFieldValues: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateCreativeFieldValuesRequest,
   output: CreativeFieldValue,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19531,6 +20671,7 @@ export type UpdateCreativeGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative group. */
 export const updateCreativeGroups: API.OperationMethod<
@@ -19541,7 +20682,14 @@ export const updateCreativeGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateCreativeGroupsRequest,
   output: CreativeGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19551,6 +20699,7 @@ export type UpdateCreativesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing creative. */
 export const updateCreatives: API.OperationMethod<
@@ -19561,7 +20710,14 @@ export const updateCreatives: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateCreativesRequest,
   output: Creative,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19571,6 +20727,7 @@ export type UpdateDynamicFeedsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates a new dynamic feed. For draft feeds, only Element can be updated. For published feeds, only FeedSchedule can be updated. Other fields will be ignored. */
 export const updateDynamicFeeds: API.OperationMethod<
@@ -19581,7 +20738,14 @@ export const updateDynamicFeeds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateDynamicFeedsRequest,
   output: DynamicFeed,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19591,6 +20755,7 @@ export type UpdateDynamicProfilesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing dynamic profile. */
 export const updateDynamicProfiles: API.OperationMethod<
@@ -19601,7 +20766,14 @@ export const updateDynamicProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateDynamicProfilesRequest,
   output: DynamicProfile,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19611,6 +20783,7 @@ export type UpdateEventTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing event tag. */
 export const updateEventTags: API.OperationMethod<
@@ -19621,7 +20794,14 @@ export const updateEventTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateEventTagsRequest,
   output: EventTag,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19631,6 +20811,7 @@ export type UpdateFloodlightActivitiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing floodlight activity. */
 export const updateFloodlightActivities: API.OperationMethod<
@@ -19641,7 +20822,14 @@ export const updateFloodlightActivities: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateFloodlightActivitiesRequest,
   output: FloodlightActivity,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19651,6 +20839,7 @@ export type UpdateFloodlightActivityGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing floodlight activity group. */
 export const updateFloodlightActivityGroups: API.OperationMethod<
@@ -19661,7 +20850,14 @@ export const updateFloodlightActivityGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateFloodlightActivityGroupsRequest,
   output: FloodlightActivityGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19671,6 +20867,7 @@ export type UpdateFloodlightConfigurationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing floodlight configuration. */
 export const updateFloodlightConfigurations: API.OperationMethod<
@@ -19681,7 +20878,14 @@ export const updateFloodlightConfigurations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateFloodlightConfigurationsRequest,
   output: FloodlightConfiguration,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19691,6 +20895,7 @@ export type UpdatePlacementGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing placement group. */
 export const updatePlacementGroups: API.OperationMethod<
@@ -19701,7 +20906,14 @@ export const updatePlacementGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdatePlacementGroupsRequest,
   output: PlacementGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19711,6 +20923,7 @@ export type UpdatePlacementsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing placement. */
 export const updatePlacements: API.OperationMethod<
@@ -19721,7 +20934,14 @@ export const updatePlacements: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdatePlacementsRequest,
   output: Placement,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19731,6 +20951,7 @@ export type UpdatePlacementStrategiesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing placement strategy. */
 export const updatePlacementStrategies: API.OperationMethod<
@@ -19741,7 +20962,14 @@ export const updatePlacementStrategies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdatePlacementStrategiesRequest,
   output: PlacementStrategy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19751,6 +20979,7 @@ export type UpdateRemarketingListsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing remarketing list. */
 export const updateRemarketingLists: API.OperationMethod<
@@ -19761,7 +20990,14 @@ export const updateRemarketingLists: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateRemarketingListsRequest,
   output: RemarketingList,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19771,6 +21007,7 @@ export type UpdateRemarketingListSharesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing remarketing list share. */
 export const updateRemarketingListShares: API.OperationMethod<
@@ -19781,7 +21018,14 @@ export const updateRemarketingListShares: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateRemarketingListSharesRequest,
   output: RemarketingListShare,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19791,6 +21035,7 @@ export type UpdateReportsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates a report. */
 export const updateReports: API.OperationMethod<
@@ -19801,7 +21046,14 @@ export const updateReports: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateReportsRequest,
   output: Report,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19811,6 +21063,7 @@ export type UpdateSitesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing site. */
 export const updateSites: API.OperationMethod<
@@ -19821,7 +21074,14 @@ export const updateSites: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateSitesRequest,
   output: Site,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19831,6 +21091,7 @@ export type UpdateSubaccountsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing subaccount. */
 export const updateSubaccounts: API.OperationMethod<
@@ -19841,7 +21102,14 @@ export const updateSubaccounts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateSubaccountsRequest,
   output: Subaccount,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19851,6 +21119,7 @@ export type UpdateTargetingTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing targeting template. */
 export const updateTargetingTemplates: API.OperationMethod<
@@ -19861,7 +21130,14 @@ export const updateTargetingTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateTargetingTemplatesRequest,
   output: TargetingTemplate,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -19871,6 +21147,7 @@ export type UpdateUserRolesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Updates an existing user role. */
 export const updateUserRoles: API.OperationMethod<
@@ -19881,7 +21158,14 @@ export const updateUserRoles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateUserRolesRequest,
   output: UserRole,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

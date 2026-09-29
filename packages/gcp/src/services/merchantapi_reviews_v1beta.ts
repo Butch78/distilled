@@ -52,6 +52,25 @@ export class Forbidden
     [{ status: 403 }],
   ) {}
 
+/** The OAuth token lacks the scope the API requires (HTTP 403 PERMISSION_DENIED: "Request had insufficient authentication scopes."). Service-account tokens with only cloud-platform scope hit this. */
+export class InsufficientScopes
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<InsufficientScopes>()("InsufficientScopes", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "insufficient authentication scopes" },
+      },
+    ],
+  ) {}
+
 export class NotFound
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<NotFound>()("NotFound", {
@@ -850,6 +869,7 @@ export type DeleteAccountsMerchantReviewsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes merchant review. */
 export const deleteAccountsMerchantReviews: API.OperationMethod<
@@ -860,7 +880,14 @@ export const deleteAccountsMerchantReviews: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteAccountsMerchantReviewsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -870,6 +897,7 @@ export type DeleteAccountsProductReviewsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Deletes a product review. */
 export const deleteAccountsProductReviews: API.OperationMethod<
@@ -880,12 +908,23 @@ export const deleteAccountsProductReviews: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteAccountsProductReviewsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAccountsMerchantReviewsError = NotFound | Forbidden | GcpOpError;
+export type GetAccountsMerchantReviewsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a merchant review. */
 export const getAccountsMerchantReviews: API.OperationMethod<
   GetAccountsMerchantReviewsRequest,
@@ -895,12 +934,16 @@ export const getAccountsMerchantReviews: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountsMerchantReviewsRequest,
   output: MerchantReview,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetAccountsProductReviewsError = NotFound | Forbidden | GcpOpError;
+export type GetAccountsProductReviewsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Gets a product review. */
 export const getAccountsProductReviews: API.OperationMethod<
   GetAccountsProductReviewsRequest,
@@ -910,7 +953,7 @@ export const getAccountsProductReviews: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetAccountsProductReviewsRequest,
   output: ProductReview,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -920,6 +963,7 @@ export type InsertAccountsMerchantReviewsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a review for your Merchant Center account. If the review already exists, then the review is replaced with the new instance. */
 export const insertAccountsMerchantReviews: API.OperationMethod<
@@ -930,7 +974,14 @@ export const insertAccountsMerchantReviews: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertAccountsMerchantReviewsRequest,
   output: MerchantReview,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -940,6 +991,7 @@ export type InsertAccountsProductReviewsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InsufficientScopes
   | GcpOpError;
 /** Inserts a product review. */
 export const insertAccountsProductReviews: API.OperationMethod<
@@ -950,7 +1002,14 @@ export const insertAccountsProductReviews: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertAccountsProductReviewsRequest,
   output: ProductReview,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InsufficientScopes,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -958,6 +1017,7 @@ export const insertAccountsProductReviews: API.OperationMethod<
 export type ListAccountsMerchantReviewsError =
   | NotFound
   | Forbidden
+  | InsufficientScopes
   | GcpOpError;
 /** Lists merchant reviews. */
 export const listAccountsMerchantReviews: API.PaginatedOperationMethod<
@@ -969,7 +1029,7 @@ export const listAccountsMerchantReviews: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAccountsMerchantReviewsRequest,
   output: ListMerchantReviewsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -978,7 +1038,11 @@ export const listAccountsMerchantReviews: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListAccountsProductReviewsError = NotFound | Forbidden | GcpOpError;
+export type ListAccountsProductReviewsError =
+  | NotFound
+  | Forbidden
+  | InsufficientScopes
+  | GcpOpError;
 /** Lists product reviews. */
 export const listAccountsProductReviews: API.PaginatedOperationMethod<
   ListAccountsProductReviewsRequest,
@@ -989,7 +1053,7 @@ export const listAccountsProductReviews: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListAccountsProductReviewsRequest,
   output: ListProductReviewsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, InsufficientScopes, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {

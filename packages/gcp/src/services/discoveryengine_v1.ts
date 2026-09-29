@@ -39,6 +39,20 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** The parent data store is still being set up and cannot accept the change yet (HTTP 400: '... try again later'). Retryable after a short wait. */
+export class DataStoreNotReady
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<DataStoreNotReady>()("DataStoreNotReady", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "try again later" } }],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -50,6 +64,37 @@ export class Forbidden
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withAuthError),
     [{ status: 403 }],
+  ) {}
+
+/** The project has no workforce identity provider configured, which identity mapping stores require (HTTP 400: 'IdP must be configured before creating an Identity Mapping Store'). Not retryable. */
+export class IdentityProviderNotConfigured
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<IdentityProviderNotConfigured>()(
+      "IdentityProviderNotConfigured",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "IdP must be configured" } }],
+  ) {}
+
+/** The data store or engine lacks the Large Language Model add-on that conversations need (HTTP 400: 'This feature is only available when Large Language Model add-on is enabled.'). Not retryable. */
+export class LlmAddOnRequired
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<LlmAddOnRequired>()("LlmAddOnRequired", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "Large Language Model add-on" } }],
   ) {}
 
 export class NotFound
@@ -20134,6 +20179,7 @@ export type CreateProjectsLocationsCollectionsDataStoresConversationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | LlmAddOnRequired
   | GcpOpError;
 /** Creates a Conversation. If the Conversation to create already exists, an ALREADY_EXISTS error is returned. */
 export const createProjectsLocationsCollectionsDataStoresConversations: API.OperationMethod<
@@ -20144,7 +20190,14 @@ export const createProjectsLocationsCollectionsDataStoresConversations: API.Oper
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCollectionsDataStoresConversationsRequest,
   output: GoogleCloudDiscoveryengineV1Conversation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    LlmAddOnRequired,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -20154,6 +20207,7 @@ export type CreateProjectsLocationsCollectionsDataStoresSchemasError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataStoreNotReady
   | GcpOpError;
 /** Creates a Schema. */
 export const createProjectsLocationsCollectionsDataStoresSchemas: API.OperationMethod<
@@ -20164,7 +20218,14 @@ export const createProjectsLocationsCollectionsDataStoresSchemas: API.OperationM
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCollectionsDataStoresSchemasRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataStoreNotReady,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -20337,6 +20398,7 @@ export type CreateProjectsLocationsCollectionsEnginesConversationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | LlmAddOnRequired
   | GcpOpError;
 /** Creates a Conversation. If the Conversation to create already exists, an ALREADY_EXISTS error is returned. */
 export const createProjectsLocationsCollectionsEnginesConversations: API.OperationMethod<
@@ -20347,7 +20409,14 @@ export const createProjectsLocationsCollectionsEnginesConversations: API.Operati
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCollectionsEnginesConversationsRequest,
   output: GoogleCloudDiscoveryengineV1Conversation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    LlmAddOnRequired,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -20457,6 +20526,7 @@ export type CreateProjectsLocationsDataStoresConversationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | LlmAddOnRequired
   | GcpOpError;
 /** Creates a Conversation. If the Conversation to create already exists, an ALREADY_EXISTS error is returned. */
 export const createProjectsLocationsDataStoresConversations: API.OperationMethod<
@@ -20467,7 +20537,14 @@ export const createProjectsLocationsDataStoresConversations: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsDataStoresConversationsRequest,
   output: GoogleCloudDiscoveryengineV1Conversation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    LlmAddOnRequired,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -20477,6 +20554,7 @@ export type CreateProjectsLocationsDataStoresSchemasError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataStoreNotReady
   | GcpOpError;
 /** Creates a Schema. */
 export const createProjectsLocationsDataStoresSchemas: API.OperationMethod<
@@ -20487,7 +20565,14 @@ export const createProjectsLocationsDataStoresSchemas: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsDataStoresSchemasRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataStoreNotReady,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -20577,6 +20662,7 @@ export type CreateProjectsLocationsIdentityMappingStoresError =
   | Forbidden
   | BadRequest
   | Conflict
+  | IdentityProviderNotConfigured
   | GcpOpError;
 /** Creates a new Identity Mapping Store. */
 export const createProjectsLocationsIdentityMappingStores: API.OperationMethod<
@@ -20587,7 +20673,14 @@ export const createProjectsLocationsIdentityMappingStores: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsIdentityMappingStoresRequest,
   output: GoogleCloudDiscoveryengineV1IdentityMappingStore,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    IdentityProviderNotConfigured,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

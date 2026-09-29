@@ -26,6 +26,23 @@ export class BadRequest
     [{ status: 400 }],
   ) {}
 
+/** BigLake answers a missing catalog, database or table with HTTP 403 PERMISSION_DENIED: "Permission 'biglake.<kind>.get' denied on resource '...' (or it may not exist)." — verified live with a caller that can read existing resources. */
+export class BigLakeResourceNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<BigLakeResourceNotFound>()(
+      "BigLakeResourceNotFound",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "(or it may not exist)" } }],
+  ) {}
+
 export class Conflict
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Conflict>()("Conflict", {
@@ -1006,6 +1023,7 @@ export type CreateProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Creates a new catalog. */
 export const createProjectsLocationsCatalogs: API.OperationMethod<
@@ -1016,7 +1034,14 @@ export const createProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsRequest,
   output: Catalog,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1026,6 +1051,7 @@ export type CreateProjectsLocationsCatalogsDatabasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Creates a new database. */
 export const createProjectsLocationsCatalogsDatabases: API.OperationMethod<
@@ -1036,7 +1062,14 @@ export const createProjectsLocationsCatalogsDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsDatabasesRequest,
   output: Database,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1046,6 +1079,7 @@ export type CreateProjectsLocationsCatalogsDatabasesTablesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Creates a new table. */
 export const createProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
@@ -1056,7 +1090,14 @@ export const createProjectsLocationsCatalogsDatabasesTables: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCatalogsDatabasesTablesRequest,
   output: Table,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1066,6 +1107,7 @@ export type DeleteProjectsLocationsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Deletes an existing catalog specified by the catalog ID. */
 export const deleteProjectsLocationsCatalogs: API.OperationMethod<
@@ -1076,7 +1118,14 @@ export const deleteProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsRequest,
   output: Catalog,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1086,6 +1135,7 @@ export type DeleteProjectsLocationsCatalogsDatabasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Deletes an existing database specified by the database ID. */
 export const deleteProjectsLocationsCatalogsDatabases: API.OperationMethod<
@@ -1096,7 +1146,14 @@ export const deleteProjectsLocationsCatalogsDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsDatabasesRequest,
   output: Database,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1106,6 +1163,7 @@ export type DeleteProjectsLocationsCatalogsDatabasesTablesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Deletes an existing table specified by the table ID. */
 export const deleteProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
@@ -1116,7 +1174,14 @@ export const deleteProjectsLocationsCatalogsDatabasesTables: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCatalogsDatabasesTablesRequest,
   output: Table,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1124,6 +1189,7 @@ export const deleteProjectsLocationsCatalogsDatabasesTables: API.OperationMethod
 export type GetIamPolicyProjectsCatalogsError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Gets the IAM policy for the specified Catalog. */
 export const getIamPolicyProjectsCatalogs: API.OperationMethod<
@@ -1134,7 +1200,7 @@ export const getIamPolicyProjectsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsCatalogsRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1142,6 +1208,7 @@ export const getIamPolicyProjectsCatalogs: API.OperationMethod<
 export type GetIamPolicyProjectsCatalogsNamespacesError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Gets the IAM policy for the specified Catalog. */
 export const getIamPolicyProjectsCatalogsNamespaces: API.OperationMethod<
@@ -1152,7 +1219,7 @@ export const getIamPolicyProjectsCatalogsNamespaces: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsCatalogsNamespacesRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1160,6 +1227,7 @@ export const getIamPolicyProjectsCatalogsNamespaces: API.OperationMethod<
 export type GetIamPolicyProjectsCatalogsNamespacesTablesError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Gets the IAM policy for the specified Catalog. */
 export const getIamPolicyProjectsCatalogsNamespacesTables: API.OperationMethod<
@@ -1170,7 +1238,7 @@ export const getIamPolicyProjectsCatalogsNamespacesTables: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsCatalogsNamespacesTablesRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1178,6 +1246,7 @@ export const getIamPolicyProjectsCatalogsNamespacesTables: API.OperationMethod<
 export type GetProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Gets the catalog specified by the resource name. */
 export const getProjectsLocationsCatalogs: API.OperationMethod<
@@ -1188,7 +1257,7 @@ export const getProjectsLocationsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsRequest,
   output: Catalog,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1196,6 +1265,7 @@ export const getProjectsLocationsCatalogs: API.OperationMethod<
 export type GetProjectsLocationsCatalogsDatabasesError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Gets the database specified by the resource name. */
 export const getProjectsLocationsCatalogsDatabases: API.OperationMethod<
@@ -1206,7 +1276,7 @@ export const getProjectsLocationsCatalogsDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsDatabasesRequest,
   output: Database,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1214,6 +1284,7 @@ export const getProjectsLocationsCatalogsDatabases: API.OperationMethod<
 export type GetProjectsLocationsCatalogsDatabasesTablesError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Gets the table specified by the resource name. */
 export const getProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
@@ -1224,7 +1295,7 @@ export const getProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCatalogsDatabasesTablesRequest,
   output: Table,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1232,6 +1303,7 @@ export const getProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
 export type ListProjectsLocationsCatalogsError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** List all catalogs in a specified project. */
 export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
@@ -1243,7 +1315,7 @@ export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsRequest,
   output: ListCatalogsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1255,6 +1327,7 @@ export const listProjectsLocationsCatalogs: API.PaginatedOperationMethod<
 export type ListProjectsLocationsCatalogsDatabasesError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** List all databases in a specified catalog. */
 export const listProjectsLocationsCatalogsDatabases: API.PaginatedOperationMethod<
@@ -1266,7 +1339,7 @@ export const listProjectsLocationsCatalogsDatabases: API.PaginatedOperationMetho
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsDatabasesRequest,
   output: ListDatabasesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1278,6 +1351,7 @@ export const listProjectsLocationsCatalogsDatabases: API.PaginatedOperationMetho
 export type ListProjectsLocationsCatalogsDatabasesTablesError =
   | NotFound
   | Forbidden
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** List all tables in a specified database. */
 export const listProjectsLocationsCatalogsDatabasesTables: API.PaginatedOperationMethod<
@@ -1289,7 +1363,7 @@ export const listProjectsLocationsCatalogsDatabasesTables: API.PaginatedOperatio
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCatalogsDatabasesTablesRequest,
   output: ListTablesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, BigLakeResourceNotFound, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1303,6 +1377,7 @@ export type PatchProjectsLocationsCatalogsDatabasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Updates an existing database specified by the database ID. */
 export const patchProjectsLocationsCatalogsDatabases: API.OperationMethod<
@@ -1313,7 +1388,14 @@ export const patchProjectsLocationsCatalogsDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsDatabasesRequest,
   output: Database,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1323,6 +1405,7 @@ export type PatchProjectsLocationsCatalogsDatabasesTablesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Updates an existing table specified by the table ID. */
 export const patchProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
@@ -1333,7 +1416,14 @@ export const patchProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCatalogsDatabasesTablesRequest,
   output: Table,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1343,6 +1433,7 @@ export type RenameProjectsLocationsCatalogsDatabasesTablesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Renames an existing table specified by the table ID. */
 export const renameProjectsLocationsCatalogsDatabasesTables: API.OperationMethod<
@@ -1353,7 +1444,14 @@ export const renameProjectsLocationsCatalogsDatabasesTables: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: RenameProjectsLocationsCatalogsDatabasesTablesRequest,
   output: Table,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1363,6 +1461,7 @@ export type SetIamPolicyProjectsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Sets the IAM policy for the specified catalog. */
 export const setIamPolicyProjectsCatalogs: API.OperationMethod<
@@ -1373,7 +1472,14 @@ export const setIamPolicyProjectsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetIamPolicyProjectsCatalogsRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1383,6 +1489,7 @@ export type SetIamPolicyProjectsCatalogsNamespacesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Sets the IAM policy for the specified catalog. */
 export const setIamPolicyProjectsCatalogsNamespaces: API.OperationMethod<
@@ -1393,7 +1500,14 @@ export const setIamPolicyProjectsCatalogsNamespaces: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetIamPolicyProjectsCatalogsNamespacesRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1403,6 +1517,7 @@ export type SetIamPolicyProjectsCatalogsNamespacesTablesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Sets the IAM policy for the specified catalog. */
 export const setIamPolicyProjectsCatalogsNamespacesTables: API.OperationMethod<
@@ -1413,7 +1528,14 @@ export const setIamPolicyProjectsCatalogsNamespacesTables: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetIamPolicyProjectsCatalogsNamespacesTablesRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1423,6 +1545,7 @@ export type TestIamPermissionsProjectsCatalogsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Tests the IAM permissions for the specified catalog. */
 export const testIamPermissionsProjectsCatalogs: API.OperationMethod<
@@ -1433,7 +1556,14 @@ export const testIamPermissionsProjectsCatalogs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: TestIamPermissionsProjectsCatalogsRequest,
   output: TestIamPermissionsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1443,6 +1573,7 @@ export type TestIamPermissionsProjectsCatalogsNamespacesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Tests the IAM permissions for the specified namespace. */
 export const testIamPermissionsProjectsCatalogsNamespaces: API.OperationMethod<
@@ -1453,7 +1584,14 @@ export const testIamPermissionsProjectsCatalogsNamespaces: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: TestIamPermissionsProjectsCatalogsNamespacesRequest,
   output: TestIamPermissionsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1463,6 +1601,7 @@ export type TestIamPermissionsProjectsCatalogsNamespacesTablesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BigLakeResourceNotFound
   | GcpOpError;
 /** Tests the IAM permissions for the specified table. */
 export const testIamPermissionsProjectsCatalogsNamespacesTables: API.OperationMethod<
@@ -1473,7 +1612,14 @@ export const testIamPermissionsProjectsCatalogsNamespacesTables: API.OperationMe
 > = /*@__PURE__*/ API.make(() => ({
   input: TestIamPermissionsProjectsCatalogsNamespacesTablesRequest,
   output: TestIamPermissionsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BigLakeResourceNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

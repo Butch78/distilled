@@ -26,6 +26,20 @@ export class BadRequest
     [{ status: 400 }],
   ) {}
 
+/** The release's blueprint package image does not exist or is not readable (HTTP 400 INVALID_ARGUMENT: "... failed to read for img path: ..."). Push the blueprint image first. */
+export class BlueprintNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<BlueprintNotFound>()("BlueprintNotFound", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "failed to read for img path" } }],
+  ) {}
+
 export class Conflict
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Conflict>()("Conflict", {
@@ -63,6 +77,20 @@ export class NotFound
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withBadRequestError),
     [{ status: 404 }],
+  ) {}
+
+/** The referenced Saas does not exist or is not readable yet (HTTP 400 INVALID_ARGUMENT: "cannot get UnitKind's Saas ..."). Retry briefly right after creating the Saas. */
+export class SaasNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<SaasNotFound>()("SaasNotFound", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [{ status: 400, message: { matches: "cannot get \\w+'s Saas" } }],
   ) {}
 
 export type StringMap = { [key: string]: string | undefined };
@@ -2521,6 +2549,7 @@ export type CreateProjectsLocationsReleasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BlueprintNotFound
   | GcpOpError;
 /** Create a new release. */
 export const createProjectsLocationsReleases: API.OperationMethod<
@@ -2531,7 +2560,14 @@ export const createProjectsLocationsReleases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsReleasesRequest,
   output: Release,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BlueprintNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2601,6 +2637,7 @@ export type CreateProjectsLocationsTenantsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SaasNotFound
   | GcpOpError;
 /** Create a new tenant. */
 export const createProjectsLocationsTenants: API.OperationMethod<
@@ -2611,7 +2648,14 @@ export const createProjectsLocationsTenants: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsTenantsRequest,
   output: Tenant,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SaasNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2621,6 +2665,7 @@ export type CreateProjectsLocationsUnitKindsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SaasNotFound
   | GcpOpError;
 /** Create a new unit kind. */
 export const createProjectsLocationsUnitKinds: API.OperationMethod<
@@ -2631,7 +2676,14 @@ export const createProjectsLocationsUnitKinds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsUnitKindsRequest,
   output: UnitKind,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SaasNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3192,6 +3244,7 @@ export type PatchProjectsLocationsReleasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | BlueprintNotFound
   | GcpOpError;
 /** Update a single release. */
 export const patchProjectsLocationsReleases: API.OperationMethod<
@@ -3202,7 +3255,14 @@ export const patchProjectsLocationsReleases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsReleasesRequest,
   output: Release,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    BlueprintNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3272,6 +3332,7 @@ export type PatchProjectsLocationsTenantsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SaasNotFound
   | GcpOpError;
 /** Update a single tenant. */
 export const patchProjectsLocationsTenants: API.OperationMethod<
@@ -3282,7 +3343,14 @@ export const patchProjectsLocationsTenants: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsTenantsRequest,
   output: Tenant,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SaasNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3292,6 +3360,7 @@ export type PatchProjectsLocationsUnitKindsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SaasNotFound
   | GcpOpError;
 /** Update a single unit kind. */
 export const patchProjectsLocationsUnitKinds: API.OperationMethod<
@@ -3302,7 +3371,14 @@ export const patchProjectsLocationsUnitKinds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsUnitKindsRequest,
   output: UnitKind,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SaasNotFound,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

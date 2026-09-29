@@ -39,6 +39,45 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** The database is in Datastore mode, which does not serve the Cloud Firestore document API (HTTP 400 FAILED_PRECONDITION: 'The Cloud Firestore API is not available for Firestore in Datastore Mode database ...'). Not retryable. */
+export class DatastoreModeDatabase
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<DatastoreModeDatabase>()(
+      "DatastoreModeDatabase",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "not available for Firestore in Datastore Mode" },
+      },
+    ],
+  ) {}
+
+/** User creds need an Enterprise-edition database (HTTP 400 FAILED_PRECONDITION: 'This operation requires an Enterprise database.'). Not retryable. */
+export class EnterpriseDatabaseRequired
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<EnterpriseDatabaseRequired>()(
+      "EnterpriseDatabaseRequired",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "requires an Enterprise database" } }],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -4341,6 +4380,7 @@ export type CreateDocumentProjectsDatabasesDocumentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DatastoreModeDatabase
   | GcpOpError;
 /** Creates a new document. */
 export const createDocumentProjectsDatabasesDocuments: API.OperationMethod<
@@ -4351,7 +4391,14 @@ export const createDocumentProjectsDatabasesDocuments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateDocumentProjectsDatabasesDocumentsRequest,
   output: Document,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DatastoreModeDatabase,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4441,6 +4488,7 @@ export type CreateProjectsDatabasesUserCredsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | EnterpriseDatabaseRequired
   | GcpOpError;
 /** Create a user creds. */
 export const createProjectsDatabasesUserCreds: API.OperationMethod<
@@ -4451,7 +4499,14 @@ export const createProjectsDatabasesUserCreds: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsDatabasesUserCredsRequest,
   output: GoogleFirestoreAdminV1UserCreds,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    EnterpriseDatabaseRequired,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4541,6 +4596,7 @@ export type DeleteProjectsDatabasesDocumentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DatastoreModeDatabase
   | GcpOpError;
 /** Deletes a document. */
 export const deleteProjectsDatabasesDocuments: API.OperationMethod<
@@ -4551,7 +4607,14 @@ export const deleteProjectsDatabasesDocuments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsDatabasesDocumentsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DatastoreModeDatabase,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4786,6 +4849,7 @@ export const getProjectsDatabasesCollectionGroupsIndexes: API.OperationMethod<
 export type GetProjectsDatabasesDocumentsError =
   | NotFound
   | Forbidden
+  | DatastoreModeDatabase
   | GcpOpError;
 /** Gets a single document. */
 export const getProjectsDatabasesDocuments: API.OperationMethod<
@@ -4796,7 +4860,7 @@ export const getProjectsDatabasesDocuments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsDatabasesDocumentsRequest,
   output: Document,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DatastoreModeDatabase, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5053,6 +5117,7 @@ export const listProjectsDatabasesCollectionGroupsIndexes: API.PaginatedOperatio
 export type ListProjectsDatabasesDocumentsError =
   | NotFound
   | Forbidden
+  | DatastoreModeDatabase
   | GcpOpError;
 /** Lists documents. */
 export const listProjectsDatabasesDocuments: API.PaginatedOperationMethod<
@@ -5064,7 +5129,7 @@ export const listProjectsDatabasesDocuments: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsDatabasesDocumentsRequest,
   output: ListDocumentsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DatastoreModeDatabase, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -5237,6 +5302,7 @@ export type PatchProjectsDatabasesDocumentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DatastoreModeDatabase
   | GcpOpError;
 /** Updates or inserts a document. */
 export const patchProjectsDatabasesDocuments: API.OperationMethod<
@@ -5247,7 +5313,14 @@ export const patchProjectsDatabasesDocuments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsDatabasesDocumentsRequest,
   output: Document,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DatastoreModeDatabase,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

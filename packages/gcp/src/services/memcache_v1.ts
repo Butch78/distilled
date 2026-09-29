@@ -65,6 +65,28 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The authorized network has no Private Service Access connection (HTTP 400: 'Google private service access is not enabled.'). Not retryable until the network is peered. */
+export class PrivateServiceAccessNotEnabled
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<PrivateServiceAccessNotEnabled>()(
+      "PrivateServiceAccessNotEnabled",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "private service access is not enabled" },
+      },
+    ],
+  ) {}
+
 export type StringList = Array<string>;
 export const StringList = /*@__PURE__*/ S.Array(
   S.String,
@@ -1104,6 +1126,7 @@ export type CreateProjectsLocationsInstancesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | PrivateServiceAccessNotEnabled
   | GcpOpError;
 /** Creates a new Instance in a given location. */
 export const createProjectsLocationsInstances: API.OperationMethod<
@@ -1114,7 +1137,14 @@ export const createProjectsLocationsInstances: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsInstancesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    PrivateServiceAccessNotEnabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

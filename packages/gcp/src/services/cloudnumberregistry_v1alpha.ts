@@ -65,6 +65,20 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The API is not enabled on the project (HTTP 403 PERMISSION_DENIED, reason SERVICE_DISABLED: "<API> has not been used in project <n> before or it is disabled."). */
+export class ServiceDisabled
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceDisabled>()("ServiceDisabled", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "has not been used in project" } }],
+  ) {}
+
 /** The request message for Operations.CancelOperation. */
 export interface CancelOperationRequest {}
 export const CancelOperationRequest = /*@__PURE__*/ S.suspend(() =>
@@ -2115,6 +2129,7 @@ export type CancelOrganizationsLocationsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use Operations.GetOperation or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an Operation.error value with a google.rpc.Status.code of `1`, corresponding to `Code.CANCELLED`. */
 export const cancelOrganizationsLocationsOperations: API.OperationMethod<
@@ -2125,7 +2140,14 @@ export const cancelOrganizationsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelOrganizationsLocationsOperationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2135,6 +2157,7 @@ export type CancelProjectsLocationsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use Operations.GetOperation or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an Operation.error value with a google.rpc.Status.code of `1`, corresponding to `Code.CANCELLED`. */
 export const cancelProjectsLocationsOperations: API.OperationMethod<
@@ -2145,7 +2168,14 @@ export const cancelProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelProjectsLocationsOperationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2153,6 +2183,7 @@ export const cancelProjectsLocationsOperations: API.OperationMethod<
 export type CheckAvailabilityProjectsLocationsIpamAdminScopesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Checks the availability of IpamAdminScopes in a given project and location. */
 export const checkAvailabilityProjectsLocationsIpamAdminScopes: API.OperationMethod<
@@ -2163,7 +2194,7 @@ export const checkAvailabilityProjectsLocationsIpamAdminScopes: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: CheckAvailabilityProjectsLocationsIpamAdminScopesRequest,
   output: CheckAvailabilityIpamAdminScopesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2173,6 +2204,7 @@ export type CleanupProjectsLocationsIpamAdminScopesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Cleans up a single IpamAdminScope. */
 export const cleanupProjectsLocationsIpamAdminScopes: API.OperationMethod<
@@ -2183,7 +2215,14 @@ export const cleanupProjectsLocationsIpamAdminScopes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CleanupProjectsLocationsIpamAdminScopesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2193,6 +2232,7 @@ export type CreateOrganizationsLocationsOrgNumberRegistriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Creates a new OrgNumberRegistry in a given organization and location. */
 export const createOrganizationsLocationsOrgNumberRegistries: API.OperationMethod<
@@ -2203,7 +2243,14 @@ export const createOrganizationsLocationsOrgNumberRegistries: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateOrganizationsLocationsOrgNumberRegistriesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2213,6 +2260,7 @@ export type CreateProjectsLocationsCustomRangesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Creates a new CustomRange in a given project and location. */
 export const createProjectsLocationsCustomRanges: API.OperationMethod<
@@ -2223,7 +2271,14 @@ export const createProjectsLocationsCustomRanges: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCustomRangesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2233,6 +2288,7 @@ export type CreateProjectsLocationsIpamAdminScopesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Creates a new IpamAdminScope in a given project and location. */
 export const createProjectsLocationsIpamAdminScopes: API.OperationMethod<
@@ -2243,7 +2299,14 @@ export const createProjectsLocationsIpamAdminScopes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsIpamAdminScopesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2253,6 +2316,7 @@ export type CreateProjectsLocationsRealmsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Creates a new Realm in a given project and location. */
 export const createProjectsLocationsRealms: API.OperationMethod<
@@ -2263,7 +2327,14 @@ export const createProjectsLocationsRealms: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsRealmsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2273,6 +2344,7 @@ export type CreateProjectsLocationsRegistryBooksError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Creates a new RegistryBook in a given project and location. */
 export const createProjectsLocationsRegistryBooks: API.OperationMethod<
@@ -2283,7 +2355,14 @@ export const createProjectsLocationsRegistryBooks: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsRegistryBooksRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2293,6 +2372,7 @@ export type DeleteOrganizationsLocationsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a long-running operation. This method indicates that the client is no longer interested in the operation result. It does not cancel the operation. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. */
 export const deleteOrganizationsLocationsOperations: API.OperationMethod<
@@ -2303,7 +2383,14 @@ export const deleteOrganizationsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteOrganizationsLocationsOperationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2313,6 +2400,7 @@ export type DeleteOrganizationsLocationsOrgNumberRegistriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a single OrgNumberRegistry. */
 export const deleteOrganizationsLocationsOrgNumberRegistries: API.OperationMethod<
@@ -2323,7 +2411,14 @@ export const deleteOrganizationsLocationsOrgNumberRegistries: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteOrganizationsLocationsOrgNumberRegistriesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2333,6 +2428,7 @@ export type DeleteProjectsLocationsCustomRangesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a single CustomRange. */
 export const deleteProjectsLocationsCustomRanges: API.OperationMethod<
@@ -2343,7 +2439,14 @@ export const deleteProjectsLocationsCustomRanges: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsCustomRangesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2353,6 +2456,7 @@ export type DeleteProjectsLocationsIpamAdminScopesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a single IpamAdminScope. */
 export const deleteProjectsLocationsIpamAdminScopes: API.OperationMethod<
@@ -2363,7 +2467,14 @@ export const deleteProjectsLocationsIpamAdminScopes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsIpamAdminScopesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2373,6 +2484,7 @@ export type DeleteProjectsLocationsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a long-running operation. This method indicates that the client is no longer interested in the operation result. It does not cancel the operation. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. */
 export const deleteProjectsLocationsOperations: API.OperationMethod<
@@ -2383,7 +2495,14 @@ export const deleteProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsOperationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2393,6 +2512,7 @@ export type DeleteProjectsLocationsRealmsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a single Realm. */
 export const deleteProjectsLocationsRealms: API.OperationMethod<
@@ -2403,7 +2523,14 @@ export const deleteProjectsLocationsRealms: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsRealmsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2413,6 +2540,7 @@ export type DeleteProjectsLocationsRegistryBooksError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a single RegistryBook. */
 export const deleteProjectsLocationsRegistryBooks: API.OperationMethod<
@@ -2423,7 +2551,14 @@ export const deleteProjectsLocationsRegistryBooks: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsRegistryBooksRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2433,6 +2568,7 @@ export type DisableProjectsLocationsIpamAdminScopesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Disables a single IpamAdminScope. */
 export const disableProjectsLocationsIpamAdminScopes: API.OperationMethod<
@@ -2443,7 +2579,14 @@ export const disableProjectsLocationsIpamAdminScopes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DisableProjectsLocationsIpamAdminScopesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2451,6 +2594,7 @@ export const disableProjectsLocationsIpamAdminScopes: API.OperationMethod<
 export type FindFreeIpRangesProjectsLocationsCustomRangesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Finds free IP ranges in a single CustomRange. */
 export const findFreeIpRangesProjectsLocationsCustomRanges: API.OperationMethod<
@@ -2461,7 +2605,7 @@ export const findFreeIpRangesProjectsLocationsCustomRanges: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: FindFreeIpRangesProjectsLocationsCustomRangesRequest,
   output: FindCustomRangeFreeIpRangesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2469,6 +2613,7 @@ export const findFreeIpRangesProjectsLocationsCustomRanges: API.OperationMethod<
 export type FindFreeIpRangesProjectsLocationsDiscoveredRangesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Finds free IP ranges in a single DiscoveredRange. */
 export const findFreeIpRangesProjectsLocationsDiscoveredRanges: API.OperationMethod<
@@ -2479,7 +2624,7 @@ export const findFreeIpRangesProjectsLocationsDiscoveredRanges: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: FindFreeIpRangesProjectsLocationsDiscoveredRangesRequest,
   output: FindDiscoveredRangeFreeIpRangesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2487,6 +2632,7 @@ export const findFreeIpRangesProjectsLocationsDiscoveredRanges: API.OperationMet
 export type GetOrganizationsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getOrganizationsLocationsOperations: API.OperationMethod<
@@ -2497,7 +2643,7 @@ export const getOrganizationsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetOrganizationsLocationsOperationsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2505,6 +2651,7 @@ export const getOrganizationsLocationsOperations: API.OperationMethod<
 export type GetOrganizationsLocationsOrgNumberRegistriesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single OrgNumberRegistry. */
 export const getOrganizationsLocationsOrgNumberRegistries: API.OperationMethod<
@@ -2515,12 +2662,16 @@ export const getOrganizationsLocationsOrgNumberRegistries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetOrganizationsLocationsOrgNumberRegistriesRequest,
   output: OrgNumberRegistry,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsLocationsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsLocationsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Gets information about a location. */
 export const getProjectsLocations: API.OperationMethod<
   GetProjectsLocationsRequest,
@@ -2530,7 +2681,7 @@ export const getProjectsLocations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsRequest,
   output: Location,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2538,6 +2689,7 @@ export const getProjectsLocations: API.OperationMethod<
 export type GetProjectsLocationsCustomRangesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single CustomRange. */
 export const getProjectsLocationsCustomRanges: API.OperationMethod<
@@ -2548,7 +2700,7 @@ export const getProjectsLocationsCustomRanges: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsCustomRangesRequest,
   output: CustomRange,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2556,6 +2708,7 @@ export const getProjectsLocationsCustomRanges: API.OperationMethod<
 export type GetProjectsLocationsDiscoveredRangesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single DiscoveredRange. */
 export const getProjectsLocationsDiscoveredRanges: API.OperationMethod<
@@ -2566,7 +2719,7 @@ export const getProjectsLocationsDiscoveredRanges: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsDiscoveredRangesRequest,
   output: DiscoveredRange,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2574,6 +2727,7 @@ export const getProjectsLocationsDiscoveredRanges: API.OperationMethod<
 export type GetProjectsLocationsIpamAdminScopesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single IpamAdminScope. */
 export const getProjectsLocationsIpamAdminScopes: API.OperationMethod<
@@ -2584,7 +2738,7 @@ export const getProjectsLocationsIpamAdminScopes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsIpamAdminScopesRequest,
   output: IpamAdminScope,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2592,6 +2746,7 @@ export const getProjectsLocationsIpamAdminScopes: API.OperationMethod<
 export type GetProjectsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsOperations: API.OperationMethod<
@@ -2602,12 +2757,16 @@ export const getProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsOperationsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsLocationsRealmsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsLocationsRealmsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Gets details of a single Realm. */
 export const getProjectsLocationsRealms: API.OperationMethod<
   GetProjectsLocationsRealmsRequest,
@@ -2617,7 +2776,7 @@ export const getProjectsLocationsRealms: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsRealmsRequest,
   output: Realm,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2625,6 +2784,7 @@ export const getProjectsLocationsRealms: API.OperationMethod<
 export type GetProjectsLocationsRegistryBooksError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single RegistryBook. */
 export const getProjectsLocationsRegistryBooks: API.OperationMethod<
@@ -2635,7 +2795,7 @@ export const getProjectsLocationsRegistryBooks: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsRegistryBooksRequest,
   output: RegistryBook,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2679,6 +2839,7 @@ export const getUtilizationProjectsLocationsDiscoveredRanges: API.OperationMetho
 export type ListOrganizationsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listOrganizationsLocationsOperations: API.PaginatedOperationMethod<
@@ -2690,7 +2851,7 @@ export const listOrganizationsLocationsOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListOrganizationsLocationsOperationsRequest,
   output: ListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2702,6 +2863,7 @@ export const listOrganizationsLocationsOperations: API.PaginatedOperationMethod<
 export type ListOrganizationsLocationsOrgNumberRegistriesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists OrgNumberRegistries in a given organization and location. */
 export const listOrganizationsLocationsOrgNumberRegistries: API.PaginatedOperationMethod<
@@ -2713,7 +2875,7 @@ export const listOrganizationsLocationsOrgNumberRegistries: API.PaginatedOperati
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListOrganizationsLocationsOrgNumberRegistriesRequest,
   output: ListOrgNumberRegistriesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2722,7 +2884,11 @@ export const listOrganizationsLocationsOrgNumberRegistries: API.PaginatedOperati
   } as const,
 })) as any;
 
-export type ListProjectsLocationsError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsLocationsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Lists information about the supported locations for this service. This method lists locations based on the resource scope provided in the ListLocationsRequest.name field: * **Global locations**: If `name` is empty, the method lists the public locations available to all projects. * **Project-specific locations**: If `name` follows the format `projects/{project}`, the method lists locations visible to that specific project. This includes public, private, or other project-specific locations enabled for the project. For gRPC and client library implementations, the resource name is passed as the `name` field. For direct service calls, the resource name is incorporated into the request path based on the specific service implementation and version. */
 export const listProjectsLocations: API.PaginatedOperationMethod<
   ListProjectsLocationsRequest,
@@ -2733,7 +2899,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsRequest,
   output: ListLocationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2745,6 +2911,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsCustomRangesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists CustomRanges in a given project and location. */
 export const listProjectsLocationsCustomRanges: API.PaginatedOperationMethod<
@@ -2756,7 +2923,7 @@ export const listProjectsLocationsCustomRanges: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsCustomRangesRequest,
   output: ListCustomRangesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2768,6 +2935,7 @@ export const listProjectsLocationsCustomRanges: API.PaginatedOperationMethod<
 export type ListProjectsLocationsDiscoveredRangesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists DiscoveredRanges in a given project and location. */
 export const listProjectsLocationsDiscoveredRanges: API.PaginatedOperationMethod<
@@ -2779,7 +2947,7 @@ export const listProjectsLocationsDiscoveredRanges: API.PaginatedOperationMethod
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsDiscoveredRangesRequest,
   output: ListDiscoveredRangesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2791,6 +2959,7 @@ export const listProjectsLocationsDiscoveredRanges: API.PaginatedOperationMethod
 export type ListProjectsLocationsIpamAdminScopesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists IpamAdminScopes in a given project and location. */
 export const listProjectsLocationsIpamAdminScopes: API.PaginatedOperationMethod<
@@ -2802,7 +2971,7 @@ export const listProjectsLocationsIpamAdminScopes: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsIpamAdminScopesRequest,
   output: ListIpamAdminScopesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2814,6 +2983,7 @@ export const listProjectsLocationsIpamAdminScopes: API.PaginatedOperationMethod<
 export type ListProjectsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
@@ -2825,7 +2995,7 @@ export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsOperationsRequest,
   output: ListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2837,6 +3007,7 @@ export const listProjectsLocationsOperations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsRealmsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists Realms in a given project and location. */
 export const listProjectsLocationsRealms: API.PaginatedOperationMethod<
@@ -2848,7 +3019,7 @@ export const listProjectsLocationsRealms: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsRealmsRequest,
   output: ListRealmsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2860,6 +3031,7 @@ export const listProjectsLocationsRealms: API.PaginatedOperationMethod<
 export type ListProjectsLocationsRegistryBooksError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists RegistryBooks in a given project and location. */
 export const listProjectsLocationsRegistryBooks: API.PaginatedOperationMethod<
@@ -2871,7 +3043,7 @@ export const listProjectsLocationsRegistryBooks: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsRegistryBooksRequest,
   output: ListRegistryBooksResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2885,6 +3057,7 @@ export type PatchProjectsLocationsCustomRangesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates the parameters of a single CustomRange. */
 export const patchProjectsLocationsCustomRanges: API.OperationMethod<
@@ -2895,7 +3068,14 @@ export const patchProjectsLocationsCustomRanges: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsCustomRangesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2905,6 +3085,7 @@ export type PatchProjectsLocationsIpamAdminScopesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates the parameters of a single IpamAdminScope. */
 export const patchProjectsLocationsIpamAdminScopes: API.OperationMethod<
@@ -2915,7 +3096,14 @@ export const patchProjectsLocationsIpamAdminScopes: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsIpamAdminScopesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2925,6 +3113,7 @@ export type PatchProjectsLocationsRealmsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates the parameters of a single Realm. */
 export const patchProjectsLocationsRealms: API.OperationMethod<
@@ -2935,7 +3124,14 @@ export const patchProjectsLocationsRealms: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsRealmsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2945,6 +3141,7 @@ export type PatchProjectsLocationsRegistryBooksError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates the parameters of a single RegistryBook. */
 export const patchProjectsLocationsRegistryBooks: API.OperationMethod<
@@ -2955,7 +3152,14 @@ export const patchProjectsLocationsRegistryBooks: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsRegistryBooksRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2965,6 +3169,7 @@ export type SearchIpResourcesProjectsLocationsRegistryBooksError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Searches IP resources in a given RegistryBook. */
 export const searchIpResourcesProjectsLocationsRegistryBooks: API.OperationMethod<
@@ -2975,7 +3180,14 @@ export const searchIpResourcesProjectsLocationsRegistryBooks: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: SearchIpResourcesProjectsLocationsRegistryBooksRequest,
   output: SearchIpResourcesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

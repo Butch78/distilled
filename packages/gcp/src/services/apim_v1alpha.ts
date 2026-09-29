@@ -65,6 +65,20 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The API Management API is not enabled for the calling project (HTTP 403 SERVICE_DISABLED: 'API Management API has not been used in project N before or it is disabled.'). Not retryable until the service is enabled. */
+export class ServiceDisabled
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceDisabled>()("ServiceDisabled", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "has not been used in project" } }],
+  ) {}
+
 export type TagActionActionEnum = "ACTION_UNSPECIFIED" | "ADD" | "REMOVE";
 export const TagActionActionEnum = S.String;
 
@@ -1325,6 +1339,7 @@ export type CreateProjectsLocationsObservationJobsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** CreateObservationJob creates a new ObservationJob but does not have any effecton its own. It is a configuration that can be used in an Observation Job to collect data about existing APIs. */
 export const createProjectsLocationsObservationJobs: API.OperationMethod<
@@ -1335,7 +1350,14 @@ export const createProjectsLocationsObservationJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsObservationJobsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1345,6 +1367,7 @@ export type CreateProjectsLocationsObservationSourcesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** CreateObservationSource creates a new ObservationSource but does not affect any deployed infrastructure. It is a configuration that can be used in an Observation Job to collect data about APIs running in user's dataplane. */
 export const createProjectsLocationsObservationSources: API.OperationMethod<
@@ -1355,7 +1378,14 @@ export const createProjectsLocationsObservationSources: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsObservationSourcesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1365,6 +1395,7 @@ export type DeleteProjectsLocationsObservationJobsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** DeleteObservationJob deletes an ObservationJob. This method will fail if the observation job is currently being used by any ObservationSource, even if not enabled. */
 export const deleteProjectsLocationsObservationJobs: API.OperationMethod<
@@ -1375,7 +1406,14 @@ export const deleteProjectsLocationsObservationJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsObservationJobsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1385,6 +1423,7 @@ export type DeleteProjectsLocationsObservationSourcesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** DeleteObservationSource deletes an observation source. This method will fail if the observation source is currently being used by any ObservationJob, even if not enabled. */
 export const deleteProjectsLocationsObservationSources: API.OperationMethod<
@@ -1395,7 +1434,14 @@ export const deleteProjectsLocationsObservationSources: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsObservationSourcesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1425,6 +1471,7 @@ export type DisableProjectsLocationsObservationJobsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Disables the given ObservationJob. */
 export const disableProjectsLocationsObservationJobs: API.OperationMethod<
@@ -1435,7 +1482,14 @@ export const disableProjectsLocationsObservationJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DisableProjectsLocationsObservationJobsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1445,6 +1499,7 @@ export type EnableProjectsLocationsObservationJobsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Enables the given ObservationJob. */
 export const enableProjectsLocationsObservationJobs: API.OperationMethod<
@@ -1455,7 +1510,14 @@ export const enableProjectsLocationsObservationJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: EnableProjectsLocationsObservationJobsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1496,6 +1558,7 @@ export const getProjectsLocations: API.OperationMethod<
 export type GetProjectsLocationsObservationJobsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** GetObservationJob retrieves a single ObservationJob by name. */
 export const getProjectsLocationsObservationJobs: API.OperationMethod<
@@ -1506,7 +1569,7 @@ export const getProjectsLocationsObservationJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsObservationJobsRequest,
   output: ObservationJob,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1550,6 +1613,7 @@ export const getProjectsLocationsObservationJobsApiObservationsApiOperations: AP
 export type GetProjectsLocationsObservationSourcesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** GetObservationSource retrieves a single ObservationSource by name. */
 export const getProjectsLocationsObservationSources: API.OperationMethod<
@@ -1560,7 +1624,7 @@ export const getProjectsLocationsObservationSources: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsObservationSourcesRequest,
   output: ObservationSource,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1568,6 +1632,7 @@ export const getProjectsLocationsObservationSources: API.OperationMethod<
 export type GetProjectsLocationsOperationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsOperations: API.OperationMethod<
@@ -1578,7 +1643,7 @@ export const getProjectsLocationsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsOperationsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1629,6 +1694,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsObservationJobsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** ListObservationJobs gets all ObservationJobs for a given project and location. */
 export const listProjectsLocationsObservationJobs: API.PaginatedOperationMethod<
@@ -1640,7 +1706,7 @@ export const listProjectsLocationsObservationJobs: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsObservationJobsRequest,
   output: ListObservationJobsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1699,6 +1765,7 @@ export const listProjectsLocationsObservationJobsApiObservationsApiOperations: A
 export type ListProjectsLocationsObservationSourcesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** ListObservationSources gets all ObservationSources for a given project and location. */
 export const listProjectsLocationsObservationSources: API.PaginatedOperationMethod<
@@ -1710,7 +1777,7 @@ export const listProjectsLocationsObservationSources: API.PaginatedOperationMeth
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsObservationSourcesRequest,
   output: ListObservationSourcesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {

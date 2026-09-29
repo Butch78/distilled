@@ -13,6 +13,28 @@ import * as Retry from "../retry.ts";
 
 export type { GcpOpError, GcpOpContext };
 
+/** The access token lacks the `https://www.googleapis.com/auth/authorized-buyers-marketplace` OAuth scope (HTTP 403 PERMISSION_DENIED, reason ACCESS_TOKEN_SCOPE_INSUFFICIENT: 'Request had insufficient authentication scopes.'). A `cloud-platform` token is not enough. Not retryable. */
+export class AuthorizedBuyersScopeInsufficient
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<AuthorizedBuyersScopeInsufficient>()(
+      "AuthorizedBuyersScopeInsufficient",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "insufficient authentication scopes" },
+      },
+    ],
+  ) {}
+
 export class BadRequest
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<BadRequest>()("BadRequest", {
@@ -2518,6 +2540,7 @@ export type AcceptBuyersProposalsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Accepts the proposal at the given revision number. If the revision number in the request is behind the latest from the server, an error message will be returned. This call updates the Proposal.state from `BUYER_ACCEPTANCE_REQUESTED` to `FINALIZED`; it has no side effect if the Proposal.state is already `FINALIZED` and throws exception if the Proposal.state is not either `BUYER_ACCEPTANCE_REQUESTED` or `FINALIZED`. Accepting a proposal means the buyer understands and accepts the Proposal.terms_and_conditions proposed by the seller. */
 export const acceptBuyersProposals: API.OperationMethod<
@@ -2528,7 +2551,14 @@ export const acceptBuyersProposals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: AcceptBuyersProposalsRequest,
   output: Proposal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2538,6 +2568,7 @@ export type ActivateBuyersClientsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Activates an existing client. The state of the client will be updated to "ACTIVE". This method has no effect if the client is already in "ACTIVE" state. */
 export const activateBuyersClients: API.OperationMethod<
@@ -2548,7 +2579,14 @@ export const activateBuyersClients: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ActivateBuyersClientsRequest,
   output: Client,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2558,6 +2596,7 @@ export type ActivateBuyersClientsUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Activates an existing client user. The state of the client user will be updated from "INACTIVE" to "ACTIVE". This method has no effect if the client user is already in "ACTIVE" state. An error will be returned if the client user to activate is still in "INVITED" state. */
 export const activateBuyersClientsUsers: API.OperationMethod<
@@ -2568,7 +2607,14 @@ export const activateBuyersClientsUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ActivateBuyersClientsUsersRequest,
   output: ClientUser,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2578,6 +2624,7 @@ export type AddCreativeBuyersFinalizedDealsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Add creative to be used in the bidding process for a finalized deal. For programmatic guaranteed deals, it's recommended that you associate at least one approved creative with the deal before calling SetReadyToServe, to help reduce the number of bid responses filtered because they don't contain approved creatives. Creatives successfully added to a deal can be found in the Realtime-bidding Creatives API creative.deal_ids. This method only applies to programmatic guaranteed deals. Maximum number of 1000 creatives can be added to a finalized deal. */
 export const addCreativeBuyersFinalizedDeals: API.OperationMethod<
@@ -2588,7 +2635,14 @@ export const addCreativeBuyersFinalizedDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: AddCreativeBuyersFinalizedDealsRequest,
   output: FinalizedDeal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2598,6 +2652,7 @@ export type AddNoteBuyersProposalsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Creates a note for this proposal and sends to the seller. This method is not supported for proposals with DealType set to 'PRIVATE_AUCTION'. */
 export const addNoteBuyersProposals: API.OperationMethod<
@@ -2608,7 +2663,14 @@ export const addNoteBuyersProposals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: AddNoteBuyersProposalsRequest,
   output: Proposal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2618,6 +2680,7 @@ export type BatchUpdateBuyersProposalsDealsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Batch updates multiple deals in the same proposal. */
 export const batchUpdateBuyersProposalsDeals: API.OperationMethod<
@@ -2628,7 +2691,14 @@ export const batchUpdateBuyersProposalsDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: BatchUpdateBuyersProposalsDealsRequest,
   output: BatchUpdateDealsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2638,6 +2708,7 @@ export type CancelNegotiationBuyersProposalsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Cancels an ongoing negotiation on a proposal. This does not cancel or end serving for the deals if the proposal has been finalized. If the proposal has not been finalized before, calling this method will set the Proposal.state to `TERMINATED` and increment the Proposal.proposal_revision. If the proposal has been finalized before and is under renegotiation now, calling this method will reset the Proposal.state to `FINALIZED` and increment the Proposal.proposal_revision. This method does not support private auction proposals whose Proposal.deal_type is 'PRIVATE_AUCTION'. */
 export const cancelNegotiationBuyersProposals: API.OperationMethod<
@@ -2648,7 +2719,14 @@ export const cancelNegotiationBuyersProposals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelNegotiationBuyersProposalsRequest,
   output: Proposal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2658,6 +2736,7 @@ export type CreateBuyersClientsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Creates a new client. */
 export const createBuyersClients: API.OperationMethod<
@@ -2668,7 +2747,14 @@ export const createBuyersClients: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateBuyersClientsRequest,
   output: Client,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2678,6 +2764,7 @@ export type CreateBuyersClientsUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Creates a new client user in "INVITED" state. An email invitation will be sent to the new user, once accepted the user will become active. */
 export const createBuyersClientsUsers: API.OperationMethod<
@@ -2688,7 +2775,14 @@ export const createBuyersClientsUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateBuyersClientsUsersRequest,
   output: ClientUser,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2698,6 +2792,7 @@ export type DeactivateBuyersClientsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Deactivates an existing client. The state of the client will be updated to "INACTIVE". This method has no effect if the client is already in "INACTIVE" state. */
 export const deactivateBuyersClients: API.OperationMethod<
@@ -2708,7 +2803,14 @@ export const deactivateBuyersClients: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeactivateBuyersClientsRequest,
   output: Client,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2718,6 +2820,7 @@ export type DeactivateBuyersClientsUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Deactivates an existing client user. The state of the client user will be updated from "ACTIVE" to "INACTIVE". This method has no effect if the client user is already in "INACTIVE" state. An error will be returned if the client user to deactivate is still in "INVITED" state. */
 export const deactivateBuyersClientsUsers: API.OperationMethod<
@@ -2728,7 +2831,14 @@ export const deactivateBuyersClientsUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeactivateBuyersClientsUsersRequest,
   output: ClientUser,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2738,6 +2848,7 @@ export type DeleteBuyersClientsUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Deletes an existing client user. The client user will lose access to the Authorized Buyers UI. Note that if a client user is deleted, the user's access to the UI can't be restored unless a new client user is created and activated. */
 export const deleteBuyersClientsUsers: API.OperationMethod<
@@ -2748,12 +2859,23 @@ export const deleteBuyersClientsUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteBuyersClientsUsersRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBuyersAuctionPackagesError = NotFound | Forbidden | GcpOpError;
+export type GetBuyersAuctionPackagesError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Gets an auction package given its name. */
 export const getBuyersAuctionPackages: API.OperationMethod<
   GetBuyersAuctionPackagesRequest,
@@ -2763,12 +2885,21 @@ export const getBuyersAuctionPackages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBuyersAuctionPackagesRequest,
   output: AuctionPackage,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBuyersClientsError = NotFound | Forbidden | GcpOpError;
+export type GetBuyersClientsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Gets a client with a given resource name. */
 export const getBuyersClients: API.OperationMethod<
   GetBuyersClientsRequest,
@@ -2778,12 +2909,21 @@ export const getBuyersClients: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBuyersClientsRequest,
   output: Client,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBuyersClientsUsersError = NotFound | Forbidden | GcpOpError;
+export type GetBuyersClientsUsersError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Retrieves an existing client user. */
 export const getBuyersClientsUsers: API.OperationMethod<
   GetBuyersClientsUsersRequest,
@@ -2793,12 +2933,21 @@ export const getBuyersClientsUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBuyersClientsUsersRequest,
   output: ClientUser,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBuyersFinalizedDealsError = NotFound | Forbidden | GcpOpError;
+export type GetBuyersFinalizedDealsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Gets a finalized deal given its name. */
 export const getBuyersFinalizedDeals: API.OperationMethod<
   GetBuyersFinalizedDealsRequest,
@@ -2808,12 +2957,21 @@ export const getBuyersFinalizedDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBuyersFinalizedDealsRequest,
   output: FinalizedDeal,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBuyersProposalsError = NotFound | Forbidden | GcpOpError;
+export type GetBuyersProposalsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Gets a proposal using its resource name. The proposal is returned at the latest revision. */
 export const getBuyersProposals: API.OperationMethod<
   GetBuyersProposalsRequest,
@@ -2823,12 +2981,21 @@ export const getBuyersProposals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBuyersProposalsRequest,
   output: Proposal,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBuyersProposalsDealsError = NotFound | Forbidden | GcpOpError;
+export type GetBuyersProposalsDealsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Gets a deal given its name. The deal is returned at its head revision. */
 export const getBuyersProposalsDeals: API.OperationMethod<
   GetBuyersProposalsDealsRequest,
@@ -2838,12 +3005,21 @@ export const getBuyersProposalsDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBuyersProposalsDealsRequest,
   output: Deal,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBuyersPublisherProfilesError = NotFound | Forbidden | GcpOpError;
+export type GetBuyersPublisherProfilesError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Gets the requested publisher profile by name. */
 export const getBuyersPublisherProfiles: API.OperationMethod<
   GetBuyersPublisherProfilesRequest,
@@ -2853,12 +3029,21 @@ export const getBuyersPublisherProfiles: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBuyersPublisherProfilesRequest,
   output: PublisherProfile,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListBiddersAuctionPackagesError = NotFound | Forbidden | GcpOpError;
+export type ListBiddersAuctionPackagesError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** List the auction packages. Buyers can use the URL path "/v1/buyers/{accountId}/auctionPackages" to list auction packages for the current buyer and its clients. Bidders can use the URL path "/v1/bidders/{accountId}/auctionPackages" to list auction packages for the bidder, its media planners, its buyers, and all their clients. */
 export const listBiddersAuctionPackages: API.PaginatedOperationMethod<
   ListBiddersAuctionPackagesRequest,
@@ -2869,7 +3054,12 @@ export const listBiddersAuctionPackages: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBiddersAuctionPackagesRequest,
   output: ListAuctionPackagesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2878,7 +3068,11 @@ export const listBiddersAuctionPackages: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBiddersFinalizedDealsError = NotFound | Forbidden | GcpOpError;
+export type ListBiddersFinalizedDealsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Lists finalized deals. Use the URL path "/v1/buyers/{accountId}/finalizedDeals" to list finalized deals for the current buyer and its clients. Bidders can use the URL path "/v1/bidders/{accountId}/finalizedDeals" to list finalized deals for the bidder, its buyers and all their clients. */
 export const listBiddersFinalizedDeals: API.PaginatedOperationMethod<
   ListBiddersFinalizedDealsRequest,
@@ -2889,7 +3083,12 @@ export const listBiddersFinalizedDeals: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBiddersFinalizedDealsRequest,
   output: ListFinalizedDealsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2898,7 +3097,11 @@ export const listBiddersFinalizedDeals: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBuyersAuctionPackagesError = NotFound | Forbidden | GcpOpError;
+export type ListBuyersAuctionPackagesError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** List the auction packages. Buyers can use the URL path "/v1/buyers/{accountId}/auctionPackages" to list auction packages for the current buyer and its clients. Bidders can use the URL path "/v1/bidders/{accountId}/auctionPackages" to list auction packages for the bidder, its media planners, its buyers, and all their clients. */
 export const listBuyersAuctionPackages: API.PaginatedOperationMethod<
   ListBuyersAuctionPackagesRequest,
@@ -2909,7 +3112,12 @@ export const listBuyersAuctionPackages: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBuyersAuctionPackagesRequest,
   output: ListAuctionPackagesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2918,7 +3126,11 @@ export const listBuyersAuctionPackages: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBuyersClientsError = NotFound | Forbidden | GcpOpError;
+export type ListBuyersClientsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Lists all the clients for the current buyer. */
 export const listBuyersClients: API.PaginatedOperationMethod<
   ListBuyersClientsRequest,
@@ -2929,7 +3141,12 @@ export const listBuyersClients: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBuyersClientsRequest,
   output: ListClientsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2938,7 +3155,11 @@ export const listBuyersClients: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBuyersClientsUsersError = NotFound | Forbidden | GcpOpError;
+export type ListBuyersClientsUsersError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Lists all client users for a specified client. */
 export const listBuyersClientsUsers: API.PaginatedOperationMethod<
   ListBuyersClientsUsersRequest,
@@ -2949,7 +3170,12 @@ export const listBuyersClientsUsers: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBuyersClientsUsersRequest,
   output: ListClientUsersResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2958,7 +3184,11 @@ export const listBuyersClientsUsers: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBuyersFinalizedDealsError = NotFound | Forbidden | GcpOpError;
+export type ListBuyersFinalizedDealsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Lists finalized deals. Use the URL path "/v1/buyers/{accountId}/finalizedDeals" to list finalized deals for the current buyer and its clients. Bidders can use the URL path "/v1/bidders/{accountId}/finalizedDeals" to list finalized deals for the bidder, its buyers and all their clients. */
 export const listBuyersFinalizedDeals: API.PaginatedOperationMethod<
   ListBuyersFinalizedDealsRequest,
@@ -2969,7 +3199,12 @@ export const listBuyersFinalizedDeals: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBuyersFinalizedDealsRequest,
   output: ListFinalizedDealsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2978,7 +3213,11 @@ export const listBuyersFinalizedDeals: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBuyersProposalsError = NotFound | Forbidden | GcpOpError;
+export type ListBuyersProposalsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Lists proposals. A filter expression using [Cloud API list filtering syntax](https://developers.google.com/authorized-buyers/apis/guides/list-filters) may be specified to filter the results. */
 export const listBuyersProposals: API.PaginatedOperationMethod<
   ListBuyersProposalsRequest,
@@ -2989,7 +3228,12 @@ export const listBuyersProposals: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBuyersProposalsRequest,
   output: ListProposalsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -2998,7 +3242,11 @@ export const listBuyersProposals: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListBuyersProposalsDealsError = NotFound | Forbidden | GcpOpError;
+export type ListBuyersProposalsDealsError =
+  | NotFound
+  | Forbidden
+  | AuthorizedBuyersScopeInsufficient
+  | GcpOpError;
 /** Lists all deals in a proposal. To retrieve only the finalized revision deals regardless if a deal is being renegotiated, see the FinalizedDeals resource. */
 export const listBuyersProposalsDeals: API.PaginatedOperationMethod<
   ListBuyersProposalsDealsRequest,
@@ -3009,7 +3257,12 @@ export const listBuyersProposalsDeals: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBuyersProposalsDealsRequest,
   output: ListDealsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -3021,6 +3274,7 @@ export const listBuyersProposalsDeals: API.PaginatedOperationMethod<
 export type ListBuyersPublisherProfilesError =
   | NotFound
   | Forbidden
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Lists publisher profiles. The returned publisher profiles aren't in any defined order. The order of the results might change. A new publisher profile can appear in any place in the list of returned results. */
 export const listBuyersPublisherProfiles: API.PaginatedOperationMethod<
@@ -3032,7 +3286,12 @@ export const listBuyersPublisherProfiles: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBuyersPublisherProfilesRequest,
   output: ListPublisherProfilesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -3046,6 +3305,7 @@ export type PatchBuyersClientsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Updates an existing client. */
 export const patchBuyersClients: API.OperationMethod<
@@ -3056,7 +3316,14 @@ export const patchBuyersClients: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchBuyersClientsRequest,
   output: Client,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3066,6 +3333,7 @@ export type PatchBuyersProposalsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Updates the proposal at the given revision number. If the revision number in the request is behind the latest one kept in the server, an error message will be returned. See FieldMask for how to use FieldMask. Only fields specified in the UpdateProposalRequest.update_mask will be updated; Fields noted as 'Immutable' or 'Output only' yet specified in the UpdateProposalRequest.update_mask will be ignored and left unchanged. Updating a private auction proposal is only allowed for buyer private data, all other fields are immutable. */
 export const patchBuyersProposals: API.OperationMethod<
@@ -3076,7 +3344,14 @@ export const patchBuyersProposals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchBuyersProposalsRequest,
   output: Proposal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3086,6 +3361,7 @@ export type PatchBuyersProposalsDealsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Updates the given deal at the buyer known revision number. If the server revision has advanced since the passed-in proposal.proposal_revision an ABORTED error message will be returned. The revision number is incremented by the server whenever the proposal or its constituent deals are updated. Note: The revision number is kept at a proposal level. The buyer of the API is expected to keep track of the revision number after the last update operation and send it in as part of the next update request. This way, if there are further changes on the server (for example, seller making new updates), then the server can detect conflicts and reject the proposed changes. */
 export const patchBuyersProposalsDeals: API.OperationMethod<
@@ -3096,7 +3372,14 @@ export const patchBuyersProposalsDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchBuyersProposalsDealsRequest,
   output: Deal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3106,6 +3389,7 @@ export type PauseBuyersFinalizedDealsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Pauses serving of the given finalized deal. This call only pauses the serving status, and does not affect other fields of the finalized deal. Calling this method for an already paused deal has no effect. This method only applies to programmatic guaranteed deals and preferred deals. */
 export const pauseBuyersFinalizedDeals: API.OperationMethod<
@@ -3116,7 +3400,14 @@ export const pauseBuyersFinalizedDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PauseBuyersFinalizedDealsRequest,
   output: FinalizedDeal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3126,6 +3417,7 @@ export type ResumeBuyersFinalizedDealsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Resumes serving of the given finalized deal. Calling this method for an running deal has no effect. If a deal is initially paused by the seller, calling this method will not resume serving of the deal until the seller also resumes the deal. This method only applies to programmatic guaranteed deals and preferred deals. */
 export const resumeBuyersFinalizedDeals: API.OperationMethod<
@@ -3136,7 +3428,14 @@ export const resumeBuyersFinalizedDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ResumeBuyersFinalizedDealsRequest,
   output: FinalizedDeal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3146,6 +3445,7 @@ export type SendRfpBuyersProposalsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Sends a request for proposal (RFP) to a publisher to initiate the negotiation regarding certain inventory. In the RFP, buyers can specify the deal type, deal terms, start and end dates, targeting, and a message to the publisher. Once the RFP is sent, a proposal in `SELLER_REVIEW_REQUESTED` state will be created and returned in the response. The publisher may review your request and respond with detailed deals in the proposal. */
 export const sendRfpBuyersProposals: API.OperationMethod<
@@ -3156,7 +3456,14 @@ export const sendRfpBuyersProposals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SendRfpBuyersProposalsRequest,
   output: Proposal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3166,6 +3473,7 @@ export type SetReadyToServeBiddersFinalizedDealsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Sets the given finalized deal as ready to serve. By default, deals are set as ready to serve as soon as they're finalized. If you want to opt out of the default behavior, and manually indicate that deals are ready to serve, ask your Technical Account Manager to add you to the allowlist. If you choose to use this method, finalized deals belonging to the bidder and its child seats don't start serving until after you call `setReadyToServe`, and after the deals become active. For example, you can use this method to delay receiving bid requests until your creative is ready. In addition, bidders can use the URL path "/v1/bidders/{accountId}/finalizedDeals/{dealId}" to set ready to serve for the finalized deals belong to itself, its child seats and all their clients. This method only applies to programmatic guaranteed deals. */
 export const setReadyToServeBiddersFinalizedDeals: API.OperationMethod<
@@ -3176,7 +3484,14 @@ export const setReadyToServeBiddersFinalizedDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetReadyToServeBiddersFinalizedDealsRequest,
   output: FinalizedDeal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3186,6 +3501,7 @@ export type SetReadyToServeBuyersFinalizedDealsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Sets the given finalized deal as ready to serve. By default, deals are set as ready to serve as soon as they're finalized. If you want to opt out of the default behavior, and manually indicate that deals are ready to serve, ask your Technical Account Manager to add you to the allowlist. If you choose to use this method, finalized deals belonging to the bidder and its child seats don't start serving until after you call `setReadyToServe`, and after the deals become active. For example, you can use this method to delay receiving bid requests until your creative is ready. In addition, bidders can use the URL path "/v1/bidders/{accountId}/finalizedDeals/{dealId}" to set ready to serve for the finalized deals belong to itself, its child seats and all their clients. This method only applies to programmatic guaranteed deals. */
 export const setReadyToServeBuyersFinalizedDeals: API.OperationMethod<
@@ -3196,7 +3512,14 @@ export const setReadyToServeBuyersFinalizedDeals: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetReadyToServeBuyersFinalizedDealsRequest,
   output: FinalizedDeal,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3206,6 +3529,7 @@ export type SubscribeBuyersAuctionPackagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Subscribe to the auction package for the specified buyer. Once subscribed, the bidder will receive a call out for inventory matching the auction package targeting criteria with the auction package deal ID and the specified buyer. */
 export const subscribeBuyersAuctionPackages: API.OperationMethod<
@@ -3216,7 +3540,14 @@ export const subscribeBuyersAuctionPackages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SubscribeBuyersAuctionPackagesRequest,
   output: AuctionPackage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3226,6 +3557,7 @@ export type SubscribeClientsBuyersAuctionPackagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Subscribe the specified clients of the buyer to the auction package. If a client in the list does not belong to the buyer, an error response will be returned, and all of the following clients in the list will not be subscribed. Subscribing an already subscribed client will have no effect. */
 export const subscribeClientsBuyersAuctionPackages: API.OperationMethod<
@@ -3236,7 +3568,14 @@ export const subscribeClientsBuyersAuctionPackages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SubscribeClientsBuyersAuctionPackagesRequest,
   output: AuctionPackage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3246,6 +3585,7 @@ export type UnsubscribeBuyersAuctionPackagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Unsubscribe from the auction package for the specified buyer. Once unsubscribed, the bidder will no longer receive a call out for the auction package deal ID and the specified buyer. */
 export const unsubscribeBuyersAuctionPackages: API.OperationMethod<
@@ -3256,7 +3596,14 @@ export const unsubscribeBuyersAuctionPackages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UnsubscribeBuyersAuctionPackagesRequest,
   output: AuctionPackage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3266,6 +3613,7 @@ export type UnsubscribeClientsBuyersAuctionPackagesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AuthorizedBuyersScopeInsufficient
   | GcpOpError;
 /** Unsubscribe from the auction package for the specified clients of the buyer. Unsubscribing a client that is not subscribed will have no effect. */
 export const unsubscribeClientsBuyersAuctionPackages: API.OperationMethod<
@@ -3276,7 +3624,14 @@ export const unsubscribeClientsBuyersAuctionPackages: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UnsubscribeClientsBuyersAuctionPackagesRequest,
   output: AuctionPackage,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AuthorizedBuyersScopeInsufficient,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

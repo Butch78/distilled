@@ -13,6 +13,23 @@ import * as Retry from "../retry.ts";
 
 export type { GcpOpError, GcpOpContext };
 
+/** AgentService does not serve the v1 API (HTTP 400 INVALID_ARGUMENT: 'This API version is not supported by AgentService. Please use the v1beta1 version.'). Not retryable. */
+export class AgentServiceV1Unsupported
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<AgentServiceV1Unsupported>()(
+      "AgentServiceV1Unsupported",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "not supported by AgentService" } }],
+  ) {}
+
 export class BadRequest
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<BadRequest>()("BadRequest", {
@@ -26,6 +43,30 @@ export class BadRequest
     [{ status: 400 }],
   ) {}
 
+/** The cached content is below the explicit-caching minimum token count (HTTP 400 INVALID_ARGUMENT: 'The minimum token count to start explicit caching is 1024.'). Vertex AI sometimes returns this spuriously for large content; a retry succeeds. */
+export class CachedContentTooFewTokens
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<CachedContentTooFewTokens>()(
+      "CachedContentTooFewTokens",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: {
+          includes: "The minimum token count to start explicit caching",
+        },
+      },
+    ],
+  ) {}
+
 export class Conflict
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Conflict>()("Conflict", {
@@ -37,6 +78,23 @@ export class Conflict
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withConflictError),
     [{ status: 409 }],
+  ) {}
+
+/** Vertex DataLabelingJob is deprecated for this project (HTTP 400 INVALID_ARGUMENT: 'Vertex DataLabelingJob is deprecated, so new project … will not be able to use the service unless they opt-in to use Labelbox human labelers.'). Not retryable. */
+export class DataLabelingJobDeprecated
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<DataLabelingJobDeprecated>()(
+      "DataLabelingJobDeprecated",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "DataLabelingJob is deprecated" } }],
   ) {}
 
 export class Forbidden
@@ -63,6 +121,23 @@ export class NotFound
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withBadRequestError),
     [{ status: 404 }],
+  ) {}
+
+/** The reasoning engine has no running instances, typically because it has no valid `spec.package_spec` (HTTP 400 FAILED_PRECONDITION/INVALID_ARGUMENT: 'The requested resource [...] does not have running instances.'). Deploy code to the engine; not retryable. */
+export class ReasoningEngineNotRunning
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ReasoningEngineNotRunning>()(
+      "ReasoningEngineNotRunning",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "does not have running instances" } }],
   ) {}
 
 /** Agent Engine sandbox environments are not enabled for this project or region (HTTP 501 UNIMPLEMENTED: 'Operation is not implemented, or supported, or enabled.'). Not retryable. */
@@ -55110,6 +55185,7 @@ export type CancelDataLabelingJobsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use Operations.GetOperation or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an Operation.error value with a google.rpc.Status.code of `1`, corresponding to `Code.CANCELLED`. */
 export const cancelDataLabelingJobsOperations: API.OperationMethod<
@@ -55120,7 +55196,14 @@ export const cancelDataLabelingJobsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelDataLabelingJobsOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -55790,6 +55873,7 @@ export type CancelProjectsLocationsDataLabelingJobsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Cancels a DataLabelingJob. Success of cancellation is not guaranteed. */
 export const cancelProjectsLocationsDataLabelingJobs: API.OperationMethod<
@@ -55800,7 +55884,14 @@ export const cancelProjectsLocationsDataLabelingJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelProjectsLocationsDataLabelingJobsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -55810,6 +55901,7 @@ export type CancelProjectsLocationsDataLabelingJobsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use Operations.GetOperation or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an Operation.error value with a google.rpc.Status.code of `1`, corresponding to `Code.CANCELLED`. */
 export const cancelProjectsLocationsDataLabelingJobsOperations: API.OperationMethod<
@@ -55820,7 +55912,14 @@ export const cancelProjectsLocationsDataLabelingJobsOperations: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: CancelProjectsLocationsDataLabelingJobsOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -57835,6 +57934,7 @@ export type CreateProjectsLocationsAgentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AgentServiceV1Unsupported
   | GcpOpError;
 /** Creates an agent. */
 export const createProjectsLocationsAgents: API.OperationMethod<
@@ -57845,7 +57945,14 @@ export const createProjectsLocationsAgents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsAgentsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AgentServiceV1Unsupported,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -57875,6 +57982,7 @@ export type CreateProjectsLocationsCachedContentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | CachedContentTooFewTokens
   | GcpOpError;
 /** Creates cached content, this call will initialize the cached content in the data storage, and users need to pay for the cache data storage. */
 export const createProjectsLocationsCachedContents: API.OperationMethod<
@@ -57885,7 +57993,14 @@ export const createProjectsLocationsCachedContents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsCachedContentsRequest,
   output: GoogleCloudAiplatformV1CachedContent,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    CachedContentTooFewTokens,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -57915,6 +58030,7 @@ export type CreateProjectsLocationsDataLabelingJobsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Creates a DataLabelingJob. */
 export const createProjectsLocationsDataLabelingJobs: API.OperationMethod<
@@ -57925,7 +58041,14 @@ export const createProjectsLocationsDataLabelingJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsDataLabelingJobsRequest,
   output: GoogleCloudAiplatformV1DataLabelingJob,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -59008,6 +59131,7 @@ export type DeleteDataLabelingJobsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Deletes a long-running operation. This method indicates that the client is no longer interested in the operation result. It does not cancel the operation. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. */
 export const deleteDataLabelingJobsOperations: API.OperationMethod<
@@ -59018,7 +59142,14 @@ export const deleteDataLabelingJobsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteDataLabelingJobsOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -59768,6 +59899,7 @@ export type DeleteProjectsLocationsAgentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AgentServiceV1Unsupported
   | GcpOpError;
 /** Deletes an agent. */
 export const deleteProjectsLocationsAgents: API.OperationMethod<
@@ -59778,7 +59910,14 @@ export const deleteProjectsLocationsAgents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsAgentsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AgentServiceV1Unsupported,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -59868,6 +60007,7 @@ export type DeleteProjectsLocationsDataLabelingJobsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Deletes a DataLabelingJob. */
 export const deleteProjectsLocationsDataLabelingJobs: API.OperationMethod<
@@ -59878,7 +60018,14 @@ export const deleteProjectsLocationsDataLabelingJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsDataLabelingJobsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -59888,6 +60035,7 @@ export type DeleteProjectsLocationsDataLabelingJobsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Deletes a long-running operation. This method indicates that the client is no longer interested in the operation result. It does not cancel the operation. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. */
 export const deleteProjectsLocationsDataLabelingJobsOperations: API.OperationMethod<
@@ -59898,7 +60046,14 @@ export const deleteProjectsLocationsDataLabelingJobsOperations: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsDataLabelingJobsOperationsRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -63550,6 +63705,7 @@ export const getCustomJobsOperations: API.OperationMethod<
 export type GetDataLabelingJobsOperationsError =
   | NotFound
   | Forbidden
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getDataLabelingJobsOperations: API.OperationMethod<
@@ -63560,7 +63716,7 @@ export const getDataLabelingJobsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetDataLabelingJobsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataLabelingJobDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -64395,7 +64551,11 @@ export const getProjectsLocations: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetProjectsLocationsAgentsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsLocationsAgentsError =
+  | NotFound
+  | Forbidden
+  | AgentServiceV1Unsupported
+  | GcpOpError;
 /** Retrieves an agent. */
 export const getProjectsLocationsAgents: API.OperationMethod<
   GetProjectsLocationsAgentsRequest,
@@ -64405,7 +64565,7 @@ export const getProjectsLocationsAgents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsAgentsRequest,
   output: GoogleCloudAiplatformV1Agent,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, AgentServiceV1Unsupported, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -64485,6 +64645,7 @@ export const getProjectsLocationsCustomJobsOperations: API.OperationMethod<
 export type GetProjectsLocationsDataLabelingJobsError =
   | NotFound
   | Forbidden
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Gets a DataLabelingJob. */
 export const getProjectsLocationsDataLabelingJobs: API.OperationMethod<
@@ -64495,7 +64656,7 @@ export const getProjectsLocationsDataLabelingJobs: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsDataLabelingJobsRequest,
   output: GoogleCloudAiplatformV1DataLabelingJob,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataLabelingJobDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -64503,6 +64664,7 @@ export const getProjectsLocationsDataLabelingJobs: API.OperationMethod<
 export type GetProjectsLocationsDataLabelingJobsOperationsError =
   | NotFound
   | Forbidden
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Gets the latest state of a long-running operation. Clients can use this method to poll the operation result at intervals as recommended by the API service. */
 export const getProjectsLocationsDataLabelingJobsOperations: API.OperationMethod<
@@ -64513,7 +64675,7 @@ export const getProjectsLocationsDataLabelingJobsOperations: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsDataLabelingJobsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataLabelingJobDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -67411,6 +67573,7 @@ export const listCustomJobsOperations: API.PaginatedOperationMethod<
 export type ListDataLabelingJobsOperationsError =
   | NotFound
   | Forbidden
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listDataLabelingJobsOperations: API.PaginatedOperationMethod<
@@ -67422,7 +67585,7 @@ export const listDataLabelingJobsOperations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListDataLabelingJobsOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataLabelingJobDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -68186,6 +68349,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsAgentsError =
   | NotFound
   | Forbidden
+  | AgentServiceV1Unsupported
   | GcpOpError;
 /** Lists the agents in a location that belong to the caller. An agent belongs to the end user recorded as its owner when it was created, so the response holds that caller's agents and no others. It is empty for a caller that is not an end user, and an agent with no recorded owner is listed for nobody. */
 export const listProjectsLocationsAgents: API.PaginatedOperationMethod<
@@ -68197,7 +68361,7 @@ export const listProjectsLocationsAgents: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsAgentsRequest,
   output: GoogleCloudAiplatformV1ListAgentsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, AgentServiceV1Unsupported, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -68301,6 +68465,7 @@ export const listProjectsLocationsCustomJobsOperations: API.PaginatedOperationMe
 export type ListProjectsLocationsDataLabelingJobsError =
   | NotFound
   | Forbidden
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Lists DataLabelingJobs in a Location. */
 export const listProjectsLocationsDataLabelingJobs: API.PaginatedOperationMethod<
@@ -68312,7 +68477,7 @@ export const listProjectsLocationsDataLabelingJobs: API.PaginatedOperationMethod
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsDataLabelingJobsRequest,
   output: GoogleCloudAiplatformV1ListDataLabelingJobsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataLabelingJobDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -68324,6 +68489,7 @@ export const listProjectsLocationsDataLabelingJobs: API.PaginatedOperationMethod
 export type ListProjectsLocationsDataLabelingJobsOperationsError =
   | NotFound
   | Forbidden
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. */
 export const listProjectsLocationsDataLabelingJobsOperations: API.PaginatedOperationMethod<
@@ -68335,7 +68501,7 @@ export const listProjectsLocationsDataLabelingJobsOperations: API.PaginatedOpera
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsDataLabelingJobsOperationsRequest,
   output: GoogleLongrunningListOperationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataLabelingJobDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -71746,6 +71912,7 @@ export type PatchProjectsLocationsAgentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | AgentServiceV1Unsupported
   | GcpOpError;
 /** Updates an agent. */
 export const patchProjectsLocationsAgents: API.OperationMethod<
@@ -71756,7 +71923,14 @@ export const patchProjectsLocationsAgents: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsAgentsRequest,
   output: GoogleCloudAiplatformV1Agent,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    AgentServiceV1Unsupported,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -72914,6 +73088,7 @@ export type QueryProjectsLocationsReasoningEnginesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ReasoningEngineNotRunning
   | GcpOpError;
 /** Queries using a reasoning engine. */
 export const queryProjectsLocationsReasoningEngines: API.OperationMethod<
@@ -72924,7 +73099,14 @@ export const queryProjectsLocationsReasoningEngines: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: QueryProjectsLocationsReasoningEnginesRequest,
   output: GoogleCloudAiplatformV1QueryReasoningEngineResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ReasoningEngineNotRunning,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -72954,6 +73136,7 @@ export type QueryReasoningEnginesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ReasoningEngineNotRunning
   | GcpOpError;
 /** Queries using a reasoning engine. */
 export const queryReasoningEngines: API.OperationMethod<
@@ -72964,7 +73147,14 @@ export const queryReasoningEngines: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: QueryReasoningEnginesRequest,
   output: GoogleCloudAiplatformV1QueryReasoningEngineResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ReasoningEngineNotRunning,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -74029,6 +74219,7 @@ export type StreamQueryProjectsLocationsReasoningEnginesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ReasoningEngineNotRunning
   | GcpOpError;
 /** Streams queries using a reasoning engine. */
 export const streamQueryProjectsLocationsReasoningEngines: API.OperationMethod<
@@ -74039,7 +74230,14 @@ export const streamQueryProjectsLocationsReasoningEngines: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: StreamQueryProjectsLocationsReasoningEnginesRequest,
   output: GoogleApiHttpBody,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ReasoningEngineNotRunning,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -74069,6 +74267,7 @@ export type StreamQueryReasoningEnginesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ReasoningEngineNotRunning
   | GcpOpError;
 /** Streams queries using a reasoning engine. */
 export const streamQueryReasoningEngines: API.OperationMethod<
@@ -74079,7 +74278,14 @@ export const streamQueryReasoningEngines: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: StreamQueryReasoningEnginesRequest,
   output: GoogleApiHttpBody,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ReasoningEngineNotRunning,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -74650,6 +74856,7 @@ export type WaitDataLabelingJobsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Waits until the specified long-running operation is done or reaches at most a specified timeout, returning the latest state. If the operation is already done, the latest state is immediately returned. If the timeout specified is greater than the default HTTP/RPC timeout, the HTTP/RPC timeout is used. If the server does not support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Note that this method is on a best-effort basis. It may return the latest state before the specified timeout (including immediately), meaning even an immediate response is no guarantee that the operation is done. */
 export const waitDataLabelingJobsOperations: API.OperationMethod<
@@ -74660,7 +74867,14 @@ export const waitDataLabelingJobsOperations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: WaitDataLabelingJobsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -75370,6 +75584,7 @@ export type WaitProjectsLocationsDataLabelingJobsOperationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataLabelingJobDeprecated
   | GcpOpError;
 /** Waits until the specified long-running operation is done or reaches at most a specified timeout, returning the latest state. If the operation is already done, the latest state is immediately returned. If the timeout specified is greater than the default HTTP/RPC timeout, the HTTP/RPC timeout is used. If the server does not support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Note that this method is on a best-effort basis. It may return the latest state before the specified timeout (including immediately), meaning even an immediate response is no guarantee that the operation is done. */
 export const waitProjectsLocationsDataLabelingJobsOperations: API.OperationMethod<
@@ -75380,7 +75595,14 @@ export const waitProjectsLocationsDataLabelingJobsOperations: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: WaitProjectsLocationsDataLabelingJobsOperationsRequest,
   output: GoogleLongrunningOperation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataLabelingJobDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

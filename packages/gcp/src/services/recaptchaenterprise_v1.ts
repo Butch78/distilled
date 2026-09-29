@@ -39,6 +39,28 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** The project has no access to the reCAPTCHA firewall policy API (HTTP 403: "The firewall policy API is not provided by this environment."). Not retryable; request access per the firewall policy documentation. */
+export class FirewallPolicyApiUnavailable
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<FirewallPolicyApiUnavailable>()(
+      "FirewallPolicyApiUnavailable",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "firewall policy API is not provided" },
+      },
+    ],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -50,6 +72,20 @@ export class Forbidden
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withAuthError),
     [{ status: 403 }],
+  ) {}
+
+/** The event's site key is unknown to reCAPTCHA (HTTP 400: 'siteKey is invalid'). Retryable briefly after the key is created; otherwise the key id is wrong. */
+export class InvalidSiteKey
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<InvalidSiteKey>()("InvalidSiteKey", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "siteKey is invalid" } }],
   ) {}
 
 export class NotFound
@@ -2938,6 +2974,7 @@ export type CreateProjectsAssessmentsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | InvalidSiteKey
   | GcpOpError;
 /** Creates an Assessment of the likelihood an event is legitimate. */
 export const createProjectsAssessments: API.OperationMethod<
@@ -2948,7 +2985,14 @@ export const createProjectsAssessments: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsAssessmentsRequest,
   output: GoogleCloudRecaptchaenterpriseV1Assessment,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    InvalidSiteKey,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2958,6 +3002,7 @@ export type CreateProjectsFirewallpoliciesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FirewallPolicyApiUnavailable
   | GcpOpError;
 /** Creates a new FirewallPolicy, specifying conditions at which reCAPTCHA Enterprise actions can be executed. A project may have a maximum of 1000 policies. */
 export const createProjectsFirewallpolicies: API.OperationMethod<
@@ -2968,7 +3013,14 @@ export const createProjectsFirewallpolicies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsFirewallpoliciesRequest,
   output: GoogleCloudRecaptchaenterpriseV1FirewallPolicy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FirewallPolicyApiUnavailable,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -2998,6 +3050,7 @@ export type DeleteProjectsFirewallpoliciesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FirewallPolicyApiUnavailable
   | GcpOpError;
 /** Deletes the specified firewall policy. */
 export const deleteProjectsFirewallpolicies: API.OperationMethod<
@@ -3008,7 +3061,14 @@ export const deleteProjectsFirewallpolicies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsFirewallpoliciesRequest,
   output: GoogleProtobufEmpty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FirewallPolicyApiUnavailable,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3084,6 +3144,7 @@ export const getPolicyProjectsKeys: API.OperationMethod<
 export type GetProjectsFirewallpoliciesError =
   | NotFound
   | Forbidden
+  | FirewallPolicyApiUnavailable
   | GcpOpError;
 /** Returns the specified firewall policy. */
 export const getProjectsFirewallpolicies: API.OperationMethod<
@@ -3094,7 +3155,7 @@ export const getProjectsFirewallpolicies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsFirewallpoliciesRequest,
   output: GoogleCloudRecaptchaenterpriseV1FirewallPolicy,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, FirewallPolicyApiUnavailable, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3140,6 +3201,7 @@ export const listIpOverridesProjectsKeys: API.PaginatedOperationMethod<
 export type ListProjectsFirewallpoliciesError =
   | NotFound
   | Forbidden
+  | FirewallPolicyApiUnavailable
   | GcpOpError;
 /** Returns the list of all firewall policies that belong to a project. */
 export const listProjectsFirewallpolicies: API.PaginatedOperationMethod<
@@ -3151,7 +3213,7 @@ export const listProjectsFirewallpolicies: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsFirewallpoliciesRequest,
   output: GoogleCloudRecaptchaenterpriseV1ListFirewallPoliciesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, FirewallPolicyApiUnavailable, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -3252,6 +3314,7 @@ export type PatchProjectsFirewallpoliciesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FirewallPolicyApiUnavailable
   | GcpOpError;
 /** Updates the specified firewall policy. */
 export const patchProjectsFirewallpolicies: API.OperationMethod<
@@ -3262,7 +3325,14 @@ export const patchProjectsFirewallpolicies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsFirewallpoliciesRequest,
   output: GoogleCloudRecaptchaenterpriseV1FirewallPolicy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FirewallPolicyApiUnavailable,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -3312,6 +3382,7 @@ export type ReorderProjectsFirewallpoliciesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | FirewallPolicyApiUnavailable
   | GcpOpError;
 /** Reorders all firewall policies. */
 export const reorderProjectsFirewallpolicies: API.OperationMethod<
@@ -3322,7 +3393,14 @@ export const reorderProjectsFirewallpolicies: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ReorderProjectsFirewallpoliciesRequest,
   output: GoogleCloudRecaptchaenterpriseV1ReorderFirewallPoliciesResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    FirewallPolicyApiUnavailable,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

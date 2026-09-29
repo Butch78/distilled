@@ -52,6 +52,25 @@ export class Forbidden
     [{ status: 403 }],
   ) {}
 
+/** The cluster is the instance's last LIVE cluster and cannot be deleted on its own; delete the instance instead (HTTP 400 FAILED_PRECONDITION: 'Cannot delete the last LIVE Cluster in an Instance'). Not retryable. */
+export class LastClusterDeletion
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<LastClusterDeletion>()("LastClusterDeletion", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "Cannot delete the last LIVE Cluster" },
+      },
+    ],
+  ) {}
+
 export class NotFound
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<NotFound>()("NotFound", {
@@ -63,6 +82,25 @@ export class NotFound
       details: S.optional(S.Array(S.Unknown)),
     }).pipe(C.withBadRequestError),
     [{ status: 404 }],
+  ) {}
+
+/** A table referenced by the materialized view query is still being created or modified (HTTP 400: '... while it is being created or modified'). Retryable after a short wait. */
+export class SourceTableNotReady
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<SourceTableNotReady>()("SourceTableNotReady", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withBadRequestError),
+    [
+      {
+        status: 400,
+        message: { includes: "while it is being created or modified" },
+      },
+    ],
   ) {}
 
 /** Checks that all writes before the consistency token was generated are replicated in every cluster and readable. */
@@ -4361,6 +4399,7 @@ export type CreateProjectsInstancesMaterializedViewsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SourceTableNotReady
   | GcpOpError;
 /** Creates a materialized view within an instance. */
 export const createProjectsInstancesMaterializedViews: API.OperationMethod<
@@ -4371,7 +4410,14 @@ export const createProjectsInstancesMaterializedViews: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsInstancesMaterializedViewsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SourceTableNotReady,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4481,6 +4527,7 @@ export type DeleteProjectsInstancesClustersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | LastClusterDeletion
   | GcpOpError;
 /** Deletes a cluster from an instance. */
 export const deleteProjectsInstancesClusters: API.OperationMethod<
@@ -4491,7 +4538,14 @@ export const deleteProjectsInstancesClusters: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsInstancesClustersRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    LastClusterDeletion,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

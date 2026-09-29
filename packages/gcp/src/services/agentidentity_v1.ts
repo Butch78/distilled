@@ -65,6 +65,20 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** The API is not enabled on the project (HTTP 403 PERMISSION_DENIED, reason SERVICE_DISABLED: "<API> has not been used in project <n> before or it is disabled."). */
+export class ServiceDisabled
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<ServiceDisabled>()("ServiceDisabled", {
+      code: S.optional(S.Number),
+      message: S.String,
+      status: S.optional(S.String),
+      reason: S.optional(S.String),
+      domain: S.optional(S.String),
+      details: S.optional(S.Array(S.Unknown)),
+    }).pipe(C.withAuthError),
+    [{ status: 403, message: { includes: "has not been used in project" } }],
+  ) {}
+
 export type StringList = Array<string>;
 export const StringList = /*@__PURE__*/ S.Array(
   S.String,
@@ -1160,6 +1174,7 @@ export type CreateProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Creates a new auth provider in a given project and location. */
 export const createProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1170,7 +1185,14 @@ export const createProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsAuthProvidersRequest,
   output: AuthProvider,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1180,6 +1202,7 @@ export type DeleteProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a single auth provider. */
 export const deleteProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1190,7 +1213,14 @@ export const deleteProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsAuthProvidersRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1200,6 +1230,7 @@ export type DeleteProjectsLocationsAuthProvidersAuthorizationsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Deletes a single authorization. */
 export const deleteProjectsLocationsAuthProvidersAuthorizations: API.OperationMethod<
@@ -1210,7 +1241,14 @@ export const deleteProjectsLocationsAuthProvidersAuthorizations: API.OperationMe
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsAuthProvidersAuthorizationsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1220,6 +1258,7 @@ export type DisableProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Disables a single auth provider. */
 export const disableProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1230,7 +1269,14 @@ export const disableProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DisableProjectsLocationsAuthProvidersRequest,
   output: AuthProvider,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1240,6 +1286,7 @@ export type EnableProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Enables a single auth provider. */
 export const enableProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1250,7 +1297,14 @@ export const enableProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: EnableProjectsLocationsAuthProvidersRequest,
   output: AuthProvider,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1258,6 +1312,7 @@ export const enableProjectsLocationsAuthProviders: API.OperationMethod<
 export type GetIamPolicyProjectsLocationsAuthProvidersError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets the access control policy for a resource. Returns an empty policy if the resource exists and does not have a policy set. */
 export const getIamPolicyProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1268,12 +1323,16 @@ export const getIamPolicyProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsLocationsAuthProvidersRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetProjectsLocationsError = NotFound | Forbidden | GcpOpError;
+export type GetProjectsLocationsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Gets information about a location. */
 export const getProjectsLocations: API.OperationMethod<
   GetProjectsLocationsRequest,
@@ -1283,7 +1342,7 @@ export const getProjectsLocations: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsRequest,
   output: Location,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1291,6 +1350,7 @@ export const getProjectsLocations: API.OperationMethod<
 export type GetProjectsLocationsAccessSummariesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single access summary. */
 export const getProjectsLocationsAccessSummaries: API.OperationMethod<
@@ -1301,7 +1361,7 @@ export const getProjectsLocationsAccessSummaries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsAccessSummariesRequest,
   output: AccessSummary,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1309,6 +1369,7 @@ export const getProjectsLocationsAccessSummaries: API.OperationMethod<
 export type GetProjectsLocationsAuthProvidersError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single auth provider. */
 export const getProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1319,7 +1380,7 @@ export const getProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsAuthProvidersRequest,
   output: AuthProvider,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1327,6 +1388,7 @@ export const getProjectsLocationsAuthProviders: API.OperationMethod<
 export type GetProjectsLocationsAuthProvidersAuthorizationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Gets details of a single authorization. */
 export const getProjectsLocationsAuthProvidersAuthorizations: API.OperationMethod<
@@ -1337,12 +1399,16 @@ export const getProjectsLocationsAuthProvidersAuthorizations: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsAuthProvidersAuthorizationsRequest,
   output: Authorization,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListProjectsLocationsError = NotFound | Forbidden | GcpOpError;
+export type ListProjectsLocationsError =
+  | NotFound
+  | Forbidden
+  | ServiceDisabled
+  | GcpOpError;
 /** Lists information about the supported locations for this service. This method lists locations based on the resource scope provided in the ListLocationsRequest.name field: * **Global locations**: If `name` is empty, the method lists the public locations available to all projects. * **Project-specific locations**: If `name` follows the format `projects/{project}`, the method lists locations visible to that specific project. This includes public, private, or other project-specific locations enabled for the project. For gRPC and client library implementations, the resource name is passed as the `name` field. For direct service calls, the resource name is incorporated into the request path based on the specific service implementation and version. */
 export const listProjectsLocations: API.PaginatedOperationMethod<
   ListProjectsLocationsRequest,
@@ -1353,7 +1419,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsRequest,
   output: ListLocationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1365,6 +1431,7 @@ export const listProjectsLocations: API.PaginatedOperationMethod<
 export type ListProjectsLocationsAccessSummariesError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists access summaries in a given project and location. Supported filters: - `workload_id`: Filter by the SPIFFE ID of the agent. Example: `workload_id="spiffe://example.com/ns/default/sa/my-agent"` */
 export const listProjectsLocationsAccessSummaries: API.PaginatedOperationMethod<
@@ -1376,7 +1443,7 @@ export const listProjectsLocationsAccessSummaries: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsAccessSummariesRequest,
   output: ListAccessSummariesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1388,6 +1455,7 @@ export const listProjectsLocationsAccessSummaries: API.PaginatedOperationMethod<
 export type ListProjectsLocationsAuthProvidersError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists auth providers in a given project and location. */
 export const listProjectsLocationsAuthProviders: API.PaginatedOperationMethod<
@@ -1399,7 +1467,7 @@ export const listProjectsLocationsAuthProviders: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsAuthProvidersRequest,
   output: ListAuthProvidersResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1411,6 +1479,7 @@ export const listProjectsLocationsAuthProviders: API.PaginatedOperationMethod<
 export type ListProjectsLocationsAuthProvidersAuthorizationsError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Lists authorizations in a given project and location. */
 export const listProjectsLocationsAuthProvidersAuthorizations: API.PaginatedOperationMethod<
@@ -1422,7 +1491,7 @@ export const listProjectsLocationsAuthProvidersAuthorizations: API.PaginatedOper
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsAuthProvidersAuthorizationsRequest,
   output: ListAuthorizationsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1436,6 +1505,7 @@ export type PatchProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Updates the parameters of a single auth provider. */
 export const patchProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1446,7 +1516,14 @@ export const patchProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsAuthProvidersRequest,
   output: AuthProvider,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1454,6 +1531,7 @@ export const patchProjectsLocationsAuthProviders: API.OperationMethod<
 export type QueryProjectsLocationsAuthProvidersError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Queries which auth providers are used by a given workload ID. */
 export const queryProjectsLocationsAuthProviders: API.PaginatedOperationMethod<
@@ -1465,7 +1543,7 @@ export const queryProjectsLocationsAuthProviders: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: QueryProjectsLocationsAuthProvidersRequest,
   output: QueryAuthProvidersResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1477,6 +1555,7 @@ export const queryProjectsLocationsAuthProviders: API.PaginatedOperationMethod<
 export type QueryWorkloadsProjectsLocationsAuthProvidersError =
   | NotFound
   | Forbidden
+  | ServiceDisabled
   | GcpOpError;
 /** Queries which workloads are using a given auth provider. */
 export const queryWorkloadsProjectsLocationsAuthProviders: API.PaginatedOperationMethod<
@@ -1488,7 +1567,7 @@ export const queryWorkloadsProjectsLocationsAuthProviders: API.PaginatedOperatio
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: QueryWorkloadsProjectsLocationsAuthProvidersRequest,
   output: QueryWorkloadsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, ServiceDisabled, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -1502,6 +1581,7 @@ export type RevokeAuthorizationProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Revokes all authorizations for a specific user on an auth provider. This deletes all authorization records associated with the user and auth provider, effectively revoking access across all agents. */
 export const revokeAuthorizationProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1512,7 +1592,14 @@ export const revokeAuthorizationProjectsLocationsAuthProviders: API.OperationMet
 > = /*@__PURE__*/ API.make(() => ({
   input: RevokeAuthorizationProjectsLocationsAuthProvidersRequest,
   output: RevokeAuthorizationResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1522,6 +1609,7 @@ export type SetIamPolicyProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Sets the access control policy on the specified resource. Replaces any existing policy. Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED` errors. */
 export const setIamPolicyProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1532,7 +1620,14 @@ export const setIamPolicyProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetIamPolicyProjectsLocationsAuthProvidersRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1542,6 +1637,7 @@ export type TestIamPermissionsProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Returns permissions that a caller has on the specified resource. If the resource does not exist, this will return an empty set of permissions, not a `NOT_FOUND` error. Note: This operation is designed to be used for building permission-aware UIs and command-line tools, not for authorization checking. This operation may "fail open" without warning. */
 export const testIamPermissionsProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1552,7 +1648,14 @@ export const testIamPermissionsProjectsLocationsAuthProviders: API.OperationMeth
 > = /*@__PURE__*/ API.make(() => ({
   input: TestIamPermissionsProjectsLocationsAuthProvidersRequest,
   output: TestIamPermissionsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -1562,6 +1665,7 @@ export type UndeleteProjectsLocationsAuthProvidersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | ServiceDisabled
   | GcpOpError;
 /** Undeletes a single auth provider. */
 export const undeleteProjectsLocationsAuthProviders: API.OperationMethod<
@@ -1572,7 +1676,14 @@ export const undeleteProjectsLocationsAuthProviders: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UndeleteProjectsLocationsAuthProvidersRequest,
   output: AuthProvider,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    ServiceDisabled,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

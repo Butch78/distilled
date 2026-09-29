@@ -65,6 +65,52 @@ export class NotFound
     [{ status: 404 }],
   ) {}
 
+/** Cloud SQL answered HTTP 403 PERMISSION_DENIED 'The caller does not have permission' for a backup. It returns exactly this for a backup uid that does not exist, and also when the caller lacks permission, so confirm with listBackupsBackups before treating the backup as missing. */
+export class SqlBackupAccessDenied
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<SqlBackupAccessDenied>()(
+      "SqlBackupAccessDenied",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: { includes: "The caller does not have permission" },
+      },
+    ],
+  ) {}
+
+/** Cloud SQL answered HTTP 403 'The client is not authorized to make this request.' for a database, user, SSL certificate, or backup run call. It returns exactly this for children of an instance that does not exist (getInstances on the same instance answers 404), and also when the caller lacks permission, so confirm the instance with getInstances before treating it as missing. */
+export class SqlInstanceNotAuthorized
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<SqlInstanceNotAuthorized>()(
+      "SqlInstanceNotAuthorized",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withAuthError),
+    [
+      {
+        status: 403,
+        message: {
+          includes: "The client is not authorized to make this request",
+        },
+      },
+    ],
+  ) {}
+
 /** Acquire SSRS lease context. */
 export interface AcquireSsrsLeaseContext {
   /** Lease duration needed for SSRS setup. */
@@ -7366,6 +7412,7 @@ export type CreateEphemeralSslCertsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Generates a short-lived X509 certificate containing the provided public key and signed by a private key specific to the target instance. Users may use the certificate to authenticate as themselves when connecting to the database. */
 export const createEphemeralSslCerts: API.OperationMethod<
@@ -7376,7 +7423,14 @@ export const createEphemeralSslCerts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateEphemeralSslCertsRequest,
   output: SslCert,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7386,6 +7440,7 @@ export type DeleteBackupBackupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlBackupAccessDenied
   | GcpOpError;
 /** Deletes the backup. */
 export const deleteBackupBackups: API.OperationMethod<
@@ -7396,7 +7451,14 @@ export const deleteBackupBackups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteBackupBackupsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlBackupAccessDenied,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7406,6 +7468,7 @@ export type DeleteBackupRunsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Deletes the backup taken by a backup run. */
 export const deleteBackupRuns: API.OperationMethod<
@@ -7416,7 +7479,14 @@ export const deleteBackupRuns: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteBackupRunsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7446,6 +7516,7 @@ export type DeleteDatabasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Deletes a database from a Cloud SQL instance. */
 export const deleteDatabases: API.OperationMethod<
@@ -7456,7 +7527,14 @@ export const deleteDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteDatabasesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7486,6 +7564,7 @@ export type DeleteSslCertsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Deletes the SSL certificate. For First Generation instances, the certificate remains valid until the instance is restarted. */
 export const deleteSslCerts: API.OperationMethod<
@@ -7496,7 +7575,14 @@ export const deleteSslCerts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteSslCertsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7506,6 +7592,7 @@ export type DeleteUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Deletes a user from a Cloud SQL instance. */
 export const deleteUsers: API.OperationMethod<
@@ -7516,7 +7603,14 @@ export const deleteUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteUsersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7641,7 +7735,11 @@ export const generateEphemeralCertConnect: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetBackupBackupsError = NotFound | Forbidden | GcpOpError;
+export type GetBackupBackupsError =
+  | NotFound
+  | Forbidden
+  | SqlBackupAccessDenied
+  | GcpOpError;
 /** Retrieves a resource containing information about a backup. */
 export const getBackupBackups: API.OperationMethod<
   GetBackupBackupsRequest,
@@ -7651,12 +7749,16 @@ export const getBackupBackups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBackupBackupsRequest,
   output: Backup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlBackupAccessDenied, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetBackupRunsError = NotFound | Forbidden | GcpOpError;
+export type GetBackupRunsError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Retrieves a resource containing information about a backup run. */
 export const getBackupRuns: API.OperationMethod<
   GetBackupRunsRequest,
@@ -7666,7 +7768,7 @@ export const getBackupRuns: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetBackupRunsRequest,
   output: BackupRun,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7701,7 +7803,11 @@ export const getConnect: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetDatabasesError = NotFound | Forbidden | GcpOpError;
+export type GetDatabasesError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Retrieves a resource containing information about a database inside a Cloud SQL instance. */
 export const getDatabases: API.OperationMethod<
   GetDatabasesRequest,
@@ -7711,7 +7817,7 @@ export const getDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetDatabasesRequest,
   output: Database,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7782,7 +7888,11 @@ export const getOperations: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetSslCertsError = NotFound | Forbidden | GcpOpError;
+export type GetSslCertsError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Retrieves a particular SSL certificate. Does not include the private key (required for usage). The private key must be saved from the response to initial creation. */
 export const getSslCerts: API.OperationMethod<
   GetSslCertsRequest,
@@ -7792,12 +7902,16 @@ export const getSslCerts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetSslCertsRequest,
   output: SslCert,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type GetUsersError = NotFound | Forbidden | GcpOpError;
+export type GetUsersError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Retrieves a resource containing information about a user. */
 export const getUsers: API.OperationMethod<
   GetUsersRequest,
@@ -7807,7 +7921,7 @@ export const getUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetUsersRequest,
   output: User,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7837,6 +7951,7 @@ export type InsertBackupRunsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Creates a new backup run on demand. */
 export const insertBackupRuns: API.OperationMethod<
@@ -7847,7 +7962,14 @@ export const insertBackupRuns: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertBackupRunsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7857,6 +7979,7 @@ export type InsertDatabasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Inserts a resource containing information about a database inside a Cloud SQL instance. **Note:** You can't modify the default character set and collation. */
 export const insertDatabases: API.OperationMethod<
@@ -7867,7 +7990,14 @@ export const insertDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertDatabasesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7897,6 +8027,7 @@ export type InsertSslCertsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Creates an SSL certificate and returns it along with the private key and server certificate authority. The new certificate will not be usable until the instance is restarted. */
 export const insertSslCerts: API.OperationMethod<
@@ -7907,7 +8038,14 @@ export const insertSslCerts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertSslCertsRequest,
   output: SslCertsInsertResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -7917,6 +8055,7 @@ export type InsertUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Creates a new user in a Cloud SQL instance. */
 export const insertUsers: API.OperationMethod<
@@ -7927,12 +8066,23 @@ export const insertUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: InsertUsersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
 
-export type ListBackupRunsError = NotFound | Forbidden | GcpOpError;
+export type ListBackupRunsError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Lists all backup runs associated with the project or a given instance and configuration in the reverse chronological order of the backup initiation time. */
 export const listBackupRuns: API.PaginatedOperationMethod<
   ListBackupRunsRequest,
@@ -7943,7 +8093,7 @@ export const listBackupRuns: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListBackupRunsRequest,
   output: BackupRunsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -7993,7 +8143,11 @@ export const listBlueGreenDeployments: API.PaginatedOperationMethod<
   } as const,
 })) as any;
 
-export type ListDatabasesError = NotFound | Forbidden | GcpOpError;
+export type ListDatabasesError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Lists databases in the specified Cloud SQL instance. */
 export const listDatabases: API.OperationMethod<
   ListDatabasesRequest,
@@ -8003,7 +8157,7 @@ export const listDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListDatabasesRequest,
   output: DatabasesListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8116,7 +8270,11 @@ export const listServerCertificatesInstances: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type ListSslCertsError = NotFound | Forbidden | GcpOpError;
+export type ListSslCertsError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Lists all of the current SSL certificates for the instance. */
 export const listSslCerts: API.OperationMethod<
   ListSslCertsRequest,
@@ -8126,7 +8284,7 @@ export const listSslCerts: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListSslCertsRequest,
   output: SslCertsListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8146,7 +8304,11 @@ export const listTiers: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type ListUsersError = NotFound | Forbidden | GcpOpError;
+export type ListUsersError =
+  | NotFound
+  | Forbidden
+  | SqlInstanceNotAuthorized
+  | GcpOpError;
 /** Lists users in the specified Cloud SQL instance. */
 export const listUsers: API.OperationMethod<
   ListUsersRequest,
@@ -8156,7 +8318,7 @@ export const listUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListUsersRequest,
   output: UsersListResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, SqlInstanceNotAuthorized, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8166,6 +8328,7 @@ export type PatchDatabasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Partially updates a resource containing information about a database inside a Cloud SQL instance. This method supports patch semantics. */
 export const patchDatabases: API.OperationMethod<
@@ -8176,7 +8339,14 @@ export const patchDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchDatabasesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8606,6 +8776,7 @@ export type UpdateBackupBackupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlBackupAccessDenied
   | GcpOpError;
 /** Updates the retention period and description of the backup. You can use this API to update final backups only. */
 export const updateBackupBackups: API.OperationMethod<
@@ -8616,7 +8787,14 @@ export const updateBackupBackups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateBackupBackupsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlBackupAccessDenied,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8626,6 +8804,7 @@ export type UpdateDatabasesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Updates a resource containing information about a database inside a Cloud SQL instance. */
 export const updateDatabases: API.OperationMethod<
@@ -8636,7 +8815,14 @@ export const updateDatabases: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateDatabasesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -8666,6 +8852,7 @@ export type UpdateUsersError =
   | Forbidden
   | BadRequest
   | Conflict
+  | SqlInstanceNotAuthorized
   | GcpOpError;
 /** Updates an existing user in a Cloud SQL instance. */
 export const updateUsers: API.OperationMethod<
@@ -8676,7 +8863,14 @@ export const updateUsers: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UpdateUsersRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    SqlInstanceNotAuthorized,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));

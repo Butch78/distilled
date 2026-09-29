@@ -39,6 +39,23 @@ export class Conflict
     [{ status: 409 }],
   ) {}
 
+/** The project may no longer use this Data Catalog API because it moved to Dataplex Universal Catalog (HTTP 400 INVALID_ARGUMENT: 'Project … is not allowed to perform read/write operations due to Data Catalog deprecation.'). Not retryable. */
+export class DataCatalogDeprecated
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<DataCatalogDeprecated>()(
+      "DataCatalogDeprecated",
+      {
+        code: S.optional(S.Number),
+        message: S.String,
+        status: S.optional(S.String),
+        reason: S.optional(S.String),
+        domain: S.optional(S.String),
+        details: S.optional(S.Array(S.Unknown)),
+      },
+    ).pipe(C.withBadRequestError),
+    [{ status: 400, message: { includes: "due to Data Catalog deprecation" } }],
+  ) {}
+
 export class Forbidden
   extends /*@__PURE__*/ T.applyErrorMatchers(
     /*@__PURE__*/ S.TaggedError<Forbidden>()("Forbidden", {
@@ -4549,6 +4566,7 @@ export type CreateProjectsLocationsEntryGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Creates an entry group. An entry group contains logically related entries together with [Cloud Identity and Access Management](/data-catalog/docs/concepts/iam) policies. These policies specify users who can create, edit, and view entries within entry groups. Data Catalog automatically creates entry groups with names that start with the `@` symbol for the following resources: * BigQuery entries (`@bigquery`) * Pub/Sub topics (`@pubsub`) * Dataproc Metastore services (`@dataproc_metastore_{SERVICE_NAME_HASH}`) You can create your own entry groups for Cloud Storage fileset entries and custom entries together with the corresponding IAM policies. User-created entry groups can't contain the `@` symbol, it is reserved for automatically created groups. Entry groups, like entries, can be searched. A maximum of 10,000 entry groups may be created per organization across all locations. You must enable the Data Catalog API in the project identified by the `parent` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const createProjectsLocationsEntryGroups: API.OperationMethod<
@@ -4559,7 +4577,14 @@ export const createProjectsLocationsEntryGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsEntryGroupsRequest,
   output: GoogleCloudDatacatalogV1EntryGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4569,6 +4594,7 @@ export type CreateProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Creates an entry. You can create entries only with 'FILESET', 'CLUSTER', 'DATA_STREAM', or custom types. Data Catalog automatically creates entries with other types during metadata ingestion from integrated systems. You must enable the Data Catalog API in the project identified by the `parent` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). An entry group can have a maximum of 100,000 entries. */
 export const createProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -4579,7 +4605,14 @@ export const createProjectsLocationsEntryGroupsEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1Entry,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4589,6 +4622,7 @@ export type CreateProjectsLocationsEntryGroupsEntriesTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Creates a tag and assigns it to: * An Entry if the method name is `projects.locations.entryGroups.entries.tags.create`. * Or EntryGroupif the method name is `projects.locations.entryGroups.tags.create`. Note: The project identified by the `parent` parameter for the [tag] (https://cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.entryGroups.entries.tags/create#path-parameters) and the [tag template] (https://cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.tagTemplates/create#path-parameters) used to create the tag must be in the same organization. */
 export const createProjectsLocationsEntryGroupsEntriesTags: API.OperationMethod<
@@ -4599,7 +4633,14 @@ export const createProjectsLocationsEntryGroupsEntriesTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsEntryGroupsEntriesTagsRequest,
   output: GoogleCloudDatacatalogV1Tag,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4609,6 +4650,7 @@ export type CreateProjectsLocationsEntryGroupsTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Creates a tag and assigns it to: * An Entry if the method name is `projects.locations.entryGroups.entries.tags.create`. * Or EntryGroupif the method name is `projects.locations.entryGroups.tags.create`. Note: The project identified by the `parent` parameter for the [tag] (https://cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.entryGroups.entries.tags/create#path-parameters) and the [tag template] (https://cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.tagTemplates/create#path-parameters) used to create the tag must be in the same organization. */
 export const createProjectsLocationsEntryGroupsTags: API.OperationMethod<
@@ -4619,7 +4661,14 @@ export const createProjectsLocationsEntryGroupsTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsEntryGroupsTagsRequest,
   output: GoogleCloudDatacatalogV1Tag,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4629,6 +4678,7 @@ export type CreateProjectsLocationsTagTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Creates a tag template. You must enable the Data Catalog API in the project identified by the `parent` parameter. For more information, see [Data Catalog resource project] (https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const createProjectsLocationsTagTemplates: API.OperationMethod<
@@ -4639,7 +4689,14 @@ export const createProjectsLocationsTagTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsTagTemplatesRequest,
   output: GoogleCloudDatacatalogV1TagTemplate,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4649,6 +4706,7 @@ export type CreateProjectsLocationsTagTemplatesFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Creates a field in a tag template. You must enable the Data Catalog API in the project identified by the `parent` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const createProjectsLocationsTagTemplatesFields: API.OperationMethod<
@@ -4659,7 +4717,14 @@ export const createProjectsLocationsTagTemplatesFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: CreateProjectsLocationsTagTemplatesFieldsRequest,
   output: GoogleCloudDatacatalogV1TagTemplateField,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4709,6 +4774,7 @@ export type DeleteProjectsLocationsEntryGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Deletes an entry group. You must enable the Data Catalog API in the project identified by the `name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const deleteProjectsLocationsEntryGroups: API.OperationMethod<
@@ -4719,7 +4785,14 @@ export const deleteProjectsLocationsEntryGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsEntryGroupsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4729,6 +4802,7 @@ export type DeleteProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Deletes an existing entry. You can delete only the entries created by the CreateEntry method. You must enable the Data Catalog API in the project identified by the `name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const deleteProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -4739,7 +4813,14 @@ export const deleteProjectsLocationsEntryGroupsEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsEntryGroupsEntriesRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4749,6 +4830,7 @@ export type DeleteProjectsLocationsEntryGroupsEntriesTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Deletes a tag. */
 export const deleteProjectsLocationsEntryGroupsEntriesTags: API.OperationMethod<
@@ -4759,7 +4841,14 @@ export const deleteProjectsLocationsEntryGroupsEntriesTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsEntryGroupsEntriesTagsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4769,6 +4858,7 @@ export type DeleteProjectsLocationsEntryGroupsTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Deletes a tag. */
 export const deleteProjectsLocationsEntryGroupsTags: API.OperationMethod<
@@ -4779,7 +4869,14 @@ export const deleteProjectsLocationsEntryGroupsTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsEntryGroupsTagsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4809,6 +4906,7 @@ export type DeleteProjectsLocationsTagTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Deletes a tag template and all tags that use it. You must enable the Data Catalog API in the project identified by the `name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const deleteProjectsLocationsTagTemplates: API.OperationMethod<
@@ -4819,7 +4917,14 @@ export const deleteProjectsLocationsTagTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsTagTemplatesRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4829,6 +4934,7 @@ export type DeleteProjectsLocationsTagTemplatesFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Deletes a field in a tag template and all uses of this field from the tags based on this template. You must enable the Data Catalog API in the project identified by the `name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const deleteProjectsLocationsTagTemplatesFields: API.OperationMethod<
@@ -4839,7 +4945,14 @@ export const deleteProjectsLocationsTagTemplatesFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: DeleteProjectsLocationsTagTemplatesFieldsRequest,
   output: Empty,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4961,6 +5074,7 @@ export type GetIamPolicyProjectsLocationsEntryGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets the access control policy for a resource. May return: * A`NOT_FOUND` error if the resource doesn't exist or you don't have the permission to view it. * An empty policy if the resource exists but doesn't have a set policy. Supported resources are: - Tag templates - Entry groups Note: This method doesn't get policies from Google Cloud Platform resources ingested into Data Catalog. To call this method, you must have the following Google IAM permissions: - `datacatalog.tagTemplates.getIamPolicy` to get policies on tag templates. - `datacatalog.entryGroups.getIamPolicy` to get policies on entry groups. */
 export const getIamPolicyProjectsLocationsEntryGroups: API.OperationMethod<
@@ -4971,7 +5085,14 @@ export const getIamPolicyProjectsLocationsEntryGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsLocationsEntryGroupsRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -4981,6 +5102,7 @@ export type GetIamPolicyProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets the access control policy for a resource. May return: * A`NOT_FOUND` error if the resource doesn't exist or you don't have the permission to view it. * An empty policy if the resource exists but doesn't have a set policy. Supported resources are: - Tag templates - Entry groups Note: This method doesn't get policies from Google Cloud Platform resources ingested into Data Catalog. To call this method, you must have the following Google IAM permissions: - `datacatalog.tagTemplates.getIamPolicy` to get policies on tag templates. - `datacatalog.entryGroups.getIamPolicy` to get policies on entry groups. */
 export const getIamPolicyProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -4991,7 +5113,14 @@ export const getIamPolicyProjectsLocationsEntryGroupsEntries: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsLocationsEntryGroupsEntriesRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5001,6 +5130,7 @@ export type GetIamPolicyProjectsLocationsTagTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets the access control policy for a resource. May return: * A`NOT_FOUND` error if the resource doesn't exist or you don't have the permission to view it. * An empty policy if the resource exists but doesn't have a set policy. Supported resources are: - Tag templates - Entry groups Note: This method doesn't get policies from Google Cloud Platform resources ingested into Data Catalog. To call this method, you must have the following Google IAM permissions: - `datacatalog.tagTemplates.getIamPolicy` to get policies on tag templates. - `datacatalog.entryGroups.getIamPolicy` to get policies on entry groups. */
 export const getIamPolicyProjectsLocationsTagTemplates: API.OperationMethod<
@@ -5011,7 +5141,14 @@ export const getIamPolicyProjectsLocationsTagTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetIamPolicyProjectsLocationsTagTemplatesRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5059,6 +5196,7 @@ export const getIamPolicyProjectsLocationsTaxonomiesPolicyTags: API.OperationMet
 export type GetProjectsLocationsEntryGroupsError =
   | NotFound
   | Forbidden
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets an entry group. */
 export const getProjectsLocationsEntryGroups: API.OperationMethod<
@@ -5069,7 +5207,7 @@ export const getProjectsLocationsEntryGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsEntryGroupsRequest,
   output: GoogleCloudDatacatalogV1EntryGroup,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5077,6 +5215,7 @@ export const getProjectsLocationsEntryGroups: API.OperationMethod<
 export type GetProjectsLocationsEntryGroupsEntriesError =
   | NotFound
   | Forbidden
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets an entry. */
 export const getProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5087,7 +5226,7 @@ export const getProjectsLocationsEntryGroupsEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1Entry,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5113,6 +5252,7 @@ export const getProjectsLocationsOperations: API.OperationMethod<
 export type GetProjectsLocationsTagTemplatesError =
   | NotFound
   | Forbidden
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets a tag template. */
 export const getProjectsLocationsTagTemplates: API.OperationMethod<
@@ -5123,7 +5263,7 @@ export const getProjectsLocationsTagTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetProjectsLocationsTagTemplatesRequest,
   output: GoogleCloudDatacatalogV1TagTemplate,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5169,6 +5309,7 @@ export type ImportProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Imports entries from a source, such as data previously dumped into a Cloud Storage bucket, into Data Catalog. Import of entries is a sync operation that reconciles the state of the third-party system with the Data Catalog. `ImportEntries` accepts source data snapshots of a third-party system. Snapshot should be delivered as a .wire or base65-encoded .txt file containing a sequence of Protocol Buffer messages of DumpItem type. `ImportEntries` returns a long-running operation resource that can be queried with Operations.GetOperation to return ImportEntriesMetadata and an ImportEntriesResponse message. */
 export const importProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5179,7 +5320,14 @@ export const importProjectsLocationsEntryGroupsEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ImportProjectsLocationsEntryGroupsEntriesRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5207,6 +5355,7 @@ export const importProjectsLocationsTaxonomies: API.OperationMethod<
 export type ListProjectsLocationsEntryGroupsError =
   | NotFound
   | Forbidden
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Lists entry groups. */
 export const listProjectsLocationsEntryGroups: API.PaginatedOperationMethod<
@@ -5218,7 +5367,7 @@ export const listProjectsLocationsEntryGroups: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsEntryGroupsRequest,
   output: GoogleCloudDatacatalogV1ListEntryGroupsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -5230,6 +5379,7 @@ export const listProjectsLocationsEntryGroups: API.PaginatedOperationMethod<
 export type ListProjectsLocationsEntryGroupsEntriesError =
   | NotFound
   | Forbidden
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Lists entries. Note: Currently, this method can list only custom entries. To get a list of both custom and automatically created entries, use SearchCatalog. */
 export const listProjectsLocationsEntryGroupsEntries: API.PaginatedOperationMethod<
@@ -5241,7 +5391,7 @@ export const listProjectsLocationsEntryGroupsEntries: API.PaginatedOperationMeth
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1ListEntriesResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -5253,6 +5403,7 @@ export const listProjectsLocationsEntryGroupsEntries: API.PaginatedOperationMeth
 export type ListProjectsLocationsEntryGroupsEntriesTagsError =
   | NotFound
   | Forbidden
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Lists tags assigned to an Entry. The columns in the response are lowercased. */
 export const listProjectsLocationsEntryGroupsEntriesTags: API.PaginatedOperationMethod<
@@ -5264,7 +5415,7 @@ export const listProjectsLocationsEntryGroupsEntriesTags: API.PaginatedOperation
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsEntryGroupsEntriesTagsRequest,
   output: GoogleCloudDatacatalogV1ListTagsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -5276,6 +5427,7 @@ export const listProjectsLocationsEntryGroupsEntriesTags: API.PaginatedOperation
 export type ListProjectsLocationsEntryGroupsTagsError =
   | NotFound
   | Forbidden
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Lists tags assigned to an Entry. The columns in the response are lowercased. */
 export const listProjectsLocationsEntryGroupsTags: API.PaginatedOperationMethod<
@@ -5287,7 +5439,7 @@ export const listProjectsLocationsEntryGroupsTags: API.PaginatedOperationMethod<
 > = /*@__PURE__*/ API.makePaginated(() => ({
   input: ListProjectsLocationsEntryGroupsTagsRequest,
   output: GoogleCloudDatacatalogV1ListTagsResponse,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
   pagination: {
@@ -5365,7 +5517,11 @@ export const listProjectsLocationsTaxonomiesPolicyTags: API.PaginatedOperationMe
   } as const,
 })) as any;
 
-export type LookupEntriesError = NotFound | Forbidden | GcpOpError;
+export type LookupEntriesError =
+  | NotFound
+  | Forbidden
+  | DataCatalogDeprecated
+  | GcpOpError;
 /** Gets an entry by its target resource name. The resource name comes from the source Google Cloud Platform service. */
 export const lookupEntries: API.OperationMethod<
   LookupEntriesRequest,
@@ -5375,7 +5531,7 @@ export const lookupEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: LookupEntriesRequest,
   output: GoogleCloudDatacatalogV1Entry,
-  errors: [NotFound, Forbidden, UnknownGCPError],
+  errors: [NotFound, Forbidden, DataCatalogDeprecated, UnknownGCPError],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5385,6 +5541,7 @@ export type ModifyEntryContactsProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Modifies contacts, part of the business context of an Entry. To call this method, you must have the `datacatalog.entries.updateContacts` IAM permission on the corresponding project. */
 export const modifyEntryContactsProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5395,7 +5552,14 @@ export const modifyEntryContactsProjectsLocationsEntryGroupsEntries: API.Operati
 > = /*@__PURE__*/ API.make(() => ({
   input: ModifyEntryContactsProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1Contacts,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5405,6 +5569,7 @@ export type ModifyEntryOverviewProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Modifies entry overview, part of the business context of an Entry. To call this method, you must have the `datacatalog.entries.updateOverview` IAM permission on the corresponding project. */
 export const modifyEntryOverviewProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5415,7 +5580,14 @@ export const modifyEntryOverviewProjectsLocationsEntryGroupsEntries: API.Operati
 > = /*@__PURE__*/ API.make(() => ({
   input: ModifyEntryOverviewProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1EntryOverview,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5425,6 +5597,7 @@ export type PatchProjectsLocationsEntryGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Updates an entry group. You must enable the Data Catalog API in the project identified by the `entry_group.name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const patchProjectsLocationsEntryGroups: API.OperationMethod<
@@ -5435,7 +5608,14 @@ export const patchProjectsLocationsEntryGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsEntryGroupsRequest,
   output: GoogleCloudDatacatalogV1EntryGroup,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5445,6 +5625,7 @@ export type PatchProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Updates an existing entry. You must enable the Data Catalog API in the project identified by the `entry.name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const patchProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5455,7 +5636,14 @@ export const patchProjectsLocationsEntryGroupsEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1Entry,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5465,6 +5653,7 @@ export type PatchProjectsLocationsEntryGroupsEntriesTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Updates an existing tag. */
 export const patchProjectsLocationsEntryGroupsEntriesTags: API.OperationMethod<
@@ -5475,7 +5664,14 @@ export const patchProjectsLocationsEntryGroupsEntriesTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsEntryGroupsEntriesTagsRequest,
   output: GoogleCloudDatacatalogV1Tag,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5485,6 +5681,7 @@ export type PatchProjectsLocationsEntryGroupsTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Updates an existing tag. */
 export const patchProjectsLocationsEntryGroupsTags: API.OperationMethod<
@@ -5495,7 +5692,14 @@ export const patchProjectsLocationsEntryGroupsTags: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsEntryGroupsTagsRequest,
   output: GoogleCloudDatacatalogV1Tag,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5505,6 +5709,7 @@ export type PatchProjectsLocationsTagTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Updates a tag template. You can't update template fields with this method. These fields are separate resources with their own create, update, and delete methods. You must enable the Data Catalog API in the project identified by the `tag_template.name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const patchProjectsLocationsTagTemplates: API.OperationMethod<
@@ -5515,7 +5720,14 @@ export const patchProjectsLocationsTagTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsTagTemplatesRequest,
   output: GoogleCloudDatacatalogV1TagTemplate,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5525,6 +5737,7 @@ export type PatchProjectsLocationsTagTemplatesFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Updates a field in a tag template. You can't update the field type with this method. You must enable the Data Catalog API in the project identified by the `name` parameter. For more information, see [Data Catalog resource project](https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const patchProjectsLocationsTagTemplatesFields: API.OperationMethod<
@@ -5535,7 +5748,14 @@ export const patchProjectsLocationsTagTemplatesFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: PatchProjectsLocationsTagTemplatesFieldsRequest,
   output: GoogleCloudDatacatalogV1TagTemplateField,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5585,6 +5805,7 @@ export type ReconcileProjectsLocationsEntryGroupsEntriesTagsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** `ReconcileTags` creates or updates a list of tags on the entry. If the ReconcileTagsRequest.force_delete_missing parameter is set, the operation deletes tags not included in the input tag list. `ReconcileTags` returns a long-running operation resource that can be queried with Operations.GetOperation to return ReconcileTagsMetadata and a ReconcileTagsResponse message. Note: SearchCatalog might return stale search results for up to 24 hours after the `ReconcileTags` operation completes. */
 export const reconcileProjectsLocationsEntryGroupsEntriesTags: API.OperationMethod<
@@ -5595,7 +5816,14 @@ export const reconcileProjectsLocationsEntryGroupsEntriesTags: API.OperationMeth
 > = /*@__PURE__*/ API.make(() => ({
   input: ReconcileProjectsLocationsEntryGroupsEntriesTagsRequest,
   output: Operation,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5605,6 +5833,7 @@ export type RenameProjectsLocationsTagTemplatesFieldsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Renames a field in a tag template. You must enable the Data Catalog API in the project identified by the `name` parameter. For more information, see [Data Catalog resource project] (https://cloud.google.com/data-catalog/docs/concepts/resource-project). */
 export const renameProjectsLocationsTagTemplatesFields: API.OperationMethod<
@@ -5615,7 +5844,14 @@ export const renameProjectsLocationsTagTemplatesFields: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: RenameProjectsLocationsTagTemplatesFieldsRequest,
   output: GoogleCloudDatacatalogV1TagTemplateField,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5625,6 +5861,7 @@ export type RenameProjectsLocationsTagTemplatesFieldsEnumValuesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Renames an enum value in a tag template. Within a single enum field, enum values must be unique. */
 export const renameProjectsLocationsTagTemplatesFieldsEnumValues: API.OperationMethod<
@@ -5635,7 +5872,14 @@ export const renameProjectsLocationsTagTemplatesFieldsEnumValues: API.OperationM
 > = /*@__PURE__*/ API.make(() => ({
   input: RenameProjectsLocationsTagTemplatesFieldsEnumValuesRequest,
   output: GoogleCloudDatacatalogV1TagTemplateField,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5665,6 +5909,7 @@ export type SearchCatalogError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Searches Data Catalog for multiple resources like entries and tags that match a query. This is a [Custom Method] (https://cloud.google.com/apis/design/custom_methods) that doesn't return all information on a resource, only its ID and high level fields. To get more information, you can subsequently call specific get methods. Note: Data Catalog search queries don't guarantee full recall. Results that match your query might not be returned, even in subsequent result pages. Additionally, returned (and not returned) results can vary if you repeat search queries. For more information, see [Data Catalog search syntax] (https://cloud.google.com/data-catalog/docs/how-to/search-reference). */
 export const searchCatalog: API.OperationMethod<
@@ -5675,7 +5920,14 @@ export const searchCatalog: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SearchCatalogRequest,
   output: GoogleCloudDatacatalogV1SearchCatalogResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5725,6 +5977,7 @@ export type SetIamPolicyProjectsLocationsEntryGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Sets an access control policy for a resource. Replaces any existing policy. Supported resources are: - Tag templates - Entry groups Note: This method sets policies only within Data Catalog and can't be used to manage policies in BigQuery, Pub/Sub, Dataproc Metastore, and any external Google Cloud Platform resources synced with the Data Catalog. To call this method, you must have the following Google IAM permissions: - `datacatalog.tagTemplates.setIamPolicy` to set policies on tag templates. - `datacatalog.entryGroups.setIamPolicy` to set policies on entry groups. */
 export const setIamPolicyProjectsLocationsEntryGroups: API.OperationMethod<
@@ -5735,7 +5988,14 @@ export const setIamPolicyProjectsLocationsEntryGroups: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetIamPolicyProjectsLocationsEntryGroupsRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5745,6 +6005,7 @@ export type SetIamPolicyProjectsLocationsTagTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Sets an access control policy for a resource. Replaces any existing policy. Supported resources are: - Tag templates - Entry groups Note: This method sets policies only within Data Catalog and can't be used to manage policies in BigQuery, Pub/Sub, Dataproc Metastore, and any external Google Cloud Platform resources synced with the Data Catalog. To call this method, you must have the following Google IAM permissions: - `datacatalog.tagTemplates.setIamPolicy` to set policies on tag templates. - `datacatalog.entryGroups.setIamPolicy` to set policies on entry groups. */
 export const setIamPolicyProjectsLocationsTagTemplates: API.OperationMethod<
@@ -5755,7 +6016,14 @@ export const setIamPolicyProjectsLocationsTagTemplates: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: SetIamPolicyProjectsLocationsTagTemplatesRequest,
   output: Policy,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5805,6 +6073,7 @@ export type StarProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Marks an Entry as starred by the current user. Starring information is private to each user. */
 export const starProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5815,7 +6084,14 @@ export const starProjectsLocationsEntryGroupsEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: StarProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1StarEntryResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5825,6 +6101,7 @@ export type TestIamPermissionsProjectsLocationsEntryGroupsError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets your permissions on a resource. Returns an empty set of permissions if the resource doesn't exist. Supported resources are: - Tag templates - Entry groups Note: This method gets policies only within Data Catalog and can't be used to get policies from BigQuery, Pub/Sub, Dataproc Metastore, and any external Google Cloud Platform resources ingested into Data Catalog. No Google IAM permissions are required to call this method. */
 export const testIamPermissionsProjectsLocationsEntryGroups: API.OperationMethod<
@@ -5835,7 +6112,14 @@ export const testIamPermissionsProjectsLocationsEntryGroups: API.OperationMethod
 > = /*@__PURE__*/ API.make(() => ({
   input: TestIamPermissionsProjectsLocationsEntryGroupsRequest,
   output: TestIamPermissionsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5845,6 +6129,7 @@ export type TestIamPermissionsProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets your permissions on a resource. Returns an empty set of permissions if the resource doesn't exist. Supported resources are: - Tag templates - Entry groups Note: This method gets policies only within Data Catalog and can't be used to get policies from BigQuery, Pub/Sub, Dataproc Metastore, and any external Google Cloud Platform resources ingested into Data Catalog. No Google IAM permissions are required to call this method. */
 export const testIamPermissionsProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5855,7 +6140,14 @@ export const testIamPermissionsProjectsLocationsEntryGroupsEntries: API.Operatio
 > = /*@__PURE__*/ API.make(() => ({
   input: TestIamPermissionsProjectsLocationsEntryGroupsEntriesRequest,
   output: TestIamPermissionsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5865,6 +6157,7 @@ export type TestIamPermissionsProjectsLocationsTagTemplatesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Gets your permissions on a resource. Returns an empty set of permissions if the resource doesn't exist. Supported resources are: - Tag templates - Entry groups Note: This method gets policies only within Data Catalog and can't be used to get policies from BigQuery, Pub/Sub, Dataproc Metastore, and any external Google Cloud Platform resources ingested into Data Catalog. No Google IAM permissions are required to call this method. */
 export const testIamPermissionsProjectsLocationsTagTemplates: API.OperationMethod<
@@ -5875,7 +6168,14 @@ export const testIamPermissionsProjectsLocationsTagTemplates: API.OperationMetho
 > = /*@__PURE__*/ API.make(() => ({
   input: TestIamPermissionsProjectsLocationsTagTemplatesRequest,
   output: TestIamPermissionsResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
@@ -5925,6 +6225,7 @@ export type UnstarProjectsLocationsEntryGroupsEntriesError =
   | Forbidden
   | BadRequest
   | Conflict
+  | DataCatalogDeprecated
   | GcpOpError;
 /** Marks an Entry as NOT starred by the current user. Starring information is private to each user. */
 export const unstarProjectsLocationsEntryGroupsEntries: API.OperationMethod<
@@ -5935,7 +6236,14 @@ export const unstarProjectsLocationsEntryGroupsEntries: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: UnstarProjectsLocationsEntryGroupsEntriesRequest,
   output: GoogleCloudDatacatalogV1UnstarEntryResponse,
-  errors: [NotFound, Forbidden, BadRequest, Conflict, UnknownGCPError],
+  errors: [
+    NotFound,
+    Forbidden,
+    BadRequest,
+    Conflict,
+    DataCatalogDeprecated,
+    UnknownGCPError,
+  ],
   protocol: GcpProtocol,
   retry: Retry.Retry,
 }));
