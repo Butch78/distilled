@@ -1000,27 +1000,27 @@ export interface AccessGroupProjectInput {
 }
 
 export interface AccessGroupUpdateInput {
-  readonly name?: string;
-  readonly role?: "ADMIN" | "MEMBER" | "VIEWER";
+  readonly name?: string | null;
+  readonly role?: "ADMIN" | "MEMBER" | "VIEWER" | null;
 }
 
 export interface AgentUsageLimitSetInput {
   readonly hardLimitCents: number;
-  readonly softLimitCents?: number;
+  readonly softLimitCents?: number | null;
   readonly workspaceId: string;
 }
 
 export interface ApiTokenCreateInput {
   readonly name: string;
-  readonly workspaceId?: string;
+  readonly workspaceId?: string | null;
 }
 
 export interface AuditLogFilterInput {
-  readonly endDate?: string;
-  readonly environmentId?: string;
-  readonly eventTypes?: ReadonlyArray<string>;
-  readonly projectId?: string;
-  readonly startDate?: string;
+  readonly endDate?: string | null;
+  readonly environmentId?: string | null;
+  readonly eventTypes?: ReadonlyArray<string> | null;
+  readonly projectId?: string | null;
+  readonly startDate?: string | null;
 }
 
 export interface AutoUpdateScheduleWindowInput {
@@ -1030,12 +1030,12 @@ export interface AutoUpdateScheduleWindowInput {
 }
 
 export interface BaseEnvironmentOverrideInput {
-  readonly baseEnvironmentOverrideId?: string;
+  readonly baseEnvironmentOverrideId?: string | null;
 }
 
 export interface BucketCreateInput {
-  readonly environmentId?: string;
-  readonly name?: string;
+  readonly environmentId?: string | null;
+  readonly name?: string | null;
   readonly projectId: string;
 }
 
@@ -1044,55 +1044,55 @@ export interface BucketUpdateInput {
 }
 
 export interface CliAuthEventTrackInput {
-  readonly agentSessionId?: string;
-  readonly arch?: string;
-  readonly caller?: string;
-  readonly cliVersion?: string;
-  readonly errorMessage?: string;
-  readonly installRequestId?: string;
-  readonly isCi?: boolean;
-  readonly os?: string;
+  readonly agentSessionId?: string | null;
+  readonly arch?: string | null;
+  readonly caller?: string | null;
+  readonly cliVersion?: string | null;
+  readonly errorMessage?: string | null;
+  readonly installRequestId?: string | null;
+  readonly isCi?: boolean | null;
+  readonly os?: string | null;
   readonly outcome: string;
-  readonly sessionId?: string;
+  readonly sessionId?: string | null;
   readonly success: boolean;
   readonly transport: string;
-  readonly transportReason?: string;
+  readonly transportReason?: string | null;
 }
 
 export interface CliEventTrackInput {
-  readonly agentSessionId?: string;
+  readonly agentSessionId?: string | null;
   readonly arch: string;
-  readonly caller?: string;
+  readonly caller?: string | null;
   readonly cliVersion: string;
   readonly command: string;
   readonly durationMs: number;
-  readonly environmentId?: string;
-  readonly errorClass?: string;
-  readonly errorMessage?: string;
-  readonly installRequestId?: string;
+  readonly environmentId?: string | null;
+  readonly errorClass?: string | null;
+  readonly errorMessage?: string | null;
+  readonly installRequestId?: string | null;
   readonly isCi: boolean;
   readonly os: string;
-  readonly projectId?: string;
-  readonly serviceId?: string;
-  readonly sessionId?: string;
-  readonly subCommand?: string;
+  readonly projectId?: string | null;
+  readonly serviceId?: string | null;
+  readonly sessionId?: string | null;
+  readonly subCommand?: string | null;
   readonly success: boolean;
-  readonly workspaceId?: string;
+  readonly workspaceId?: string | null;
 }
 
 /** Opt-in public code endpoint, provisioned only when creating a cloud agent. */
 export interface CloudAgentCodeEndpointInput {
-  readonly port?: number;
+  readonly port?: number | null;
 }
 
 export interface CloudAgentCreateInput {
-  readonly cloudAgentCheckpointId?: string;
-  readonly codeEndpoint?: CloudAgentCodeEndpointInput;
+  readonly cloudAgentCheckpointId?: string | null;
+  readonly codeEndpoint?: CloudAgentCodeEndpointInput | null;
   readonly environmentId: string;
-  readonly name?: string;
-  readonly region?: string;
-  readonly source?: CloudAgentSourceInput;
-  readonly variables?: unknown;
+  readonly name?: string | null;
+  readonly region?: string | null;
+  readonly source?: CloudAgentSourceInput | null;
+  readonly variables?: unknown | null;
 }
 
 export interface CloudAgentFeedbackInput {
@@ -1100,15 +1100,15 @@ export interface CloudAgentFeedbackInput {
   readonly agentVersion: string;
   readonly cloudAgentId: string;
   readonly description: string;
-  readonly elapsedMs?: number;
-  readonly lastProgressAgeMs?: number;
+  readonly elapsedMs?: number | null;
+  readonly lastProgressAgeMs?: number | null;
   readonly model: string;
   readonly reportId: string;
   readonly reportedAtMs: number;
-  readonly runId?: string;
-  readonly runStartedAtMs?: number;
+  readonly runId?: string | null;
+  readonly runStartedAtMs?: number | null;
   readonly sessionId: string;
-  readonly sessionName?: string;
+  readonly sessionName?: string | null;
   readonly state: string;
   readonly steps: number;
   readonly tuiVersion: string;
@@ -1117,21 +1117,21 @@ export interface CloudAgentFeedbackInput {
 export interface CloudAgentSnapshotInput {
   readonly harness: string;
   readonly lastEventKind: string;
-  readonly latestPrompt?: string;
-  readonly prompt?: string;
+  readonly latestPrompt?: string | null;
+  readonly prompt?: string | null;
   readonly sessionId: string;
-  readonly sessionName?: string;
+  readonly sessionName?: string | null;
   readonly state: string;
-  readonly taskId?: string;
+  readonly taskId?: string | null;
   readonly terminal: boolean;
   readonly updatedAt: string;
 }
 
 /** Repo to clone into the agent's workspace: exactly one of repo/serviceId. */
 export interface CloudAgentSourceInput {
-  readonly branch?: string;
-  readonly repo?: string;
-  readonly serviceId?: string;
+  readonly branch?: string | null;
+  readonly repo?: string | null;
+  readonly serviceId?: string | null;
 }
 
 /** State reported by a cloud agent. */
@@ -1143,12 +1143,12 @@ export interface CloudAgentStateReportInput {
 
 export interface CreateNotificationRuleInput {
   readonly channelConfigs: ReadonlyArray<unknown>;
-  readonly ephemeralEnvironments?: boolean;
+  readonly ephemeralEnvironments?: boolean | null;
   readonly eventTypes: ReadonlyArray<string>;
-  readonly projectId?: string;
+  readonly projectId?: string | null;
   readonly severities?: ReadonlyArray<
     "CRITICAL" | "INFO" | "NOTICE" | "WARNING"
-  >;
+  > | null;
   readonly workspaceId: string;
 }
 
@@ -1157,7 +1157,7 @@ export interface CustomDomainCreateInput {
   readonly environmentId: string;
   readonly projectId: string;
   readonly serviceId: string;
-  readonly targetPort?: number;
+  readonly targetPort?: number | null;
 }
 
 export interface DeploymentInstanceExecutionCreateInput {
@@ -1174,11 +1174,11 @@ export interface DeploymentInstanceExecutionListInput {
 }
 
 export interface DeploymentListInput {
-  readonly environmentId?: string;
-  readonly includeDeleted?: boolean;
-  readonly projectId?: string;
-  readonly serviceId?: string;
-  readonly status?: DeploymentStatusInput;
+  readonly environmentId?: string | null;
+  readonly includeDeleted?: boolean | null;
+  readonly projectId?: string | null;
+  readonly serviceId?: string | null;
+  readonly status?: DeploymentStatusInput | null;
 }
 
 export interface DeploymentStatusInput {
@@ -1196,7 +1196,7 @@ export interface DeploymentStatusInput {
     | "SLEEPING"
     | "SUCCESS"
     | "WAITING"
-  >;
+  > | null;
   readonly notIn?: ReadonlyArray<
     | "BUILDING"
     | "CRASHED"
@@ -1211,25 +1211,25 @@ export interface DeploymentStatusInput {
     | "SLEEPING"
     | "SUCCESS"
     | "WAITING"
-  >;
+  > | null;
 }
 
 export interface DeploymentTriggerCreateInput {
   readonly branch: string;
-  readonly checkSuites?: boolean;
+  readonly checkSuites?: boolean | null;
   readonly environmentId: string;
   readonly projectId: string;
   readonly provider: string;
   readonly repository: string;
-  readonly rootDirectory?: string;
+  readonly rootDirectory?: string | null;
   readonly serviceId: string;
 }
 
 export interface DeploymentTriggerUpdateInput {
-  readonly branch?: string;
-  readonly checkSuites?: boolean;
-  readonly repository?: string;
-  readonly rootDirectory?: string;
+  readonly branch?: string | null;
+  readonly checkSuites?: boolean | null;
+  readonly repository?: string | null;
+  readonly rootDirectory?: string | null;
 }
 
 export interface DisablePitrForHaClusterInput {
@@ -1244,25 +1244,25 @@ export interface DisableServiceCdnInput {
 }
 
 export interface EdgeCachingConfigInput {
-  readonly defaultTtlSeconds?: number;
-  readonly htmlCaching?: string;
-  readonly mode?: string;
-  readonly purgeOnDeploy?: "ALL" | "HTML" | "OFF";
-  readonly staleWhileRevalidate?: StaleWhileRevalidateInput;
+  readonly defaultTtlSeconds?: number | null;
+  readonly htmlCaching?: string | null;
+  readonly mode?: string | null;
+  readonly purgeOnDeploy?: "ALL" | "HTML" | "OFF" | null;
+  readonly staleWhileRevalidate?: StaleWhileRevalidateInput | null;
 }
 
 export interface EdgeConfigInput {
-  readonly caching?: EdgeCachingConfigInput;
+  readonly caching?: EdgeCachingConfigInput | null;
 }
 
 export interface EgressGatewayCreateInput {
   readonly environmentId: string;
-  readonly region?: string;
+  readonly region?: string | null;
   readonly serviceId: string;
 }
 
 export interface EgressGatewayServiceTargetInput {
-  readonly allEnvironments?: boolean;
+  readonly allEnvironments?: boolean | null;
   readonly environmentId: string;
   readonly serviceId: string;
 }
@@ -1274,7 +1274,7 @@ export interface EnablePitrForHaClusterInput {
 }
 
 export interface EnableServiceCdnInput {
-  readonly config?: EdgeConfigInput;
+  readonly config?: EdgeConfigInput | null;
   readonly environmentId: string;
   readonly serviceId: string;
 }
@@ -1287,13 +1287,13 @@ export interface EnvironmentConfigPlanCommentUpsertInput {
 }
 
 export interface EnvironmentCreateInput {
-  readonly applyChangesInBackground?: boolean;
-  readonly ephemeral?: boolean;
+  readonly applyChangesInBackground?: boolean | null;
+  readonly ephemeral?: boolean | null;
   readonly name: string;
   readonly projectId: string;
-  readonly skipInitialDeploys?: boolean;
-  readonly sourceEnvironmentId?: string;
-  readonly stageInitialChanges?: boolean;
+  readonly skipInitialDeploys?: boolean | null;
+  readonly sourceEnvironmentId?: string | null;
+  readonly stageInitialChanges?: boolean | null;
 }
 
 export interface EnvironmentRenameInput {
@@ -1307,19 +1307,19 @@ export interface EnvironmentTriggersDeployInput {
 }
 
 export interface EventFilterInput {
-  readonly action?: EventStringListFilter;
-  readonly object?: EventStringListFilter;
-  readonly serviceId?: EventStringListFilter;
+  readonly action?: EventStringListFilter | null;
+  readonly object?: EventStringListFilter | null;
+  readonly serviceId?: EventStringListFilter | null;
 }
 
 export interface EventStringListFilter {
-  readonly in?: ReadonlyArray<string>;
-  readonly notIn?: ReadonlyArray<string>;
+  readonly in?: ReadonlyArray<string> | null;
+  readonly notIn?: ReadonlyArray<string> | null;
 }
 
 export interface ExplicitOwnerInput {
   readonly id: string;
-  readonly type?: "WORKSPACE";
+  readonly type?: "WORKSPACE" | null;
 }
 
 export interface FeatureFlagToggleInput {
@@ -1347,8 +1347,8 @@ export interface FeatureFlagToggleInput {
 }
 
 export interface GitHubRepoDeployInput {
-  readonly branch?: string;
-  readonly environmentId?: string;
+  readonly branch?: string | null;
+  readonly environmentId?: string | null;
   readonly projectId: string;
   readonly repo: string;
 }
@@ -1367,22 +1367,22 @@ export interface HerokuImportVariablesInput {
 }
 
 export interface HistoryFilterInput {
-  readonly actions?: ReadonlyArray<string>;
-  readonly objects?: ReadonlyArray<string>;
-  readonly outcomes?: ReadonlyArray<string>;
-  readonly serviceIds?: ReadonlyArray<string>;
+  readonly actions?: ReadonlyArray<string> | null;
+  readonly objects?: ReadonlyArray<string> | null;
+  readonly outcomes?: ReadonlyArray<string> | null;
+  readonly serviceIds?: ReadonlyArray<string> | null;
 }
 
 export interface IntegrationCreateInput {
   readonly config: unknown;
-  readonly integrationAuthId?: string;
+  readonly integrationAuthId?: string | null;
   readonly name: string;
   readonly projectId: string;
 }
 
 export interface IntegrationUpdateInput {
   readonly config: unknown;
-  readonly integrationAuthId?: string;
+  readonly integrationAuthId?: string | null;
   readonly name: string;
   readonly projectId: string;
 }
@@ -1396,26 +1396,26 @@ export interface JobApplicationCreateInput {
 
 export interface LoginSessionAuthInput {
   readonly code: string;
-  readonly hostname?: string;
+  readonly hostname?: string | null;
 }
 
 export interface NotificationDeliveryFilterInput {
-  readonly environmentId?: string;
-  readonly onlyUnread?: boolean;
-  readonly projectId?: string;
-  readonly status?: "ACTIVE" | "RESOLVED";
-  readonly type?: "EMAIL" | "INAPP" | "WEBHOOK";
-  readonly workspaceId?: string;
+  readonly environmentId?: string | null;
+  readonly onlyUnread?: boolean | null;
+  readonly projectId?: string | null;
+  readonly status?: "ACTIVE" | "RESOLVED" | null;
+  readonly type?: "EMAIL" | "INAPP" | "WEBHOOK" | null;
+  readonly workspaceId?: string | null;
 }
 
 export interface ObservabilityDashboardCreateInput {
   readonly environmentId: string;
-  readonly items?: ReadonlyArray<ObservabilityDashboardUpdateInput>;
+  readonly items?: ReadonlyArray<ObservabilityDashboardUpdateInput> | null;
 }
 
 export interface ObservabilityDashboardItemConfigInput {
-  readonly httpMetric?: "LATENCY" | "REQUESTS" | "STATUS_RATIO";
-  readonly logsFilter?: string;
+  readonly httpMetric?: "LATENCY" | "REQUESTS" | "STATUS_RATIO" | null;
+  readonly logsFilter?: string | null;
   readonly measurements?: ReadonlyArray<
     | "AGENT_CACHE_READ_TOKENS"
     | "AGENT_CACHE_WRITE_TOKENS"
@@ -1434,7 +1434,7 @@ export interface ObservabilityDashboardItemConfigInput {
     | "NETWORK_RX_GB"
     | "NETWORK_TX_GB"
     | "UNRECOGNIZED"
-  >;
+  > | null;
   readonly projectUsageProperties?: ReadonlyArray<
     | "BACKUP_USAGE"
     | "CPU_USAGE"
@@ -1443,13 +1443,13 @@ export interface ObservabilityDashboardItemConfigInput {
     | "ESTIMATED_USAGE"
     | "MEMORY_USAGE"
     | "NETWORK_USAGE"
-  >;
-  readonly resourceIds?: ReadonlyArray<string>;
+  > | null;
+  readonly resourceIds?: ReadonlyArray<string> | null;
 }
 
 export interface ObservabilityDashboardItemCreateInput {
   readonly config: ObservabilityDashboardItemConfigInput;
-  readonly description?: string;
+  readonly description?: string | null;
   readonly id: string;
   readonly name: string;
   readonly type:
@@ -1470,14 +1470,14 @@ export interface ObservabilityDashboardUpdateInput {
 }
 
 export interface PluginCreateInput {
-  readonly environmentId?: string;
-  readonly friendlyName?: string;
+  readonly environmentId?: string | null;
+  readonly friendlyName?: string | null;
   readonly name: string;
   readonly projectId: string;
 }
 
 export interface PluginRestartInput {
-  readonly environmentId?: string;
+  readonly environmentId?: string | null;
 }
 
 export interface PluginUpdateInput {
@@ -1485,16 +1485,16 @@ export interface PluginUpdateInput {
 }
 
 export interface PreferencesUpdateData {
-  readonly buildFailedEmail?: boolean;
-  readonly changelogEmail?: boolean;
-  readonly communityEmail?: boolean;
-  readonly deployCrashedEmail?: boolean;
-  readonly ephemeralEnvironmentEmail?: boolean;
-  readonly marketingEmail?: boolean;
-  readonly subprocessorUpdatesEmail?: boolean;
-  readonly templateQueueEmail?: boolean;
-  readonly token?: string;
-  readonly usageEmail?: boolean;
+  readonly buildFailedEmail?: boolean | null;
+  readonly changelogEmail?: boolean | null;
+  readonly communityEmail?: boolean | null;
+  readonly deployCrashedEmail?: boolean | null;
+  readonly ephemeralEnvironmentEmail?: boolean | null;
+  readonly marketingEmail?: boolean | null;
+  readonly subprocessorUpdatesEmail?: boolean | null;
+  readonly templateQueueEmail?: boolean | null;
+  readonly token?: string | null;
+  readonly usageEmail?: boolean | null;
 }
 
 export interface PrivateNetworkCreateOrGetInput {
@@ -1513,15 +1513,15 @@ export interface PrivateNetworkEndpointCreateOrGetInput {
 }
 
 export interface ProjectCreateInput {
-  readonly defaultEnvironmentName?: string;
-  readonly description?: string;
-  readonly isMonorepo?: boolean;
-  readonly isPublic?: boolean;
-  readonly name?: string;
-  readonly prDeploys?: boolean;
-  readonly repo?: ProjectCreateRepo;
-  readonly runtime?: "LEGACY" | "UNSPECIFIED" | "V2";
-  readonly workspaceId?: string;
+  readonly defaultEnvironmentName?: string | null;
+  readonly description?: string | null;
+  readonly isMonorepo?: boolean | null;
+  readonly isPublic?: boolean | null;
+  readonly name?: string | null;
+  readonly prDeploys?: boolean | null;
+  readonly repo?: ProjectCreateRepo | null;
+  readonly runtime?: "LEGACY" | "UNSPECIFIED" | "V2" | null;
+  readonly workspaceId?: string | null;
 }
 
 export interface ProjectCreateRepo {
@@ -1568,7 +1568,7 @@ export interface ProjectTokenCreateInput {
 }
 
 export interface ProjectTransferConfirmInput {
-  readonly destinationWorkspaceId?: string;
+  readonly destinationWorkspaceId?: string | null;
   readonly ownershipTransferId: string;
   readonly projectId: string;
 }
@@ -1587,15 +1587,15 @@ export interface ProjectTransferToTeamInput {
 }
 
 export interface ProjectUpdateInput {
-  readonly baseEnvironmentId?: string;
-  readonly botPrEnvironments?: boolean;
-  readonly description?: string;
-  readonly focusedPrEnvironments?: boolean;
-  readonly isPublic?: boolean;
-  readonly name?: string;
-  readonly prDeploys?: boolean;
-  readonly tracingEnabled?: boolean;
-  readonly tracingSampleRate?: number;
+  readonly baseEnvironmentId?: string | null;
+  readonly botPrEnvironments?: boolean | null;
+  readonly description?: string | null;
+  readonly focusedPrEnvironments?: boolean | null;
+  readonly isPublic?: boolean | null;
+  readonly name?: string | null;
+  readonly prDeploys?: boolean | null;
+  readonly tracingEnabled?: boolean | null;
+  readonly tracingSampleRate?: number | null;
 }
 
 export interface PurgeServiceCacheInput {
@@ -1608,8 +1608,8 @@ export interface RailwayDomainDnsRecordCreateInput {
   readonly answer: string;
   readonly domain: string;
   readonly host: string;
-  readonly priority?: number;
-  readonly ttl?: number;
+  readonly priority?: number | null;
+  readonly ttl?: number | null;
   readonly type: "A" | "AAAA" | "ANAME" | "CNAME" | "MX" | "NS" | "SRV" | "TXT";
   readonly workspaceId: string;
 }
@@ -1617,7 +1617,7 @@ export interface RailwayDomainDnsRecordCreateInput {
 export interface RailwayDomainDnsRecordDeleteInput {
   readonly domain: string;
   readonly recordId: number;
-  readonly removeEmailForwarding?: boolean;
+  readonly removeEmailForwarding?: boolean | null;
   readonly workspaceId: string;
 }
 
@@ -1625,9 +1625,9 @@ export interface RailwayDomainDnsRecordUpdateInput {
   readonly answer: string;
   readonly domain: string;
   readonly host: string;
-  readonly priority?: number;
+  readonly priority?: number | null;
   readonly recordId: number;
-  readonly ttl?: number;
+  readonly ttl?: number | null;
   readonly type: "A" | "AAAA" | "ANAME" | "CNAME" | "MX" | "NS" | "SRV" | "TXT";
   readonly workspaceId: string;
 }
@@ -1669,13 +1669,13 @@ export interface RailwayDomainNameserversSetInput {
 }
 
 export interface RailwayDomainUpdateInput {
-  readonly autoRenewEnabled?: boolean;
+  readonly autoRenewEnabled?: boolean | null;
   readonly id: string;
 }
 
 export interface RecoveryCodeValidateInput {
   readonly code: string;
-  readonly twoFactorLinkingKey?: string;
+  readonly twoFactorLinkingKey?: string | null;
 }
 
 export interface ReferralInfoUpdateInput {
@@ -1699,56 +1699,56 @@ export interface ResetPluginInput {
 
 export interface SandboxCreateInput {
   readonly environmentId: string;
-  readonly idleTimeoutMinutes?: number;
-  readonly networkIsolation?: "ISOLATED" | "PRIVATE";
-  readonly publicDomains?: ReadonlyArray<SandboxDomainInput>;
-  readonly region?: string;
-  readonly resources?: SandboxResourcesInput;
-  readonly sourceSandboxId?: string;
-  readonly template?: SandboxTemplateInput;
-  readonly variables?: unknown;
+  readonly idleTimeoutMinutes?: number | null;
+  readonly networkIsolation?: "ISOLATED" | "PRIVATE" | null;
+  readonly publicDomains?: ReadonlyArray<SandboxDomainInput> | null;
+  readonly region?: string | null;
+  readonly resources?: SandboxResourcesInput | null;
+  readonly sourceSandboxId?: string | null;
+  readonly template?: SandboxTemplateInput | null;
+  readonly variables?: unknown | null;
 }
 
 export interface SandboxDomainInput {
   readonly port: number;
-  readonly prefix?: string;
+  readonly prefix?: string | null;
 }
 
 export interface SandboxResourcesInput {
-  readonly cpu?: number;
-  readonly memoryGB?: number;
+  readonly cpu?: number | null;
+  readonly memoryGB?: number | null;
 }
 
 export interface SandboxTemplateInput {
-  readonly instructions?: ReadonlyArray<string>;
-  readonly name?: string;
-  readonly region?: string;
-  readonly variables?: unknown;
+  readonly instructions?: ReadonlyArray<string> | null;
+  readonly name?: string | null;
+  readonly region?: string | null;
+  readonly variables?: unknown | null;
 }
 
 export interface ServiceConnectInput {
-  readonly branch?: string;
-  readonly image?: string;
-  readonly repo?: string;
+  readonly branch?: string | null;
+  readonly image?: string | null;
+  readonly repo?: string | null;
 }
 
 export interface ServiceCreateInput {
-  readonly branch?: string;
-  readonly environmentId?: string;
-  readonly icon?: string;
-  readonly name?: string;
+  readonly branch?: string | null;
+  readonly environmentId?: string | null;
+  readonly icon?: string | null;
+  readonly name?: string | null;
   readonly projectId: string;
-  readonly registryCredentials?: RegistryCredentialsInput;
-  readonly source?: ServiceSourceInput;
-  readonly templateId?: string;
-  readonly templateServiceId?: string;
-  readonly variables?: unknown;
+  readonly registryCredentials?: RegistryCredentialsInput | null;
+  readonly source?: ServiceSourceInput | null;
+  readonly templateId?: string | null;
+  readonly templateServiceId?: string | null;
+  readonly variables?: unknown | null;
 }
 
 export interface ServiceDomainCreateInput {
   readonly environmentId: string;
   readonly serviceId: string;
-  readonly targetPort?: number;
+  readonly targetPort?: number | null;
 }
 
 export interface ServiceDomainUpdateInput {
@@ -1756,7 +1756,7 @@ export interface ServiceDomainUpdateInput {
   readonly environmentId: string;
   readonly serviceDomainId: string;
   readonly serviceId: string;
-  readonly targetPort?: number;
+  readonly targetPort?: number | null;
 }
 
 export interface ServiceFeatureFlagToggleInput {
@@ -1778,69 +1778,69 @@ export interface ServiceInstanceAutoDeployUpdateInput {
 
 export interface ServiceInstanceLimitsUpdateInput {
   readonly environmentId: string;
-  readonly memoryGB?: number;
+  readonly memoryGB?: number | null;
   readonly serviceId: string;
-  readonly vCPUs?: number;
+  readonly vCPUs?: number | null;
 }
 
 export interface ServiceInstanceUpdateInput {
-  readonly buildCommand?: string;
-  readonly builder?: "HEROKU" | "NIXPACKS" | "PAKETO" | "RAILPACK";
-  readonly cronSchedule?: string;
-  readonly dockerfilePath?: string;
-  readonly drainingSeconds?: number;
-  readonly healthcheckPath?: string;
-  readonly healthcheckTimeout?: number;
-  readonly ipv6EgressEnabled?: boolean;
-  readonly multiRegionConfig?: unknown;
-  readonly nixpacksPlan?: unknown;
-  readonly numReplicas?: number;
-  readonly overlapSeconds?: number;
-  readonly preDeployCommand?: ReadonlyArray<string>;
-  readonly preDeployTimeoutSeconds?: number;
-  readonly railwayConfigFile?: string;
-  readonly region?: string;
-  readonly registryCredentials?: RegistryCredentialsInput;
-  readonly restartPolicyMaxRetries?: number;
-  readonly restartPolicyType?: "ALWAYS" | "NEVER" | "ON_FAILURE";
-  readonly rootDirectory?: string;
-  readonly sleepApplication?: boolean;
-  readonly source?: ServiceSourceInput;
-  readonly startCommand?: string;
-  readonly watchPatterns?: ReadonlyArray<string>;
+  readonly buildCommand?: string | null;
+  readonly builder?: "HEROKU" | "NIXPACKS" | "PAKETO" | "RAILPACK" | null;
+  readonly cronSchedule?: string | null;
+  readonly dockerfilePath?: string | null;
+  readonly drainingSeconds?: number | null;
+  readonly healthcheckPath?: string | null;
+  readonly healthcheckTimeout?: number | null;
+  readonly ipv6EgressEnabled?: boolean | null;
+  readonly multiRegionConfig?: unknown | null;
+  readonly nixpacksPlan?: unknown | null;
+  readonly numReplicas?: number | null;
+  readonly overlapSeconds?: number | null;
+  readonly preDeployCommand?: ReadonlyArray<string> | null;
+  readonly preDeployTimeoutSeconds?: number | null;
+  readonly railwayConfigFile?: string | null;
+  readonly region?: string | null;
+  readonly registryCredentials?: RegistryCredentialsInput | null;
+  readonly restartPolicyMaxRetries?: number | null;
+  readonly restartPolicyType?: "ALWAYS" | "NEVER" | "ON_FAILURE" | null;
+  readonly rootDirectory?: string | null;
+  readonly sleepApplication?: boolean | null;
+  readonly source?: ServiceSourceInput | null;
+  readonly startCommand?: string | null;
+  readonly watchPatterns?: ReadonlyArray<string> | null;
 }
 
 export interface ServiceSourceInput {
-  readonly image?: string;
-  readonly repo?: string;
+  readonly image?: string | null;
+  readonly repo?: string | null;
 }
 
 export interface ServiceUpdateInput {
-  readonly icon?: string;
-  readonly name?: string;
-  readonly tracingEnabled?: boolean;
+  readonly icon?: string | null;
+  readonly name?: string | null;
+  readonly tracingEnabled?: boolean | null;
 }
 
 export interface SetServiceUnderAttackModeInput {
-  readonly durationSeconds?: number;
+  readonly durationSeconds?: number | null;
   readonly enabled: boolean;
   readonly environmentId: string;
   readonly serviceId: string;
 }
 
 export interface SetupAgentEventTrackInput {
-  readonly agentSessionId?: string;
-  readonly arch?: string;
-  readonly caller?: string;
-  readonly cliVersion?: string;
-  readonly configuredClients?: ReadonlyArray<string>;
-  readonly errorMessage?: string;
-  readonly installRequestId?: string;
-  readonly isCi?: boolean;
-  readonly os?: string;
+  readonly agentSessionId?: string | null;
+  readonly arch?: string | null;
+  readonly caller?: string | null;
+  readonly cliVersion?: string | null;
+  readonly configuredClients?: ReadonlyArray<string> | null;
+  readonly errorMessage?: string | null;
+  readonly installRequestId?: string | null;
+  readonly isCi?: boolean | null;
+  readonly os?: string | null;
   readonly phase: string;
-  readonly sessionId?: string;
-  readonly success?: boolean;
+  readonly sessionId?: string | null;
+  readonly success?: boolean | null;
 }
 
 export interface SharedVariableConfigureInput {
@@ -1854,10 +1854,10 @@ export interface SharedVariableConfigureInput {
 export interface ShellTokenInput {
   readonly environmentId: string;
   readonly instanceId: string;
-  readonly kind?: string;
-  readonly port?: number;
+  readonly kind?: string | null;
+  readonly port?: number | null;
   readonly scope: string;
-  readonly serviceId?: string;
+  readonly serviceId?: string | null;
 }
 
 export interface SignalCreateInput {
@@ -1865,7 +1865,7 @@ export interface SignalCreateInput {
   readonly name: string;
   readonly owner: string;
   readonly type: "bool" | "json" | "number" | "string";
-  readonly writableBy?: ReadonlyArray<string>;
+  readonly writableBy?: ReadonlyArray<string> | null;
 }
 
 export interface SignalDefaultSetInput {
@@ -1909,7 +1909,7 @@ export interface SignalRuleUnsetInput {
 export interface SshPublicKeyCreateInput {
   readonly name: string;
   readonly publicKey: string;
-  readonly workspaceId?: string;
+  readonly workspaceId?: string | null;
 }
 
 export interface StaleWhileRevalidateInput {
@@ -1924,72 +1924,72 @@ export interface TCPProxyCreateInput {
 
 export interface TemplateCloneInput {
   readonly code: string;
-  readonly workspaceId?: string;
+  readonly workspaceId?: string | null;
 }
 
 export interface TemplateDeleteInput {
-  readonly workspaceId?: string;
+  readonly workspaceId?: string | null;
 }
 
 export interface TemplateDeployInput {
-  readonly environmentId?: string;
-  readonly projectId?: string;
+  readonly environmentId?: string | null;
+  readonly projectId?: string | null;
   readonly services: ReadonlyArray<TemplateDeployService>;
-  readonly templateCode?: string;
-  readonly workspaceId?: string;
+  readonly templateCode?: string | null;
+  readonly workspaceId?: string | null;
 }
 
 export interface TemplateDeployService {
-  readonly commit?: string;
-  readonly hasDomain?: boolean;
-  readonly healthcheckPath?: string;
+  readonly commit?: string | null;
+  readonly hasDomain?: boolean | null;
+  readonly healthcheckPath?: string | null;
   readonly id: string;
-  readonly isPrivate?: boolean;
-  readonly name?: string;
-  readonly owner?: string;
-  readonly preDeployCommand?: ReadonlyArray<string>;
-  readonly rootDirectory?: string;
-  readonly serviceDomainPorts?: ReadonlyArray<number>;
-  readonly serviceIcon?: string;
+  readonly isPrivate?: boolean | null;
+  readonly name?: string | null;
+  readonly owner?: string | null;
+  readonly preDeployCommand?: ReadonlyArray<string> | null;
+  readonly rootDirectory?: string | null;
+  readonly serviceDomainPorts?: ReadonlyArray<number> | null;
+  readonly serviceIcon?: string | null;
   readonly serviceName: string;
-  readonly startCommand?: string;
-  readonly tcpProxyApplicationPort?: number;
-  readonly tcpProxyApplicationPorts?: ReadonlyArray<number>;
+  readonly startCommand?: string | null;
+  readonly tcpProxyApplicationPort?: number | null;
+  readonly tcpProxyApplicationPorts?: ReadonlyArray<number> | null;
   readonly template: string;
-  readonly variables?: unknown;
-  readonly volumes?: ReadonlyArray<unknown>;
+  readonly variables?: unknown | null;
+  readonly volumes?: ReadonlyArray<unknown> | null;
 }
 
 export interface TemplateDeployV2Input {
-  readonly environmentId?: string;
-  readonly existingRootServiceId?: string;
-  readonly projectId?: string;
+  readonly environmentId?: string | null;
+  readonly existingRootServiceId?: string | null;
+  readonly projectId?: string | null;
   readonly serializedConfig: unknown;
-  readonly stageOnly?: boolean;
+  readonly stageOnly?: boolean | null;
   readonly templateId: string;
-  readonly workspaceId?: string;
+  readonly workspaceId?: string | null;
 }
 
 export interface TemplateGenerateInput {
-  readonly environmentId?: string;
+  readonly environmentId?: string | null;
   readonly projectId: string;
 }
 
 export interface TemplatePublishInput {
   readonly category: string;
-  readonly demoProjectId?: string;
+  readonly demoProjectId?: string | null;
   readonly description: string;
-  readonly image?: string;
+  readonly image?: string | null;
   readonly readme: string;
-  readonly workspaceId?: string;
+  readonly workspaceId?: string | null;
 }
 
 export interface TemplateRevertInput {
   readonly environmentId: string;
-  readonly groupId?: string;
+  readonly groupId?: string | null;
   readonly projectId: string;
   readonly rootServiceId: string;
-  readonly stageOnly?: boolean;
+  readonly stageOnly?: boolean | null;
   readonly templateCode: string;
 }
 
@@ -2007,16 +2007,16 @@ export interface TwoFactorInfoCreateInput {
 
 export interface TwoFactorInfoValidateInput {
   readonly token: string;
-  readonly twoFactorLinkingKey?: string;
+  readonly twoFactorLinkingKey?: string | null;
 }
 
 export interface UpdateNotificationRuleInput {
-  readonly channelConfigs?: ReadonlyArray<unknown>;
-  readonly ephemeralEnvironments?: boolean;
-  readonly eventTypes?: ReadonlyArray<string>;
+  readonly channelConfigs?: ReadonlyArray<unknown> | null;
+  readonly ephemeralEnvironments?: boolean | null;
+  readonly eventTypes?: ReadonlyArray<string> | null;
   readonly severities?: ReadonlyArray<
     "CRITICAL" | "INFO" | "NOTICE" | "WARNING"
-  >;
+  > | null;
 }
 
 export interface UpdateServiceEdgeConfigInput {
@@ -2026,7 +2026,7 @@ export interface UpdateServiceEdgeConfigInput {
 }
 
 export interface UpdateServiceEdgeRulesInput {
-  readonly edgeRules?: unknown;
+  readonly edgeRules?: unknown | null;
   readonly environmentId: string;
   readonly serviceId: string;
 }
@@ -2037,24 +2037,24 @@ export interface UsageLimitRemoveInput {
 
 export interface UsageLimitSetInput {
   readonly customerId: string;
-  readonly hardLimitDollars?: number;
+  readonly hardLimitDollars?: number | null;
   readonly softLimitDollars: number;
 }
 
 export interface UserFlagsRemoveInput {
   readonly flags: ReadonlyArray<"BETA">;
-  readonly userId?: string;
+  readonly userId?: string | null;
 }
 
 export interface UserFlagsSetInput {
   readonly flags: ReadonlyArray<"BETA">;
-  readonly userId?: string;
+  readonly userId?: string | null;
 }
 
 export interface UserProfileUpdateInput {
-  readonly bio?: string;
+  readonly bio?: string | null;
   readonly isPublic: boolean;
-  readonly website?: string;
+  readonly website?: string | null;
 }
 
 export interface ValidateServiceEdgeRulesInput {
@@ -2066,9 +2066,9 @@ export interface ValidateServiceEdgeRulesInput {
 export interface VariableCollectionUpsertInput {
   readonly environmentId: string;
   readonly projectId: string;
-  readonly replace?: boolean;
-  readonly serviceId?: string;
-  readonly skipDeploys?: boolean;
+  readonly replace?: boolean | null;
+  readonly serviceId?: string | null;
+  readonly skipDeploys?: boolean | null;
   readonly variables: unknown;
 }
 
@@ -2076,29 +2076,29 @@ export interface VariableDeleteInput {
   readonly environmentId: string;
   readonly name: string;
   readonly projectId: string;
-  readonly serviceId?: string;
+  readonly serviceId?: string | null;
 }
 
 export interface VariableUpsertInput {
   readonly environmentId: string;
   readonly name: string;
   readonly projectId: string;
-  readonly serviceId?: string;
-  readonly skipDeploys?: boolean;
+  readonly serviceId?: string | null;
+  readonly skipDeploys?: boolean | null;
   readonly value: string;
 }
 
 export interface VolumeCreateInput {
-  readonly environmentId?: string;
+  readonly environmentId?: string | null;
   readonly mountPath: string;
   readonly projectId: string;
-  readonly region?: string;
-  readonly serviceId?: string;
+  readonly region?: string | null;
+  readonly serviceId?: string | null;
 }
 
 export interface VolumeInstanceUpdateInput {
-  readonly mountPath?: string;
-  readonly serviceId?: string;
+  readonly mountPath?: string | null;
+  readonly serviceId?: string | null;
   readonly state?:
     | "DELETED"
     | "DELETING"
@@ -2107,11 +2107,12 @@ export interface VolumeInstanceUpdateInput {
     | "MIGRATION_PENDING"
     | "READY"
     | "RESTORING"
-    | "UPDATING";
+    | "UPDATING"
+    | null;
 }
 
 export interface VolumeUpdateInput {
-  readonly name?: string;
+  readonly name?: string | null;
 }
 
 export interface WorkspaceInviteCodeCreateInput {
@@ -2144,9 +2145,9 @@ export interface WorkspaceTrustedDomainUpdateInput {
 }
 
 export interface WorkspaceUpdateInput {
-  readonly avatar?: string;
-  readonly name?: string;
-  readonly preferredRegion?: string;
+  readonly avatar?: string | null;
+  readonly name?: string | null;
+  readonly preferredRegion?: string | null;
 }
 
 export interface WorkspaceUserInviteInput {
@@ -2224,16 +2225,16 @@ export interface AccessGroupProjectsConnectionEdge {
 }
 
 export interface AccessRule {
-  readonly disallowed: string;
+  readonly disallowed: string | null;
 }
 
 export interface AdoptionInfo {
-  readonly adoptionLevel: number;
+  readonly adoptionLevel: number | null;
   readonly createdAt: string;
-  readonly deltaLevel: number;
+  readonly deltaLevel: number | null;
   readonly id: string;
-  readonly matchedIcpEmail: string;
-  readonly monthlyEstimatedUsage: number;
+  readonly matchedIcpEmail: string | null;
+  readonly monthlyEstimatedUsage: number | null;
   readonly numConfigFile: number;
   readonly numCronSchedule: number;
   readonly numDeploys: number;
@@ -2248,20 +2249,20 @@ export interface AdoptionInfo {
   readonly numServices: number;
   readonly numVariables: number;
   readonly numWatchPatterns: number;
-  readonly totalCores: number;
-  readonly totalDisk: number;
-  readonly totalNetwork: number;
+  readonly totalCores: number | null;
+  readonly totalDisk: number | null;
+  readonly totalNetwork: number | null;
   readonly updatedAt: string;
   readonly workspace: Workspace;
 }
 
 export interface AgentUsageSummary {
   readonly billingPeriodEnd: string;
-  readonly hardLimitCents: number;
-  readonly hasCustomHardLimit: boolean;
-  readonly softLimitCents: number;
+  readonly hardLimitCents: number | null;
+  readonly hasCustomHardLimit: boolean | null;
+  readonly softLimitCents: number | null;
   readonly totalUsedCents: number;
-  readonly usageRemaining: number;
+  readonly usageRemaining: number | null;
 }
 
 /** The aggregated usage of a single measurement. */
@@ -2295,10 +2296,10 @@ export interface AllDomains {
 
 export interface ApiToken {
   readonly displayToken: string;
-  readonly expiresAt: string;
+  readonly expiresAt: string | null;
   readonly id: string;
   readonly name: string;
-  readonly workspaceId: string;
+  readonly workspaceId: string | null;
 }
 
 /** Information about the current API token and its accessible workspaces. */
@@ -2317,24 +2318,24 @@ export interface ApiTokenWorkspace {
 }
 
 export interface AppliedByMember {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly email: string;
   readonly id: string;
-  readonly name: string;
-  readonly username: string;
+  readonly name: string | null;
+  readonly username: string | null;
 }
 
 export interface AuditLog {
-  readonly context: unknown;
+  readonly context: unknown | null;
   readonly createdAt: string;
-  readonly environment: Environment;
-  readonly environmentId: string;
+  readonly environment: Environment | null;
+  readonly environmentId: string | null;
   readonly eventType: string;
   readonly id: string;
-  readonly payload: unknown;
-  readonly project: Project;
-  readonly projectId: string;
-  readonly workspaceId: string;
+  readonly payload: unknown | null;
+  readonly project: Project | null;
+  readonly projectId: string | null;
+  readonly workspaceId: string | null;
 }
 
 export interface AuditLogEventTypeInfo {
@@ -2353,7 +2354,7 @@ export interface BotScopeBindingInfo {
   readonly id: string;
   readonly platform: string;
   readonly scopeId: string;
-  readonly scopeName: string;
+  readonly scopeName: string | null;
   readonly scopeType: string;
   readonly workspaceId: string;
   readonly workspaceName: string;
@@ -2361,11 +2362,11 @@ export interface BotScopeBindingInfo {
 
 export interface Bucket {
   readonly createdAt: string;
-  readonly deletedAt: string;
-  readonly groupId: string;
+  readonly deletedAt: string | null;
+  readonly groupId: string | null;
   readonly id: string;
   readonly name: string;
-  readonly parentServiceId: string;
+  readonly parentServiceId: string | null;
   readonly project: Project;
   readonly projectId: string;
   readonly updatedAt: string;
@@ -2393,9 +2394,9 @@ export interface CanvasViewMergePreview {
 
 export interface CertificatePublicData {
   readonly domainNames: ReadonlyArray<string>;
-  readonly expiresAt: string;
+  readonly expiresAt: string | null;
   readonly fingerprintSha256: string;
-  readonly issuedAt: string;
+  readonly issuedAt: string | null;
   readonly keyType:
     | "KEY_TYPE_ECDSA"
     | "KEY_TYPE_RSA_2048"
@@ -2406,19 +2407,19 @@ export interface CertificatePublicData {
 
 export interface ChangeOperationResult {
   readonly kind: string;
-  readonly outputs: unknown;
-  readonly path: string;
+  readonly outputs: unknown | null;
+  readonly path: string | null;
   readonly status: string;
-  readonly summary: string;
+  readonly summary: string | null;
 }
 
 export interface ChangeSetApplyResult {
   readonly changes: ReadonlyArray<ChangeOperationResult>;
-  readonly deploymentId: string;
+  readonly deploymentId: string | null;
   readonly diagnostics: unknown;
   readonly id: string;
-  readonly operationId: string;
-  readonly stagedPatchId: string;
+  readonly operationId: string | null;
+  readonly stagedPatchId: string | null;
   readonly status: string;
 }
 
@@ -2430,19 +2431,19 @@ export interface ChangeSetPreview {
 
 /** A persistent cloud agent for running coding harnesses. */
 export interface CloudAgent {
-  readonly agentWsUrl: string;
-  readonly consoleTargetId: string;
+  readonly agentWsUrl: string | null;
+  readonly consoleTargetId: string | null;
   readonly createdAt: string;
-  readonly domain: string;
+  readonly domain: string | null;
   readonly domains: ReadonlyArray<CloudAgentDomain>;
   readonly environmentId: string;
   readonly id: string;
   readonly name: string;
   readonly project: Project;
   readonly projectId: string;
-  readonly region: string;
+  readonly region: string | null;
   readonly sessions: ReadonlyArray<CloudAgentSnapshot>;
-  readonly source: CloudAgentSource;
+  readonly source: CloudAgentSource | null;
   readonly status:
     | "CRASHED"
     | "DELETING"
@@ -2456,9 +2457,9 @@ export interface CloudAgent {
 export interface CloudAgentCheckpoint {
   readonly createdAt: string;
   readonly environmentId: string;
-  readonly failureReason: string;
+  readonly failureReason: string | null;
   readonly id: string;
-  readonly name: string;
+  readonly name: string | null;
   readonly region: string;
   readonly status: "FAILED" | "IN_PROGRESS" | "SUCCEEDED";
 }
@@ -2474,27 +2475,27 @@ export interface CloudAgentDomain {
 export interface CloudAgentSnapshot {
   readonly harness: string;
   readonly lastEventKind: string;
-  readonly latestPrompt: string;
-  readonly prompt: string;
+  readonly latestPrompt: string | null;
+  readonly prompt: string | null;
   readonly sessionId: string;
-  readonly sessionName: string;
+  readonly sessionName: string | null;
   readonly state: string;
-  readonly taskId: string;
+  readonly taskId: string | null;
   readonly terminal: boolean;
-  readonly title: string;
+  readonly title: string | null;
   readonly updatedAt: string;
 }
 
 /** Workspace provenance: the GitHub repo cloned into the agent's workspace at create time. */
 export interface CloudAgentSource {
-  readonly branch: string;
+  readonly branch: string | null;
   readonly repo: string;
-  readonly serviceId: string;
-  readonly status: "CLONING" | "FAILED" | "READY";
+  readonly serviceId: string | null;
+  readonly status: "CLONING" | "FAILED" | "READY" | null;
 }
 
 export interface CnameCheck {
-  readonly link: string;
+  readonly link: string | null;
   readonly message: string;
   readonly status: "ERROR" | "INFO" | "INVALID" | "VALID" | "WAITING";
 }
@@ -2508,16 +2509,16 @@ export interface ConnectedServiceInstance {
   readonly environmentId: string;
   readonly projectId: string;
   readonly serviceId: string;
-  readonly serviceName: string;
+  readonly serviceName: string | null;
 }
 
 export interface Container {
   readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly deletedAt: string | null;
   readonly environment: Environment;
   readonly environmentId: string;
   readonly id: string;
-  readonly migratedAt: string;
+  readonly migratedAt: string | null;
   readonly plugin: Plugin;
   readonly pluginId: string;
 }
@@ -2527,7 +2528,7 @@ export interface Credit {
   readonly createdAt: string;
   readonly customerId: string;
   readonly id: string;
-  readonly memo: string;
+  readonly memo: string | null;
   readonly type:
     | "APPLIED"
     | "CREDIT"
@@ -2539,16 +2540,16 @@ export interface Credit {
 }
 
 export interface CustomDomain {
-  readonly cdnMode: string;
+  readonly cdnMode: string | null;
   readonly cnameCheck: CnameCheck;
-  readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly createdAt: string | null;
+  readonly deletedAt: string | null;
   readonly domain: string;
-  readonly edgeId: string;
+  readonly edgeId: string | null;
   readonly environmentId: string;
   readonly id: string;
   readonly isRailwayDomain: boolean;
-  readonly projectId: string;
+  readonly projectId: string | null;
   readonly serviceId: string;
   readonly status: CustomDomainStatus;
   readonly syncStatus:
@@ -2558,16 +2559,17 @@ export interface CustomDomain {
     | "DELETING"
     | "UNSPECIFIED"
     | "UPDATING";
-  readonly targetPort: number;
-  readonly updatedAt: string;
+  readonly targetPort: number | null;
+  readonly updatedAt: string | null;
 }
 
 export interface CustomDomainStatus {
   readonly cdnProvider:
     | "DETECTED_CDN_PROVIDER_CLOUDFLARE"
     | "DETECTED_CDN_PROVIDER_UNSPECIFIED"
-    | "UNRECOGNIZED";
-  readonly certificateErrorMessage: string;
+    | "UNRECOGNIZED"
+    | null;
+  readonly certificateErrorMessage: string | null;
   readonly certificateErrorType:
     | "CERTIFICATE_ERROR_TYPE_AUTHORIZATION_FAILED"
     | "CERTIFICATE_ERROR_TYPE_DNS_VALIDATION"
@@ -2576,9 +2578,10 @@ export interface CustomDomainStatus {
     | "CERTIFICATE_ERROR_TYPE_ORDER_CREATION"
     | "CERTIFICATE_ERROR_TYPE_RATE_LIMIT"
     | "CERTIFICATE_ERROR_TYPE_UNSPECIFIED"
-    | "UNRECOGNIZED";
-  readonly certificateRetryable: boolean;
-  readonly certificates: ReadonlyArray<CertificatePublicData>;
+    | "UNRECOGNIZED"
+    | null;
+  readonly certificateRetryable: boolean | null;
+  readonly certificates: ReadonlyArray<CertificatePublicData> | null;
   readonly certificateStatus:
     | "CERTIFICATE_STATUS_TYPE_ISSUE_FAILED"
     | "CERTIFICATE_STATUS_TYPE_ISSUING"
@@ -2599,23 +2602,24 @@ export interface CustomDomainStatus {
     | "CERTIFICATE_STATUS_TYPE_DETAILED_POLLING_AUTHORIZATIONS"
     | "CERTIFICATE_STATUS_TYPE_DETAILED_PRESENTING_CHALLENGES"
     | "CERTIFICATE_STATUS_TYPE_DETAILED_UNSPECIFIED"
-    | "UNRECOGNIZED";
+    | "UNRECOGNIZED"
+    | null;
   readonly dnsRecords: ReadonlyArray<DNSRecords>;
-  readonly verificationDnsHost: string;
-  readonly verificationToken: string;
+  readonly verificationDnsHost: string | null;
+  readonly verificationToken: string | null;
   readonly verified: boolean;
 }
 
 export interface Customer {
   readonly appliedCredits: number;
-  readonly billingAddress: CustomerAddress;
-  readonly billingEmail: string;
+  readonly billingAddress: CustomerAddress | null;
+  readonly billingEmail: string | null;
   readonly billingPeriod: BillingPeriod;
   readonly creditBalance: number;
   readonly credits: ReadonlyArray<Credit>;
   readonly currentUsage: number;
-  readonly defaultPaymentMethod: PaymentMethod;
-  readonly defaultPaymentMethodId: string;
+  readonly defaultPaymentMethod: PaymentMethod | null;
+  readonly defaultPaymentMethodId: string | null;
   readonly hasExhaustedFreePlan: boolean;
   readonly id: string;
   readonly invoices: ReadonlyArray<CustomerInvoice>;
@@ -2623,9 +2627,9 @@ export interface Customer {
   readonly isTrialing: boolean;
   readonly isUsageSubscriber: boolean;
   readonly isWithdrawingToCredits: boolean;
-  readonly planLimitOverride: PlanLimitOverride;
+  readonly planLimitOverride: PlanLimitOverride | null;
   readonly remainingUsageCreditBalance: number;
-  readonly spendCommitment: SpendCommitment;
+  readonly spendCommitment: SpendCommitment | null;
   readonly state: "ACTIVE" | "CANCELLED" | "INACTIVE" | "PAST_DUE" | "UNPAID";
   readonly stripeCustomerId: string;
   readonly subscriptions: ReadonlyArray<CustomerSubscription>;
@@ -2634,18 +2638,18 @@ export interface Customer {
   >;
   readonly taxIds: ReadonlyArray<CustomerTaxId>;
   readonly trialDaysRemaining: number;
-  readonly usageLimit: UsageLimit;
+  readonly usageLimit: UsageLimit | null;
   readonly workspace: Workspace;
 }
 
 export interface CustomerAddress {
-  readonly city: string;
-  readonly country: string;
-  readonly line1: string;
-  readonly line2: string;
-  readonly name: string;
-  readonly postalCode: string;
-  readonly state: string;
+  readonly city: string | null;
+  readonly country: string | null;
+  readonly line1: string | null;
+  readonly line2: string | null;
+  readonly name: string | null;
+  readonly postalCode: string | null;
+  readonly state: string | null;
 }
 
 export interface CustomerCreditsConnection {
@@ -2661,28 +2665,28 @@ export interface CustomerCreditsConnectionEdge {
 export interface CustomerInvoice {
   readonly amountDue: number;
   readonly amountPaid: number;
-  readonly hostedURL: string;
+  readonly hostedURL: string | null;
   readonly invoiceId: string;
   readonly items: ReadonlyArray<SubscriptionItem>;
-  readonly lastPaymentError: string;
-  readonly paymentIntentStatus: string;
-  readonly pdfURL: string;
+  readonly lastPaymentError: string | null;
+  readonly paymentIntentStatus: string | null;
+  readonly pdfURL: string | null;
   readonly periodEnd: string;
   readonly periodStart: string;
-  readonly reissuedInvoiceFrom: string;
-  readonly reissuedInvoiceOf: string;
-  readonly spendCommitmentPrepayment: boolean;
-  readonly status: string;
-  readonly subscriptionId: string;
-  readonly subscriptionStatus: string;
+  readonly reissuedInvoiceFrom: string | null;
+  readonly reissuedInvoiceOf: string | null;
+  readonly spendCommitmentPrepayment: boolean | null;
+  readonly status: string | null;
+  readonly subscriptionId: string | null;
+  readonly subscriptionStatus: string | null;
   readonly total: number;
 }
 
 export interface CustomerSubscription {
   readonly billingCycleAnchor: string;
-  readonly cancelAt: string;
+  readonly cancelAt: string | null;
   readonly cancelAtPeriodEnd: boolean;
-  readonly couponId: string;
+  readonly couponId: string | null;
   readonly discounts: ReadonlyArray<SubscriptionDiscount>;
   readonly id: string;
   readonly items: ReadonlyArray<SubscriptionItem>;
@@ -2727,20 +2731,20 @@ export interface Deployment {
   readonly canRedeploy: boolean;
   readonly canRollback: boolean;
   readonly createdAt: string;
-  readonly creator: DeploymentCreator;
+  readonly creator: DeploymentCreator | null;
   readonly deploymentStopped: boolean;
-  readonly diagnosis: unknown;
+  readonly diagnosis: unknown | null;
   readonly environment: Environment;
   readonly environmentId: string;
   readonly id: string;
   readonly instances: ReadonlyArray<DeploymentDeploymentInstance>;
-  readonly meta: unknown;
+  readonly meta: unknown | null;
   readonly projectId: string;
   readonly service: Service;
-  readonly serviceId: string;
-  readonly snapshotId: string;
+  readonly serviceId: string | null;
+  readonly snapshotId: string | null;
   readonly sockets: ReadonlyArray<DeploymentSocket>;
-  readonly staticUrl: string;
+  readonly staticUrl: string | null;
   readonly status:
     | "BUILDING"
     | "CRASHED"
@@ -2755,17 +2759,17 @@ export interface Deployment {
     | "SLEEPING"
     | "SUCCESS"
     | "WAITING";
-  readonly statusUpdatedAt: string;
+  readonly statusUpdatedAt: string | null;
   readonly suggestAddServiceDomain: boolean;
   readonly updatedAt: string;
-  readonly url: string;
+  readonly url: string | null;
 }
 
 export interface DeploymentCreator {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly email: string;
   readonly id: string;
-  readonly name: string;
+  readonly name: string | null;
 }
 
 export interface DeploymentDeploymentInstance {
@@ -2784,10 +2788,10 @@ export interface DeploymentDeploymentInstance {
 }
 
 export interface DeploymentEvent {
-  readonly completedAt: string;
+  readonly completedAt: string | null;
   readonly createdAt: string;
   readonly id: string;
-  readonly payload: DeploymentEventPayload;
+  readonly payload: DeploymentEventPayload | null;
   readonly step:
     | "BUILD_IMAGE"
     | "CONFIGURE_NETWORK"
@@ -2802,17 +2806,17 @@ export interface DeploymentEvent {
 }
 
 export interface DeploymentEventPayload {
-  readonly attempt: number;
-  readonly detail: string;
-  readonly durationMs: number;
-  readonly error: string;
-  readonly maxAttempts: number;
-  readonly reason: string;
-  readonly skipped: boolean;
+  readonly attempt: number | null;
+  readonly detail: string | null;
+  readonly durationMs: number | null;
+  readonly error: string | null;
+  readonly maxAttempts: number | null;
+  readonly reason: string | null;
+  readonly skipped: boolean | null;
 }
 
 export interface DeploymentInstanceExecution {
-  readonly completedAt: string;
+  readonly completedAt: string | null;
   readonly createdAt: string;
   readonly deploymentId: string;
   readonly deploymentMeta: unknown;
@@ -2846,7 +2850,7 @@ export interface DeploymentSocket {
 }
 
 export interface DeploymentTrigger {
-  readonly baseEnvironmentOverrideId: string;
+  readonly baseEnvironmentOverrideId: string | null;
   readonly branch: string;
   readonly checkSuites: boolean;
   readonly environmentId: string;
@@ -2854,7 +2858,7 @@ export interface DeploymentTrigger {
   readonly projectId: string;
   readonly provider: string;
   readonly repository: string;
-  readonly serviceId: string;
+  readonly serviceId: string | null;
   readonly validCheckSuites: number;
 }
 
@@ -2874,21 +2878,21 @@ export interface DnsQueryLog {
 
 export interface DockerComposeImport {
   readonly errors: ReadonlyArray<string>;
-  readonly patch: unknown;
+  readonly patch: unknown | null;
 }
 
 export interface Domain {
-  readonly cdnMode: string;
-  readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly cdnMode: string | null;
+  readonly createdAt: string | null;
+  readonly deletedAt: string | null;
   readonly domain: string;
-  readonly edgeId: string;
+  readonly edgeId: string | null;
   readonly environmentId: string;
   readonly id: string;
-  readonly projectId: string;
+  readonly projectId: string | null;
   readonly serviceId: string;
-  readonly targetPort: number;
-  readonly updatedAt: string;
+  readonly targetPort: number | null;
+  readonly updatedAt: string | null;
 }
 
 export interface DomainAvailable {
@@ -2900,8 +2904,9 @@ export interface DomainWithStatus {
   readonly cdnProvider:
     | "DETECTED_CDN_PROVIDER_CLOUDFLARE"
     | "DETECTED_CDN_PROVIDER_UNSPECIFIED"
-    | "UNRECOGNIZED";
-  readonly certificateErrorMessage: string;
+    | "UNRECOGNIZED"
+    | null;
+  readonly certificateErrorMessage: string | null;
   readonly certificateErrorType:
     | "CERTIFICATE_ERROR_TYPE_AUTHORIZATION_FAILED"
     | "CERTIFICATE_ERROR_TYPE_DNS_VALIDATION"
@@ -2910,9 +2915,10 @@ export interface DomainWithStatus {
     | "CERTIFICATE_ERROR_TYPE_ORDER_CREATION"
     | "CERTIFICATE_ERROR_TYPE_RATE_LIMIT"
     | "CERTIFICATE_ERROR_TYPE_UNSPECIFIED"
-    | "UNRECOGNIZED";
-  readonly certificateRetryable: boolean;
-  readonly certificates: ReadonlyArray<CertificatePublicData>;
+    | "UNRECOGNIZED"
+    | null;
+  readonly certificateRetryable: boolean | null;
+  readonly certificates: ReadonlyArray<CertificatePublicData> | null;
   readonly certificateStatus:
     | "CERTIFICATE_STATUS_TYPE_ISSUE_FAILED"
     | "CERTIFICATE_STATUS_TYPE_ISSUING"
@@ -2933,9 +2939,10 @@ export interface DomainWithStatus {
     | "CERTIFICATE_STATUS_TYPE_DETAILED_POLLING_AUTHORIZATIONS"
     | "CERTIFICATE_STATUS_TYPE_DETAILED_PRESENTING_CHALLENGES"
     | "CERTIFICATE_STATUS_TYPE_DETAILED_UNSPECIFIED"
-    | "UNRECOGNIZED";
+    | "UNRECOGNIZED"
+    | null;
   readonly dnsRecords: ReadonlyArray<DNSRecords>;
-  readonly domain: Domain;
+  readonly domain: Domain | null;
 }
 
 export interface EdgeCachingConfig {
@@ -2947,15 +2954,15 @@ export interface EdgeCachingConfig {
 }
 
 export interface EdgeConfig {
-  readonly caching: EdgeCachingConfig;
-  readonly edgeRules: unknown;
+  readonly caching: EdgeCachingConfig | null;
+  readonly edgeRules: unknown | null;
   readonly enabled: boolean;
   readonly id: string;
   readonly overrides: unknown;
   readonly purgeEpoch: number;
   readonly purgeEpochByKind: unknown;
-  readonly tracing: EdgeTracingConfig;
-  readonly underAttackModeUntil: number;
+  readonly tracing: EdgeTracingConfig | null;
+  readonly underAttackModeUntil: number | null;
 }
 
 export interface EdgeRuleDiagnostic {
@@ -2966,19 +2973,19 @@ export interface EdgeRuleDiagnostic {
 
 export interface EdgeTracingConfig {
   readonly enabled: boolean;
-  readonly sampleRate: number;
+  readonly sampleRate: number | null;
 }
 
 export interface EgressGateway {
   readonly ipv4: string;
   readonly region: string;
-  readonly zone: string;
+  readonly zone: string | null;
 }
 
 export interface EgressMigrationEnvironmentResult {
   readonly environmentId: string;
   readonly environmentName: string;
-  readonly error: string;
+  readonly error: string | null;
   readonly gateways: ReadonlyArray<EgressGateway>;
   readonly success: boolean;
 }
@@ -2994,18 +3001,18 @@ export interface Environment {
   readonly config: unknown;
   readonly configEtag: string;
   readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly deletedAt: string | null;
   readonly deployments: ReadonlyArray<Deployment>;
   readonly deploymentTriggers: ReadonlyArray<DeploymentTrigger>;
-  readonly iacPartials: unknown;
+  readonly iacPartials: unknown | null;
   readonly id: string;
   readonly isEphemeral: boolean;
-  readonly meta: EnvironmentMeta;
+  readonly meta: EnvironmentMeta | null;
   readonly name: string;
   readonly projectId: string;
   readonly serviceInstances: ReadonlyArray<ServiceInstance>;
-  readonly sourceEnvironment: Environment;
-  readonly unmergedChangesCount: number;
+  readonly sourceEnvironment: Environment | null;
+  readonly unmergedChangesCount: number | null;
   readonly updatedAt: string;
   readonly variables: ReadonlyArray<Variable>;
   readonly volumeInstances: ReadonlyArray<VolumeInstance>;
@@ -3037,25 +3044,25 @@ export interface EnvironmentDeploymentsConnectionEdge {
 }
 
 export interface EnvironmentMeta {
-  readonly baseBranch: string;
-  readonly branch: string;
-  readonly latestSuccessfulGitHubDeploymentId: number;
-  readonly prCommentId: number;
-  readonly prNumber: number;
-  readonly prRepo: string;
-  readonly prTitle: string;
-  readonly skippedResourceIds: unknown;
+  readonly baseBranch: string | null;
+  readonly branch: string | null;
+  readonly latestSuccessfulGitHubDeploymentId: number | null;
+  readonly prCommentId: number | null;
+  readonly prNumber: number | null;
+  readonly prRepo: string | null;
+  readonly prTitle: string | null;
+  readonly skippedResourceIds: unknown | null;
 }
 
 export interface EnvironmentPatch {
-  readonly appliedAt: string;
-  readonly appliedBy: AppliedByMember;
+  readonly appliedAt: string | null;
+  readonly appliedBy: AppliedByMember | null;
   readonly createdAt: string;
   readonly environment: Environment;
   readonly environmentId: string;
   readonly id: string;
-  readonly lastAppliedError: string;
-  readonly message: string;
+  readonly lastAppliedError: string | null;
+  readonly message: string | null;
   readonly patch: unknown;
   readonly status: "APPLYING" | "COMMITTED" | "FAILED" | "STAGED";
   readonly updatedAt: string;
@@ -3117,32 +3124,32 @@ export interface EstimatedUsage {
 
 export interface Event {
   readonly action: string;
-  readonly activityPayload: unknown;
+  readonly activityPayload: unknown | null;
   readonly createdAt: string;
-  readonly environment: Environment;
-  readonly environmentId: string;
+  readonly environment: Environment | null;
+  readonly environmentId: string | null;
   readonly id: string;
   readonly object: string;
-  readonly payload: unknown;
+  readonly payload: unknown | null;
   readonly project: Project;
-  readonly projectId: string;
+  readonly projectId: string | null;
   readonly severity: "CRITICAL" | "INFO" | "NOTICE" | "WARNING";
 }
 
 export interface ExternalWorkspace {
-  readonly allowDeprecatedRegions: boolean;
-  readonly avatar: string;
-  readonly banReason: string;
+  readonly allowDeprecatedRegions: boolean | null;
+  readonly avatar: string | null;
+  readonly banReason: string | null;
   readonly createdAt: string;
-  readonly currentSessionHasAccess: boolean;
-  readonly customerId: string;
+  readonly currentSessionHasAccess: boolean | null;
+  readonly customerId: string | null;
   readonly customerState:
     | "ACTIVE"
     | "CANCELLED"
     | "INACTIVE"
     | "PAST_DUE"
     | "UNPAID";
-  readonly discordRole: string;
+  readonly discordRole: string | null;
   readonly has2FAEnforcement: boolean;
   readonly hasAutomaticDiagnosis: boolean;
   readonly hasBAA: boolean;
@@ -3150,14 +3157,14 @@ export interface ExternalWorkspace {
   readonly hasRBAC: boolean;
   readonly hasSAML: boolean;
   readonly id: string;
-  readonly isTrialing: boolean;
+  readonly isTrialing: boolean | null;
   readonly name: string;
   readonly plan: "FREE" | "HOBBY" | "PRO";
-  readonly preferredRegion: string;
+  readonly preferredRegion: string | null;
   readonly projects: ReadonlyArray<Project>;
   readonly redactedDueTo2FAPending: boolean;
-  readonly subscriptionPlanLimit: unknown;
-  readonly teamId: string;
+  readonly subscriptionPlanLimit: unknown | null;
+  readonly teamId: string | null;
 }
 
 export interface FunctionRuntime {
@@ -3193,30 +3200,30 @@ export interface GitHubPRInfo {
   readonly changedFiles: number;
   readonly checks: ReadonlyArray<GitHubCheck>;
   readonly deletions: number;
-  readonly mergeable: boolean;
+  readonly mergeable: boolean | null;
   readonly state: string;
   readonly title: string;
 }
 
 export interface GitHubPRInfoResult {
-  readonly error: string;
-  readonly prInfo: GitHubPRInfo;
+  readonly error: string | null;
+  readonly prInfo: GitHubPRInfo | null;
 }
 
 export interface GitHubRepo {
   readonly defaultBranch: string;
-  readonly description: string;
+  readonly description: string | null;
   readonly fullName: string;
   readonly id: number;
   readonly installationId: string;
   readonly isPrivate: boolean;
   readonly name: string;
-  readonly ownerAvatarUrl: string;
+  readonly ownerAvatarUrl: string | null;
 }
 
 export interface GitHubRepoWithoutInstallation {
   readonly defaultBranch: string;
-  readonly description: string;
+  readonly description: string | null;
   readonly fullName: string;
   readonly id: number;
   readonly isPrivate: boolean;
@@ -3231,12 +3238,12 @@ export interface GitHubSshKey {
 }
 
 export interface Group {
-  readonly color: string;
-  readonly groupId: string;
-  readonly icon: string;
+  readonly color: string | null;
+  readonly groupId: string | null;
+  readonly icon: string | null;
   readonly id: string;
-  readonly isCollapsed: boolean;
-  readonly name: string;
+  readonly isCollapsed: boolean | null;
+  readonly name: string | null;
   readonly project: Project;
   readonly projectId: string;
 }
@@ -3302,7 +3309,7 @@ export interface HttpMetricsSample {
 }
 
 export interface Incident {
-  readonly createdAt: string;
+  readonly createdAt: string | null;
   readonly id: string;
   readonly message: string;
   readonly status: "IDENTIFIED" | "INVESTIGATING" | "MONITORING" | "RESOLVED";
@@ -3346,8 +3353,8 @@ export interface InviteCode {
 export interface Log {
   readonly attributes: ReadonlyArray<LogAttribute>;
   readonly message: string;
-  readonly severity: string;
-  readonly tags: LogTags;
+  readonly severity: string | null;
+  readonly tags: LogTags | null;
   readonly timestamp: string;
 }
 
@@ -3359,20 +3366,20 @@ export interface LogAttribute {
 
 /** The tags associated with a specific log */
 export interface LogTags {
-  readonly deploymentId: string;
-  readonly deploymentInstanceId: string;
-  readonly environmentId: string;
-  readonly pluginId: string;
-  readonly projectId: string;
-  readonly serviceId: string;
-  readonly snapshotId: string;
+  readonly deploymentId: string | null;
+  readonly deploymentInstanceId: string | null;
+  readonly environmentId: string | null;
+  readonly pluginId: string | null;
+  readonly projectId: string | null;
+  readonly serviceId: string | null;
+  readonly snapshotId: string | null;
 }
 
 export interface MaintainerWorkspace {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly id: string;
   readonly name: string;
-  readonly partnerProfile: PartnerProfile;
+  readonly partnerProfile: PartnerProfile | null;
 }
 
 export interface Maintenance {
@@ -3391,15 +3398,15 @@ export interface Metric {
 
 /** The tags that were used to group the metric. */
 export interface MetricTags {
-  readonly deploymentId: string;
-  readonly deploymentInstanceId: string;
-  readonly environmentId: string;
-  readonly pluginId: string;
-  readonly projectId: string;
-  readonly region: string;
-  readonly serviceId: string;
-  readonly volumeId: string;
-  readonly volumeInstanceId: string;
+  readonly deploymentId: string | null;
+  readonly deploymentInstanceId: string | null;
+  readonly environmentId: string | null;
+  readonly pluginId: string | null;
+  readonly projectId: string | null;
+  readonly region: string | null;
+  readonly serviceId: string | null;
+  readonly volumeId: string | null;
+  readonly volumeInstanceId: string | null;
 }
 
 /** The result of a metrics query. */
@@ -3445,16 +3452,17 @@ export interface MonitorThresholdConfig {
     | "MEMORY_USAGE_GB"
     | "NETWORK_RX_GB"
     | "NETWORK_TX_GB"
-    | "UNRECOGNIZED";
+    | "UNRECOGNIZED"
+    | null;
   readonly threshold: number;
   readonly type: string;
 }
 
 export interface MysqlPitrRestorableWindow {
   readonly archiveConfigured: boolean;
-  readonly ceilingAt: string;
+  readonly ceilingAt: string | null;
   readonly fetchedAt: string;
-  readonly floorAt: string;
+  readonly floorAt: string | null;
   readonly fullBackupCount: number;
   readonly fullBackupsTakenAt: ReadonlyArray<string>;
   readonly lineageCount: number;
@@ -3469,7 +3477,7 @@ export interface NetworkFlowLog {
   readonly deploymentId: string;
   readonly deploymentInstanceId: string;
   readonly direction: "egress" | "ingress";
-  readonly dropCause: string;
+  readonly dropCause: string | null;
   readonly dstAddr: string;
   readonly dstPort: number;
   readonly flowId: string;
@@ -3483,7 +3491,7 @@ export interface NetworkFlowLog {
     | "local_dns"
     | "service"
     | "unknown";
-  readonly peerServiceId: string;
+  readonly peerServiceId: string | null;
   readonly serviceId: string;
   readonly srcAddr: string;
   readonly srcPort: number;
@@ -3505,11 +3513,11 @@ export interface NotificationDelivery {
   readonly createdAt: string;
   readonly id: string;
   readonly notificationInstance: NotificationInstance;
-  readonly readAt: string;
+  readonly readAt: string | null;
   readonly status: "FAILED" | "PENDING" | "SENT";
   readonly type: "EMAIL" | "INAPP" | "WEBHOOK";
   readonly updatedAt: string;
-  readonly userId: string;
+  readonly userId: string | null;
 }
 
 export interface NotificationDeliveryCreated {
@@ -3524,33 +3532,33 @@ export interface NotificationDeliveryResolved {
 
 export interface NotificationInstance {
   readonly createdAt: string;
-  readonly environmentId: string;
+  readonly environmentId: string | null;
   readonly event: Event;
   readonly eventId: string;
-  readonly eventType: string;
+  readonly eventType: string | null;
   readonly id: string;
   readonly payload: unknown;
-  readonly projectId: string;
-  readonly resolvedAt: string;
-  readonly resourceId: string;
-  readonly resourceType: string;
-  readonly serviceId: string;
+  readonly projectId: string | null;
+  readonly resolvedAt: string | null;
+  readonly resourceId: string | null;
+  readonly resourceType: string | null;
+  readonly serviceId: string | null;
   readonly severity: "CRITICAL" | "INFO" | "NOTICE" | "WARNING";
   readonly status: "ACTIVE" | "RESOLVED";
   readonly updatedAt: string;
-  readonly volumeId: string;
+  readonly volumeId: string | null;
   readonly workspaceId: string;
 }
 
 export interface NotificationRule {
   readonly channels: ReadonlyArray<NotificationChannel>;
   readonly createdAt: string;
-  readonly environmentId: string;
-  readonly ephemeralEnvironments: boolean;
+  readonly environmentId: string | null;
+  readonly ephemeralEnvironments: boolean | null;
   readonly eventTypes: ReadonlyArray<string>;
   readonly id: string;
-  readonly projectId: string;
-  readonly serviceId: string;
+  readonly projectId: string | null;
+  readonly serviceId: string | null;
   readonly severities: ReadonlyArray<
     "CRITICAL" | "INFO" | "NOTICE" | "WARNING"
   >;
@@ -3566,15 +3574,15 @@ export interface ObservabilityDashboard {
 export interface ObservabilityDashboardAlert {
   readonly createdAt: string;
   readonly id: string;
-  readonly resolvedAt: string;
-  readonly resourceId: string;
+  readonly resolvedAt: string | null;
+  readonly resourceId: string | null;
   readonly resourceType: "SERVICE" | "VOLUME";
   readonly status: "ALERT" | "OK";
 }
 
 export interface ObservabilityDashboardItem {
   readonly config: ObservabilityDashboardItemConfig;
-  readonly description: string;
+  readonly description: string | null;
   readonly id: string;
   readonly monitors: ReadonlyArray<ObservabilityDashboardMonitor>;
   readonly name: string;
@@ -3590,8 +3598,8 @@ export interface ObservabilityDashboardItem {
 }
 
 export interface ObservabilityDashboardItemConfig {
-  readonly httpMetric: "LATENCY" | "REQUESTS" | "STATUS_RATIO";
-  readonly logsFilter: string;
+  readonly httpMetric: "LATENCY" | "REQUESTS" | "STATUS_RATIO" | null;
+  readonly logsFilter: string | null;
   readonly measurements: ReadonlyArray<
     | "AGENT_CACHE_READ_TOKENS"
     | "AGENT_CACHE_WRITE_TOKENS"
@@ -3610,7 +3618,7 @@ export interface ObservabilityDashboardItemConfig {
     | "NETWORK_RX_GB"
     | "NETWORK_TX_GB"
     | "UNRECOGNIZED"
-  >;
+  > | null;
   readonly projectUsageProperties: ReadonlyArray<
     | "BACKUP_USAGE"
     | "CPU_USAGE"
@@ -3619,8 +3627,8 @@ export interface ObservabilityDashboardItemConfig {
     | "ESTIMATED_USAGE"
     | "MEMORY_USAGE"
     | "NETWORK_USAGE"
-  >;
-  readonly resourceIds: ReadonlyArray<string>;
+  > | null;
+  readonly resourceIds: ReadonlyArray<string> | null;
 }
 
 export interface ObservabilityDashboardItemInstance {
@@ -3638,10 +3646,10 @@ export interface ObservabilityDashboardMonitor {
 }
 
 export interface PageInfo {
-  readonly endCursor: string;
+  readonly endCursor: string | null;
   readonly hasNextPage: boolean;
   readonly hasPreviousPage: boolean;
-  readonly startCursor: string;
+  readonly startCursor: string | null;
 }
 
 export interface PartnerProfile {
@@ -3653,28 +3661,28 @@ export interface PartnerProfile {
 }
 
 export interface Passkey {
-  readonly aaguid: string;
+  readonly aaguid: string | null;
   readonly backedUp: boolean;
   readonly createdAt: string;
   readonly credentialId: string;
   readonly deviceName: string;
   readonly deviceType: string;
-  readonly displayName: string;
+  readonly displayName: string | null;
   readonly id: string;
-  readonly lastUsedAt: string;
-  readonly lastUsedDevice: string;
+  readonly lastUsedAt: string | null;
+  readonly lastUsedDevice: string | null;
   readonly transports: ReadonlyArray<string>;
   readonly updatedAt: string;
 }
 
 export interface PaymentMethod {
-  readonly card: PaymentMethodCard;
+  readonly card: PaymentMethodCard | null;
   readonly id: string;
 }
 
 export interface PaymentMethodCard {
   readonly brand: string;
-  readonly country: string;
+  readonly country: string | null;
   readonly last4: string;
 }
 
@@ -3691,11 +3699,11 @@ export interface PitrHaClusterReplicationHealth {
 export interface PitrHaMemberReplicationHealth {
   readonly healthy: boolean;
   readonly isLeader: boolean;
-  readonly lagMb: number;
-  readonly patroniName: string;
+  readonly lagMb: number | null;
+  readonly patroniName: string | null;
   readonly serviceId: string;
   readonly serviceName: string;
-  readonly state: string;
+  readonly state: string | null;
 }
 
 export interface PitrHaWorkflowMemberProgress {
@@ -3708,12 +3716,12 @@ export interface PitrHaWorkflowMemberProgress {
 /** Progress of an in-flight or recently completed PITR enable/disable rollout on an HA database cluster. */
 export interface PitrHaWorkflowProgress {
   readonly clusterMutated: boolean;
-  readonly completedAt: string;
-  readonly currentMemberServiceId: string;
+  readonly completedAt: string | null;
+  readonly currentMemberServiceId: string | null;
   readonly direction: "DISABLE" | "ENABLE";
-  readonly engine: string;
+  readonly engine: string | null;
   readonly environmentId: string;
-  readonly errorMessage: string;
+  readonly errorMessage: string | null;
   readonly failedAtPhase:
     | "CREATING_BUCKET"
     | "DONE"
@@ -3725,9 +3733,10 @@ export interface PitrHaWorkflowProgress {
     | "ROLLING_REPLICAS"
     | "SWITCHING_OVER"
     | "VERIFYING"
-    | "WRITING_VARIABLES";
+    | "WRITING_VARIABLES"
+    | null;
   readonly members: ReadonlyArray<PitrHaWorkflowMemberProgress>;
-  readonly newLeaderServiceId: string;
+  readonly newLeaderServiceId: string | null;
   readonly phase:
     | "CREATING_BUCKET"
     | "DONE"
@@ -3815,20 +3824,20 @@ export interface PlatformFeatureFlagStatus {
 }
 
 export interface PlatformStatus {
-  readonly incident: Incident;
+  readonly incident: Incident | null;
   readonly isStable: boolean;
-  readonly maintenance: Maintenance;
+  readonly maintenance: Maintenance | null;
 }
 
 export interface Plugin {
   readonly containers: ReadonlyArray<Container>;
   readonly createdAt: string;
-  readonly deletedAt: string;
-  readonly deprecatedAt: string;
+  readonly deletedAt: string | null;
+  readonly deprecatedAt: string | null;
   readonly friendlyName: string;
   readonly id: string;
   readonly logsEnabled: boolean;
-  readonly migrationDatabaseServiceId: string;
+  readonly migrationDatabaseServiceId: string | null;
   readonly name: "mongodb" | "mysql" | "postgresql" | "redis";
   readonly project: Project;
   readonly status: "DEPRECATED" | "LOCKED" | "REMOVED" | "RUNNING" | "STOPPED";
@@ -3869,8 +3878,8 @@ export interface Preferences {
 }
 
 export interface PrivateNetwork {
-  readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly createdAt: string | null;
+  readonly deletedAt: string | null;
   readonly dnsName: string;
   readonly environmentId: string;
   readonly name: string;
@@ -3881,10 +3890,10 @@ export interface PrivateNetwork {
 }
 
 export interface PrivateNetworkEndpoint {
-  readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly createdAt: string | null;
+  readonly deletedAt: string | null;
   readonly dnsName: string;
-  readonly newDnsName: string;
+  readonly newDnsName: string | null;
   readonly privateIps: ReadonlyArray<string>;
   readonly publicId: string;
   readonly serviceInstanceId: string;
@@ -3899,17 +3908,17 @@ export interface PrivateNetworkEndpoint {
 }
 
 export interface Project {
-  readonly baseEnvironment: Environment;
-  readonly baseEnvironmentId: string;
+  readonly baseEnvironment: Environment | null;
+  readonly baseEnvironmentId: string | null;
   readonly botPrEnvironments: boolean;
   readonly buckets: ReadonlyArray<Bucket>;
   readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly deletedAt: string | null;
   readonly deployments: ReadonlyArray<Deployment>;
   readonly deploymentTriggers: ReadonlyArray<DeploymentTrigger>;
-  readonly description: string;
+  readonly description: string | null;
   readonly environments: ReadonlyArray<Environment>;
-  readonly expiredAt: string;
+  readonly expiredAt: string | null;
   readonly featureFlags: ReadonlyArray<"PLACEHOLDER">;
   readonly focusedPrEnvironments: boolean;
   readonly groups: ReadonlyArray<Group>;
@@ -3920,20 +3929,20 @@ export interface Project {
   readonly name: string;
   readonly plugins: ReadonlyArray<Plugin>;
   readonly prDeploys: boolean;
-  readonly primaryEnvironmentId: string;
+  readonly primaryEnvironmentId: string | null;
   readonly projectPermissions: ReadonlyArray<ProjectPermission>;
   readonly services: ReadonlyArray<Service>;
   readonly subscriptionPlanLimit: unknown;
   readonly subscriptionType: "free" | "hobby" | "pro" | "trial";
-  readonly team: Team;
-  readonly teamId: string;
+  readonly team: Team | null;
+  readonly teamId: string | null;
   readonly tracingEnabled: boolean;
-  readonly tracingSampleRate: number;
+  readonly tracingSampleRate: number | null;
   readonly updatedAt: string;
-  readonly viewerRole: "ADMIN" | "MEMBER" | "VIEWER";
+  readonly viewerRole: "ADMIN" | "MEMBER" | "VIEWER" | null;
   readonly volumes: ReadonlyArray<Volume>;
-  readonly workspace: Workspace;
-  readonly workspaceId: string;
+  readonly workspace: Workspace | null;
+  readonly workspaceId: string | null;
 }
 
 export interface ProjectBucketsConnection {
@@ -4003,7 +4012,7 @@ export interface ProjectHistoryConnection {
 /** One settled change in an environment: a system event or a terminal operation (patch, deploy, …). */
 export interface ProjectHistoryEntry {
   readonly action: string;
-  readonly activityPayload: unknown;
+  readonly activityPayload: unknown | null;
   readonly actor: ProjectOperationActor;
   readonly changes: unknown;
   readonly createdAt: string;
@@ -4011,12 +4020,12 @@ export interface ProjectHistoryEntry {
   readonly object: string;
   readonly operationKind: string;
   readonly outcome: string;
-  readonly parentRef: string;
-  readonly payload: unknown;
+  readonly parentRef: string | null;
+  readonly payload: unknown | null;
   readonly serviceIds: ReadonlyArray<string>;
   readonly severity: "CRITICAL" | "INFO" | "NOTICE" | "WARNING";
   readonly source: string;
-  readonly workflowId: string;
+  readonly workflowId: string | null;
 }
 
 export interface ProjectHistoryEntryEdge {
@@ -4025,7 +4034,7 @@ export interface ProjectHistoryEntryEdge {
 }
 
 export interface ProjectHistoryPageInfo {
-  readonly endCursor: string;
+  readonly endCursor: string | null;
   readonly hasNextPage: boolean;
 }
 
@@ -4033,34 +4042,34 @@ export interface ProjectInvitation {
   readonly email: string;
   readonly expiresAt: string;
   readonly id: string;
-  readonly inviter: ProjectInvitationInviter;
+  readonly inviter: ProjectInvitationInviter | null;
   readonly isExpired: boolean;
   readonly project: PublicProjectInformation;
 }
 
 export interface ProjectInvitationInviter {
   readonly email: string;
-  readonly name: string;
+  readonly name: string | null;
 }
 
 export interface ProjectMember {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly email: string;
   readonly id: string;
-  readonly name: string;
+  readonly name: string | null;
   readonly role: "ADMIN" | "MEMBER" | "VIEWER";
 }
 
 export interface ProjectMemberPermissionsInfo {
   readonly email: string;
-  readonly name: string;
+  readonly name: string | null;
   readonly role: "ADMIN" | "MEMBER" | "VIEWER";
 }
 
 export interface ProjectMemberTwoFactorInfo {
   readonly email: string;
   readonly enabledMethods: ReadonlyArray<"AUTHENTICATOR" | "PASSKEY">;
-  readonly name: string;
+  readonly name: string | null;
   readonly twoFactorAuthEnabled: boolean;
 }
 
@@ -4069,19 +4078,19 @@ export interface ProjectOperation {
   readonly changes: unknown;
   readonly children: ReadonlyArray<ProjectOperation>;
   readonly environmentId: string;
-  readonly finishedAt: string;
+  readonly finishedAt: string | null;
   readonly id: string;
   readonly kind: string;
-  readonly parentRef: string;
+  readonly parentRef: string | null;
   readonly startedAt: string;
   readonly status: "applied" | "applying" | "failed" | "staged";
-  readonly workflowId: string;
+  readonly workflowId: string | null;
 }
 
 export interface ProjectOperationActor {
-  readonly onBehalfOf: string;
-  readonly principal: string;
-  readonly surface: string;
+  readonly onBehalfOf: string | null;
+  readonly principal: string | null;
+  readonly surface: string | null;
 }
 
 export interface ProjectPermission {
@@ -4126,7 +4135,7 @@ export interface ProjectServiceUsagePage {
 }
 
 export interface ProjectServiceUsagePageInfo {
-  readonly endCursor: string;
+  readonly endCursor: string | null;
   readonly hasNextPage: boolean;
 }
 
@@ -4164,7 +4173,7 @@ export interface ProjectVolumesConnectionEdge {
 export interface ProjectWorkspaceMember {
   readonly email: string;
   readonly enabledMethods: ReadonlyArray<"AUTHENTICATOR" | "PASSKEY">;
-  readonly name: string;
+  readonly name: string | null;
   readonly twoFactorAuthEnabled: boolean;
 }
 
@@ -4495,13 +4504,13 @@ export interface RailwayDomain {
   readonly domain: string;
   readonly id: string;
   readonly nameservers: RailwayDomainNameservers;
-  readonly nextBillingDate: string;
+  readonly nextBillingDate: string | null;
   readonly purchasePrice: number;
   readonly registrationYears: number;
   readonly renewalPrice: number;
   readonly status: "ACTIVE" | "EXPIRED" | "PURCHASING" | "REFUNDED";
   readonly workspaceId: string;
-  readonly workspaceName: string;
+  readonly workspaceName: string | null;
 }
 
 export interface RailwayDomainDnsRecord {
@@ -4510,7 +4519,7 @@ export interface RailwayDomainDnsRecord {
   readonly fqdn: string;
   readonly host: string;
   readonly id: number;
-  readonly priority: number;
+  readonly priority: number | null;
   readonly ttl: number;
   readonly type: "A" | "AAAA" | "ANAME" | "CNAME" | "MX" | "NS" | "SRV" | "TXT";
 }
@@ -4559,16 +4568,16 @@ export interface ReferralUser {
 
 export interface Region {
   readonly country: string;
-  readonly deploymentConstraints: RegionDeploymentConstraints;
-  readonly id: string;
+  readonly deploymentConstraints: RegionDeploymentConstraints | null;
+  readonly id: string | null;
   readonly location: string;
   readonly name: string;
-  readonly region: string;
-  readonly workspaceId: string;
+  readonly region: string | null;
+  readonly workspaceId: string | null;
 }
 
 export interface RegionDeploymentConstraints {
-  readonly deprecationInfo: RegionDeprecationInfo;
+  readonly deprecationInfo: RegionDeprecationInfo | null;
 }
 
 export interface RegionDeprecationInfo {
@@ -4578,12 +4587,12 @@ export interface RegionDeprecationInfo {
 
 /** The repo config file as of the most recent deployment that read it. */
 export interface ResolvedFileConfig {
-  readonly commitHash: string;
-  readonly configFile: string;
+  readonly commitHash: string | null;
+  readonly configFile: string | null;
   readonly deploymentId: string;
   readonly fileManifest: unknown;
   readonly propertyFileMapping: unknown;
-  readonly repo: string;
+  readonly repo: string | null;
   readonly resolvedAt: string;
 }
 
@@ -4600,13 +4609,13 @@ export interface SSHSignupClaimableWorkspace {
 export interface SSHSignupInfo {
   readonly claimableWorkspaces: ReadonlyArray<SSHSignupClaimableWorkspace>;
   readonly fingerprint: string;
-  readonly trial: SSHSignupTrial;
+  readonly trial: SSHSignupTrial | null;
 }
 
 /** The anonymous trial box the offered SSH key currently owns; approving the signup claims it. */
 export interface SSHSignupTrial {
-  readonly buildExpiresAt: string;
-  readonly cloudAgentId: string;
+  readonly buildExpiresAt: string | null;
+  readonly cloudAgentId: string | null;
   readonly projectId: string;
   readonly projectName: string;
 }
@@ -4616,7 +4625,7 @@ export interface Sandbox {
   readonly domains: ReadonlyArray<SandboxDomain>;
   readonly environmentId: string;
   readonly id: string;
-  readonly idleTimeoutMinutes: number;
+  readonly idleTimeoutMinutes: number | null;
   readonly networkIsolation: "ISOLATED" | "PRIVATE";
   readonly region: string;
   readonly status:
@@ -4654,8 +4663,8 @@ export interface SandboxExecResult {
 export interface SandboxSession {
   readonly attached: boolean;
   readonly command: string;
-  readonly createdAt: string;
-  readonly foregroundActive: boolean;
+  readonly createdAt: string | null;
+  readonly foregroundActive: boolean | null;
   readonly kind: "EXEC" | "SHELL";
   readonly name: string;
   readonly runState: SandboxSessionRunState;
@@ -4664,7 +4673,7 @@ export interface SandboxSession {
 /** A session's process lifecycle. */
 export interface SandboxSessionRunState {
   readonly exitCode: number;
-  readonly exitedAt: string;
+  readonly exitedAt: string | null;
   readonly running: boolean;
 }
 
@@ -4677,7 +4686,7 @@ export interface SandboxTemplateBuild {
 
 export interface Service {
   readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly deletedAt: string | null;
   readonly deployments: ReadonlyArray<Deployment>;
   readonly featureFlags: ReadonlyArray<
     | "COPY_VOLUME_TO_ENVIRONMENT"
@@ -4686,9 +4695,9 @@ export interface Service {
     | "SKIPPED_BUILDS"
     | "USE_VM_RUNTIME"
   >;
-  readonly groupId: string;
+  readonly groupId: string | null;
   readonly hasHiddenRegistryCredentialsFromTemplate: boolean;
-  readonly icon: string;
+  readonly icon: string | null;
   readonly id: string;
   readonly isRestricted: boolean;
   readonly name: string;
@@ -4696,10 +4705,10 @@ export interface Service {
   readonly projectId: string;
   readonly repoTriggers: ReadonlyArray<DeploymentTrigger>;
   readonly serviceInstances: ReadonlyArray<ServiceInstance>;
-  readonly templateId: string;
-  readonly templateServiceId: string;
-  readonly templateThreadSlug: string;
-  readonly tracingEnabled: boolean;
+  readonly templateId: string | null;
+  readonly templateServiceId: string | null;
+  readonly templateThreadSlug: string | null;
+  readonly tracingEnabled: boolean | null;
   readonly updatedAt: string;
 }
 
@@ -4720,18 +4729,18 @@ export interface ServiceDeploymentsConnectionEdge {
 }
 
 export interface ServiceDomain {
-  readonly cdnMode: string;
-  readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly cdnMode: string | null;
+  readonly createdAt: string | null;
+  readonly deletedAt: string | null;
   readonly domain: string;
-  readonly edgeId: string;
+  readonly edgeId: string | null;
   readonly environmentId: string;
   readonly id: string;
-  readonly newDomainName: string;
-  readonly newHostLabel: string;
-  readonly projectId: string;
+  readonly newDomainName: string | null;
+  readonly newHostLabel: string | null;
+  readonly projectId: string | null;
   readonly serviceId: string;
-  readonly suffix: string;
+  readonly suffix: string | null;
   readonly syncStatus:
     | "ACTIVE"
     | "CREATING"
@@ -4739,57 +4748,57 @@ export interface ServiceDomain {
     | "DELETING"
     | "UNSPECIFIED"
     | "UPDATING";
-  readonly targetPort: number;
-  readonly updatedAt: string;
+  readonly targetPort: number | null;
+  readonly updatedAt: string | null;
 }
 
 export interface ServiceInstance {
   readonly activeDeployments: ReadonlyArray<Deployment>;
-  readonly buildCommand: string;
+  readonly buildCommand: string | null;
   readonly builder: "HEROKU" | "NIXPACKS" | "PAKETO" | "RAILPACK";
   readonly createdAt: string;
-  readonly cronSchedule: string;
-  readonly deletedAt: string;
-  readonly dockerfilePath: string;
+  readonly cronSchedule: string | null;
+  readonly deletedAt: string | null;
+  readonly dockerfilePath: string | null;
   readonly domains: AllDomains;
-  readonly drainingSeconds: number;
-  readonly edgeConfig: EdgeConfig;
+  readonly drainingSeconds: number | null;
+  readonly edgeConfig: EdgeConfig | null;
   readonly environmentId: string;
   readonly hasEverDeployed: boolean;
-  readonly healthcheckPath: string;
-  readonly healthcheckTimeout: number;
+  readonly healthcheckPath: string | null;
+  readonly healthcheckTimeout: number | null;
   readonly id: string;
-  readonly ipv6EgressEnabled: boolean;
+  readonly ipv6EgressEnabled: boolean | null;
   readonly isUpdatable: boolean;
-  readonly latestDeployment: Deployment;
-  readonly nextCronRunAt: string;
-  readonly nixpacksPlan: unknown;
-  readonly numReplicas: number;
-  readonly overlapSeconds: number;
-  readonly preDeployCommand: unknown;
-  readonly preDeployTimeoutSeconds: number;
-  readonly railpackInfo: unknown;
-  readonly railwayConfigFile: string;
-  readonly region: string;
-  readonly resolvedFileConfig: ResolvedFileConfig;
+  readonly latestDeployment: Deployment | null;
+  readonly nextCronRunAt: string | null;
+  readonly nixpacksPlan: unknown | null;
+  readonly numReplicas: number | null;
+  readonly overlapSeconds: number | null;
+  readonly preDeployCommand: unknown | null;
+  readonly preDeployTimeoutSeconds: number | null;
+  readonly railpackInfo: unknown | null;
+  readonly railwayConfigFile: string | null;
+  readonly region: string | null;
+  readonly resolvedFileConfig: ResolvedFileConfig | null;
   readonly restartPolicyMaxRetries: number;
   readonly restartPolicyType: "ALWAYS" | "NEVER" | "ON_FAILURE";
-  readonly rootDirectory: string;
+  readonly rootDirectory: string | null;
   readonly service: Service;
   readonly serviceId: string;
   readonly serviceName: string;
-  readonly sleepApplication: boolean;
-  readonly source: ServiceSource;
-  readonly startCommand: string;
+  readonly sleepApplication: boolean | null;
+  readonly source: ServiceSource | null;
+  readonly startCommand: string | null;
   readonly updatedAt: string;
-  readonly upstreamUrl: string;
+  readonly upstreamUrl: string | null;
   readonly watchPatterns: ReadonlyArray<string>;
 }
 
 export interface ServiceInstanceAutoDeployStatus {
   readonly canEnable: boolean;
   readonly enabled: boolean;
-  readonly reason: string;
+  readonly reason: string | null;
 }
 
 export interface ServiceInstanceAutoDeployUpdateResult {
@@ -4817,8 +4826,8 @@ export interface ServiceServiceInstancesConnectionEdge {
 }
 
 export interface ServiceSource {
-  readonly image: string;
-  readonly repo: string;
+  readonly image: string | null;
+  readonly repo: string | null;
 }
 
 export interface Session {
@@ -4833,7 +4842,7 @@ export interface Session {
 
 export interface Signal {
   readonly createdAt: string;
-  readonly createdBy: string;
+  readonly createdBy: string | null;
   readonly default: unknown;
   readonly id: string;
   readonly name: string;
@@ -4846,7 +4855,7 @@ export interface Signal {
 }
 
 export interface SignalChange {
-  readonly authorId: string;
+  readonly authorId: string | null;
   readonly createdAt: string;
   readonly id: string;
   readonly kind: "default_changed" | "replaced" | "rollback" | "set" | "unset";
@@ -4865,15 +4874,15 @@ export interface SignalEvaluation {
 export interface SimilarTemplate {
   readonly code: string;
   readonly createdAt: string;
-  readonly creator: TemplateCreator;
+  readonly creator: TemplateCreator | null;
   readonly deploys: number;
-  readonly description: string;
-  readonly health: number;
-  readonly image: string;
+  readonly description: string | null;
+  readonly health: number | null;
+  readonly image: string | null;
   readonly name: string;
-  readonly teamId: string;
-  readonly userId: string;
-  readonly workspaceId: string;
+  readonly teamId: string | null;
+  readonly userId: string | null;
+  readonly workspaceId: string | null;
 }
 
 export interface SpendCommitment {
@@ -4889,8 +4898,8 @@ export interface SshPublicKey {
   readonly name: string;
   readonly publicKey: string;
   readonly updatedAt: string;
-  readonly userId: string;
-  readonly workspaceId: string;
+  readonly userId: string | null;
+  readonly workspaceId: string | null;
 }
 
 export interface StaleWhileRevalidateConfig {
@@ -4904,16 +4913,16 @@ export interface SubscriptionDiscount {
 
 export interface SubscriptionItem {
   readonly itemId: string;
-  readonly priceDollars: number;
+  readonly priceDollars: number | null;
   readonly priceId: string;
   readonly productId: string;
-  readonly quantity: string | number;
+  readonly quantity: string | number | null;
 }
 
 export interface TCPProxy {
   readonly applicationPort: number;
-  readonly createdAt: string;
-  readonly deletedAt: string;
+  readonly createdAt: string | null;
+  readonly deletedAt: string | null;
   readonly domain: string;
   readonly environmentId: string;
   readonly id: string;
@@ -4926,29 +4935,29 @@ export interface TCPProxy {
     | "DELETING"
     | "UNSPECIFIED"
     | "UPDATING";
-  readonly updatedAt: string;
+  readonly updatedAt: string | null;
 }
 
 export interface Team {
   readonly adoptionHistory: ReadonlyArray<AdoptionInfo>;
   readonly adoptionLevel: number;
-  readonly apiTokenRateLimit: ApiTokenRateLimit;
-  readonly avatar: string;
+  readonly apiTokenRateLimit: ApiTokenRateLimit | null;
+  readonly avatar: string | null;
   readonly createdAt: string;
   readonly customer: Customer;
   readonly id: string;
   readonly members: ReadonlyArray<TeamMember>;
   readonly name: string;
-  readonly preferredRegion: string;
+  readonly preferredRegion: string | null;
   readonly projects: ReadonlyArray<Project>;
-  readonly slackChannelId: string;
+  readonly slackChannelId: string | null;
   readonly teamPermissions: ReadonlyArray<TeamPermission>;
   readonly updatedAt: string;
   readonly workspace: Workspace;
 }
 
 export interface TeamMember {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly email: string;
   readonly featureFlags: ReadonlyArray<
     | "ACTIVITY_FEED_HISTORY"
@@ -4971,9 +4980,9 @@ export interface TeamMember {
     | "TRACING"
     | "USAGE_INSIGHTS"
     | "VM_STORAGE_TRACES"
-  >;
+  > | null;
   readonly id: string;
-  readonly name: string;
+  readonly name: string | null;
   readonly role: "ADMIN" | "MEMBER" | "VIEWER";
 }
 
@@ -4998,57 +5007,57 @@ export interface TeamProjectsConnectionEdge {
 
 export interface Template {
   readonly activeProjects: number;
-  readonly canvasConfig: unknown;
-  readonly category: string;
+  readonly canvasConfig: unknown | null;
+  readonly category: string | null;
   readonly code: string;
-  readonly communityThreadSlug: string;
+  readonly communityThreadSlug: string | null;
   readonly config: unknown;
   readonly createdAt: string;
-  readonly creator: TemplateCreator;
-  readonly demoProjectId: string;
-  readonly description: string;
-  readonly guides: TemplateGuide;
-  readonly health: number;
+  readonly creator: TemplateCreator | null;
+  readonly demoProjectId: string | null;
+  readonly description: string | null;
+  readonly guides: TemplateGuide | null;
+  readonly health: number | null;
   readonly id: string;
-  readonly image: string;
+  readonly image: string | null;
   readonly isApproved: boolean;
   readonly isV2Template: boolean;
   readonly isVerified: boolean;
-  readonly languages: ReadonlyArray<string>;
-  readonly maintainer: MaintainerWorkspace;
+  readonly languages: ReadonlyArray<string> | null;
+  readonly maintainer: MaintainerWorkspace | null;
   readonly metadata: unknown;
   readonly name: string;
   readonly projects: number;
-  readonly publishingRestrictionId: string;
-  readonly readme: string;
+  readonly publishingRestrictionId: string | null;
+  readonly readme: string | null;
   readonly recentProjects: number;
-  readonly serializedConfig: unknown;
+  readonly serializedConfig: unknown | null;
   readonly services: ReadonlyArray<TemplateService>;
   readonly similarTemplates: ReadonlyArray<SimilarTemplate>;
   readonly status: "HIDDEN" | "PUBLISHED" | "UNPUBLISHED";
-  readonly supportHealthMetrics: unknown;
-  readonly tags: ReadonlyArray<string>;
-  readonly teamId: string;
+  readonly supportHealthMetrics: unknown | null;
+  readonly tags: ReadonlyArray<string> | null;
+  readonly teamId: string | null;
   readonly totalPayout: number;
   readonly updatedAt: string;
-  readonly workspaceId: string;
+  readonly workspaceId: string | null;
 }
 
 export interface TemplateCreator {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly hasPublicProfile: boolean;
-  readonly name: string;
-  readonly username: string;
+  readonly name: string | null;
+  readonly username: string | null;
 }
 
 export interface TemplateDeployPayload {
   readonly projectId: string;
-  readonly workflowId: string;
+  readonly workflowId: string | null;
 }
 
 export interface TemplateGuide {
-  readonly post: string;
-  readonly video: string;
+  readonly post: string | null;
+  readonly video: string | null;
 }
 
 export interface TemplateMetrics {
@@ -5065,12 +5074,12 @@ export interface TemplateMetrics {
 
 export interface TemplateSearchResult {
   readonly code: string;
-  readonly creatorName: string;
+  readonly creatorName: string | null;
   readonly deploymentCount: number;
-  readonly description: string;
-  readonly healthScore: number;
+  readonly description: string | null;
+  readonly healthScore: number | null;
   readonly id: string;
-  readonly image: string;
+  readonly image: string | null;
   readonly isVerified: boolean;
   readonly name: string;
 }
@@ -5104,10 +5113,10 @@ export interface TrustedDomain {
 }
 
 export interface TrustedDomainVerificationData {
-  readonly dnsHost: string;
-  readonly domainMatch: Domain;
-  readonly domainStatus: CustomDomainStatus;
-  readonly token: string;
+  readonly dnsHost: string | null;
+  readonly domainMatch: Domain | null;
+  readonly domainStatus: CustomDomainStatus | null;
+  readonly token: string | null;
 }
 
 export interface TwoFactorInfo {
@@ -5121,10 +5130,10 @@ export interface TwoFactorInfoSecret {
 }
 
 export interface UsageLimit {
-  readonly agentHardLimitCents: number;
-  readonly agentSoftLimitCents: number;
+  readonly agentHardLimitCents: number | null;
+  readonly agentSoftLimitCents: number | null;
   readonly customerId: string;
-  readonly hardLimit: number;
+  readonly hardLimit: number | null;
   readonly id: string;
   readonly isOverLimit: boolean;
   readonly softLimit: number;
@@ -5132,9 +5141,9 @@ export interface UsageLimit {
 
 export interface User {
   readonly agreedFairUse: boolean;
-  readonly apiTokenRateLimit: ApiTokenRateLimit;
-  readonly avatar: string;
-  readonly banReason: string;
+  readonly apiTokenRateLimit: ApiTokenRateLimit | null;
+  readonly avatar: string | null;
+  readonly banReason: string | null;
   readonly createdAt: string;
   readonly email: string;
   readonly featureFlags: ReadonlyArray<
@@ -5160,8 +5169,8 @@ export interface User {
     | "VM_STORAGE_TRACES"
   >;
   readonly flags: ReadonlyArray<"BETA">;
-  readonly githubProviderId: string;
-  readonly githubUsername: string;
+  readonly githubProviderId: string | null;
+  readonly githubUsername: string | null;
   readonly has2FA: boolean;
   readonly hasPasskeys: boolean;
   readonly id: string;
@@ -5169,7 +5178,7 @@ export interface User {
   readonly isConductor: boolean;
   readonly isVerified: boolean;
   readonly lastLogin: string;
-  readonly name: string;
+  readonly name: string | null;
   readonly platformFeatureFlags: ReadonlyArray<
     | "AGENT_USAGE_CH_INGEST"
     | "ALERT_SUS_USERS_CRON_KILLSWITCH"
@@ -5217,14 +5226,14 @@ export interface User {
     | "VM_USAGE_CH_INGEST"
     | "WORKSPACE_MCP_KILLSWITCH"
   >;
-  readonly profile: UserProfile;
+  readonly profile: UserProfile | null;
   readonly projects: ReadonlyArray<Project>;
   readonly providerAuths: ReadonlyArray<ProviderAuth>;
   readonly registrationStatus: "ONBOARDED" | "REGISTERED" | "WAITLISTED";
-  readonly riskLevel: number;
-  readonly termsAgreedOn: string;
-  readonly username: string;
-  readonly workspace: Workspace;
+  readonly riskLevel: number | null;
+  readonly termsAgreedOn: string | null;
+  readonly username: string | null;
+  readonly workspace: Workspace | null;
   readonly workspaces: ReadonlyArray<Workspace>;
 }
 
@@ -5233,21 +5242,21 @@ export interface UserKickbackEarnings {
 }
 
 export interface UserProfile {
-  readonly bio: string;
+  readonly bio: string | null;
   readonly isPublic: boolean;
-  readonly website: string;
+  readonly website: string | null;
 }
 
 export interface UserProfileResponse {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly createdAt: string;
   readonly id: string;
-  readonly name: string;
+  readonly name: string | null;
   readonly profile: UserProfile;
   readonly publicProjects: ReadonlyArray<Project>;
   readonly publishedTemplates: ReadonlyArray<SimilarTemplate>;
   readonly totalDeploys: number;
-  readonly username: string;
+  readonly username: string | null;
 }
 
 export interface UserProfileResponsePublicProjectsConnection {
@@ -5283,15 +5292,15 @@ export interface UserProviderAuthsConnectionEdge {
 export interface Variable {
   readonly createdAt: string;
   readonly environment: Environment;
-  readonly environmentId: string;
+  readonly environmentId: string | null;
   readonly id: string;
   readonly isSealed: boolean;
   readonly name: string;
   readonly plugin: Plugin;
-  readonly pluginId: string;
+  readonly pluginId: string | null;
   readonly references: ReadonlyArray<string>;
   readonly service: Service;
-  readonly serviceId: string;
+  readonly serviceId: string | null;
   readonly updatedAt: string;
 }
 
@@ -5299,9 +5308,9 @@ export interface VercelAccount {
   readonly id: string;
   readonly integrationAuthId: string;
   readonly isUser: boolean;
-  readonly name: string;
+  readonly name: string | null;
   readonly projects: ReadonlyArray<VercelProject>;
-  readonly slug: string;
+  readonly slug: string | null;
 }
 
 export interface VercelInfo {
@@ -5326,16 +5335,16 @@ export interface Volume {
 export interface VolumeInstance {
   readonly createdAt: string;
   readonly currentSizeMB: number;
-  readonly deletedAt: string;
+  readonly deletedAt: string | null;
   readonly environment: Environment;
   readonly environmentId: string;
-  readonly externalId: string;
+  readonly externalId: string | null;
   readonly id: string;
   readonly isPendingDeletion: boolean;
   readonly mountPath: string;
-  readonly region: string;
+  readonly region: string | null;
   readonly service: Service;
-  readonly serviceId: string;
+  readonly serviceId: string | null;
   readonly sizeMB: number;
   readonly state:
     | "DELETED"
@@ -5345,22 +5354,23 @@ export interface VolumeInstance {
     | "MIGRATION_PENDING"
     | "READY"
     | "RESTORING"
-    | "UPDATING";
+    | "UPDATING"
+    | null;
   readonly volume: Volume;
   readonly volumeId: string;
 }
 
 export interface VolumeInstanceBackup {
   readonly createdAt: string;
-  readonly creatorId: string;
-  readonly expiresAt: string;
+  readonly creatorId: string | null;
+  readonly expiresAt: string | null;
   readonly externalId: string;
   readonly id: string;
-  readonly name: string;
-  readonly referencedMB: number;
-  readonly scheduleId: string;
-  readonly usedMB: number;
-  readonly volumeInstanceSizeMB: number;
+  readonly name: string | null;
+  readonly referencedMB: number | null;
+  readonly scheduleId: string | null;
+  readonly usedMB: number | null;
+  readonly volumeInstanceSizeMB: number | null;
 }
 
 export interface VolumeInstanceBackupSchedule {
@@ -5369,23 +5379,23 @@ export interface VolumeInstanceBackupSchedule {
   readonly id: string;
   readonly kind: "DAILY" | "MONTHLY" | "WEEKLY";
   readonly name: string;
-  readonly retentionSeconds: number;
+  readonly retentionSeconds: number | null;
 }
 
 export interface VolumeInstanceReplicationProgress {
   readonly bytesTransferred: string | number;
   readonly percentComplete: number;
   readonly timestamp: string;
-  readonly transferRateMbps: number;
+  readonly transferRateMbps: number | null;
 }
 
 export interface VolumeReplicationProgressUpdate {
   readonly currentSnapshot: VolumeSnapshotReplicationProgressUpdate;
   readonly destExternalId: string;
-  readonly destRegion: string;
-  readonly destStackerId: string;
-  readonly error: string;
-  readonly estimatedTimeRemainingMs: string | number;
+  readonly destRegion: string | null;
+  readonly destStackerId: string | null;
+  readonly error: string | null;
+  readonly estimatedTimeRemainingMs: string | number | null;
   readonly history: ReadonlyArray<VolumeInstanceReplicationProgress>;
   readonly nbSnapshots: number;
   readonly offlineBytesTransferred: string | number;
@@ -5395,27 +5405,27 @@ export interface VolumeReplicationProgressUpdate {
   readonly percentComplete: number;
   readonly snapshotsSizes: ReadonlyArray<string | number>;
   readonly srcExternalId: string;
-  readonly srcRegion: string;
-  readonly srcStackerId: string;
+  readonly srcRegion: string | null;
+  readonly srcStackerId: string | null;
   readonly status:
     | "COMPLETED"
     | "ERROR"
     | "QUEUED"
     | "TRANSFERRING_OFFLINE"
     | "TRANSFERRING_ONLINE";
-  readonly transferRateMbps: number;
+  readonly transferRateMbps: number | null;
 }
 
 export interface VolumeSnapshotReplicationProgressUpdate {
   readonly bytesTransferred: string | number;
   readonly compressedBytesTransferred: string | number;
-  readonly compressedTransferRateMbps: number;
+  readonly compressedTransferRateMbps: number | null;
   readonly elapsedMs: number;
-  readonly error: string;
-  readonly estimatedTimeRemainingMs: string | number;
+  readonly error: string | null;
+  readonly estimatedTimeRemainingMs: string | number | null;
   readonly index: number;
   readonly percentComplete: number;
-  readonly startedAt: string;
+  readonly startedAt: string | null;
   readonly status:
     | "COMPLETED"
     | "FAILED"
@@ -5423,7 +5433,7 @@ export interface VolumeSnapshotReplicationProgressUpdate {
     | "TRANSFERRING"
     | "UNRECOGNIZED";
   readonly totalBytes: string | number;
-  readonly transferRateMbps: number;
+  readonly transferRateMbps: number | null;
 }
 
 export interface VolumeVolumeInstancesConnection {
@@ -5437,13 +5447,13 @@ export interface VolumeVolumeInstancesConnectionEdge {
 }
 
 export interface WorkflowId {
-  readonly archiveContinuityUnverifiedReason: string;
-  readonly archiveContinuityVerified: boolean;
-  readonly workflowId: string;
+  readonly archiveContinuityUnverifiedReason: string | null;
+  readonly archiveContinuityVerified: boolean | null;
+  readonly workflowId: string | null;
 }
 
 export interface WorkflowResult {
-  readonly error: string;
+  readonly error: string | null;
   readonly status: "Complete" | "Error" | "NotFound" | "Running";
 }
 
@@ -5451,13 +5461,13 @@ export interface Workspace {
   readonly accessGroups: ReadonlyArray<AccessGroup>;
   readonly adoptionHistory: ReadonlyArray<AdoptionInfo>;
   readonly adoptionLevel: number;
-  readonly allowDeprecatedRegions: boolean;
-  readonly apiTokenRateLimit: ApiTokenRateLimit;
-  readonly avatar: string;
-  readonly banReason: string;
+  readonly allowDeprecatedRegions: boolean | null;
+  readonly apiTokenRateLimit: ApiTokenRateLimit | null;
+  readonly avatar: string | null;
+  readonly banReason: string | null;
   readonly createdAt: string;
   readonly customer: Customer;
-  readonly discordRole: string;
+  readonly discordRole: string | null;
   readonly has2FAEnforcement: boolean;
   readonly hasAutomaticDiagnosis: boolean;
   readonly hasGuardrailsAccess: boolean;
@@ -5467,18 +5477,18 @@ export interface Workspace {
   readonly identityProviders: ReadonlyArray<WorkspaceIdentityProvider>;
   readonly members: ReadonlyArray<WorkspaceMember>;
   readonly name: string;
-  readonly partnerProfile: PartnerProfile;
+  readonly partnerProfile: PartnerProfile | null;
   readonly plan: "FREE" | "HOBBY" | "PRO";
-  readonly preferredRegion: string;
+  readonly preferredRegion: string | null;
   readonly projectCount: number;
   readonly projects: ReadonlyArray<Project>;
   readonly redactedDueTo2FAPending: boolean;
   readonly referredUsers: ReadonlyArray<ReferralUser>;
   readonly restrictProjectVisibilityToGroups: boolean;
-  readonly slackChannelId: string;
+  readonly slackChannelId: string | null;
   readonly subscriptionModel: "FREE" | "TEAM" | "USER";
-  readonly subscriptionPlanLimit: unknown;
-  readonly team: Team;
+  readonly subscriptionPlanLimit: unknown | null;
+  readonly team: Team | null;
   readonly updatedAt: string;
   readonly usersWithout2FA: ReadonlyArray<string>;
 }
@@ -5494,16 +5504,16 @@ export interface WorkspaceAccessGroupsConnectionEdge {
 }
 
 export interface WorkspaceIdPConnection {
-  readonly createdAt: string;
-  readonly provider: string;
+  readonly createdAt: string | null;
+  readonly provider: string | null;
   readonly status: "ACTIVE" | "DRAFT" | "INACTIVE" | "PENDING" | "VALIDATING";
-  readonly updatedAt: string;
+  readonly updatedAt: string | null;
 }
 
 export interface WorkspaceIdentityProvider {
   readonly connection: WorkspaceIdPConnection;
   readonly createdAt: string;
-  readonly enforcementEnabledAt: string;
+  readonly enforcementEnabledAt: string | null;
   readonly id: string;
   readonly updatedAt: string;
   readonly workspace: Workspace;
@@ -5521,7 +5531,7 @@ export interface WorkspaceIdentityProvidersConnectionEdge {
 }
 
 export interface WorkspaceMember {
-  readonly avatar: string;
+  readonly avatar: string | null;
   readonly email: string;
   readonly featureFlags: ReadonlyArray<
     | "ACTIVITY_FEED_HISTORY"
@@ -5544,11 +5554,11 @@ export interface WorkspaceMember {
     | "TRACING"
     | "USAGE_INSIGHTS"
     | "VM_STORAGE_TRACES"
-  >;
+  > | null;
   readonly id: string;
-  readonly name: string;
+  readonly name: string | null;
   readonly role: "ADMIN" | "MEMBER" | "VIEWER";
-  readonly twoFactorAuthEnabled: boolean;
+  readonly twoFactorAuthEnabled: boolean | null;
 }
 
 export interface WorkspacePolicy {
@@ -5560,10 +5570,10 @@ export interface WorkspacePolicy {
 }
 
 export interface WorkspacePolicyDeploySourceAllowlist {
-  readonly addedBy: User;
+  readonly addedBy: User | null;
   readonly createdAt: string;
   readonly id: string;
-  readonly sourceIcon: string;
+  readonly sourceIcon: string | null;
   readonly sourceId: string;
   readonly sourceName: string;
   readonly sourceType: "GITHUB_ORG";
@@ -5580,7 +5590,7 @@ export interface WorkspacePolicyDeploySourceAllowlistConnectionEdge {
 }
 
 export interface WorkspacePolicySelectableDeploySource {
-  readonly sourceIcon: string;
+  readonly sourceIcon: string | null;
   readonly sourceId: string;
   readonly sourceName: string;
   readonly sourceType: "GITHUB_ORG";
@@ -9942,10 +9952,10 @@ export const Railway = {
       globalErrors,
     ),
   apiTokens: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<ApiToken>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -9981,12 +9991,12 @@ export const Railway = {
     ),
   auditLogs: (args: {
     readonly workspaceId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly filter?: AuditLogFilterInput;
-    readonly first?: number;
-    readonly last?: number;
-    readonly sort?: "asc" | "desc";
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly filter?: AuditLogFilterInput | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
+    readonly sort?: "asc" | "desc" | null;
   }): Query<ReadonlyArray<AuditLog>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10019,7 +10029,10 @@ export const Railway = {
   bucketInstanceDetails: (args: {
     readonly bucketId: string;
     readonly environmentId: string;
-  }): Query<BucketInstanceDetails, RailwayNotFound | RailwayGlobalError> =>
+  }): Query<
+    BucketInstanceDetails | null,
+    RailwayNotFound | RailwayGlobalError
+  > =>
     root(
       "query",
       "bucketInstanceDetails",
@@ -10050,10 +10063,10 @@ export const Railway = {
     ),
   buildLogs: (args: {
     readonly deploymentId: string;
-    readonly endDate?: string;
-    readonly filter?: string;
-    readonly limit?: number;
-    readonly startDate?: string;
+    readonly endDate?: string | null;
+    readonly filter?: string | null;
+    readonly limit?: number | null;
+    readonly startDate?: string | null;
   }): Query<ReadonlyArray<Log>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10095,7 +10108,7 @@ export const Railway = {
   cloudAgent: (args: {
     readonly environmentId: string;
     readonly id: string;
-  }): Query<CloudAgent, RailwayGlobalError> =>
+  }): Query<CloudAgent | null, RailwayGlobalError> =>
     root(
       "query",
       "cloudAgent",
@@ -10117,10 +10130,10 @@ export const Railway = {
     ),
   cloudAgentCheckpoints: (args: {
     readonly environmentId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<CloudAgentCheckpoint>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10138,11 +10151,11 @@ export const Railway = {
     ),
   cloudAgentConsoleSessions: (args: {
     readonly cloudAgentId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
-  }): Query<ReadonlyArray<SandboxSession>, RailwayGlobalError> =>
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
+  }): Query<ReadonlyArray<SandboxSession> | null, RailwayGlobalError> =>
     rootConnection(
       "query",
       "cloudAgentConsoleSessions",
@@ -10159,7 +10172,7 @@ export const Railway = {
     ),
   cloudAgents: (args: {
     readonly environmentId: string;
-    readonly mine?: boolean;
+    readonly mine?: boolean | null;
   }): Query<ReadonlyArray<CloudAgent>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10212,10 +10225,10 @@ export const Railway = {
     ]),
   deploymentEvents: (args: {
     readonly id: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<DeploymentEvent>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10233,10 +10246,10 @@ export const Railway = {
     ),
   deploymentInstanceExecutions: (args: {
     readonly input: DeploymentInstanceExecutionListInput;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<DeploymentInstanceExecution>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10254,10 +10267,10 @@ export const Railway = {
     ),
   deploymentLogs: (args: {
     readonly deploymentId: string;
-    readonly endDate?: string;
-    readonly filter?: string;
-    readonly limit?: number;
-    readonly startDate?: string;
+    readonly endDate?: string | null;
+    readonly filter?: string | null;
+    readonly limit?: number | null;
+    readonly startDate?: string | null;
   }): Query<ReadonlyArray<Log>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10275,10 +10288,10 @@ export const Railway = {
     ),
   deployments: (args: {
     readonly input: DeploymentListInput;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Deployment>, RailwayNotFound | RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10296,7 +10309,7 @@ export const Railway = {
     ),
   deploymentSnapshot: (args: {
     readonly deploymentId: string;
-  }): Query<DeploymentSnapshot, RailwayGlobalError> =>
+  }): Query<DeploymentSnapshot | null, RailwayGlobalError> =>
     root(
       "query",
       "deploymentSnapshot",
@@ -10309,10 +10322,10 @@ export const Railway = {
     readonly environmentId: string;
     readonly projectId: string;
     readonly serviceId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<DeploymentTrigger>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10330,7 +10343,7 @@ export const Railway = {
       },
       globalErrors,
     ),
-  devNewLandingTarget: (): Query<CloudAgent, RailwayGlobalError> =>
+  devNewLandingTarget: (): Query<CloudAgent | null, RailwayGlobalError> =>
     root(
       "query",
       "devNewLandingTarget",
@@ -10341,14 +10354,14 @@ export const Railway = {
     ),
   dnsQueryLogs: (args: {
     readonly environmentId: string;
-    readonly afterDate?: string;
-    readonly afterLimit?: number;
-    readonly anchorDate?: string;
-    readonly beforeDate?: string;
-    readonly beforeLimit?: number;
-    readonly deploymentInstanceId?: string;
-    readonly filter?: string;
-    readonly serviceId?: string;
+    readonly afterDate?: string | null;
+    readonly afterLimit?: number | null;
+    readonly anchorDate?: string | null;
+    readonly beforeDate?: string | null;
+    readonly beforeLimit?: number | null;
+    readonly deploymentInstanceId?: string | null;
+    readonly filter?: string | null;
+    readonly serviceId?: string | null;
   }): Query<ReadonlyArray<DnsQueryLog>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10431,7 +10444,7 @@ export const Railway = {
     ),
   environment: (args: {
     readonly id: string;
-    readonly projectId?: string;
+    readonly projectId?: string | null;
   }): Query<Environment, RailwayNotFound | RailwayGlobalError> =>
     root(
       "query",
@@ -10466,9 +10479,9 @@ export const Railway = {
     ),
   environmentHistory: (args: {
     readonly environmentId: string;
-    readonly after?: string;
-    readonly filter?: HistoryFilterInput;
-    readonly first?: number;
+    readonly after?: string | null;
+    readonly filter?: HistoryFilterInput | null;
+    readonly first?: number | null;
   }): Query<ReadonlyArray<ProjectHistoryEntry>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10485,12 +10498,12 @@ export const Railway = {
     ),
   environmentLogs: (args: {
     readonly environmentId: string;
-    readonly afterDate?: string;
-    readonly afterLimit?: number;
-    readonly anchorDate?: string;
-    readonly beforeDate?: string;
-    readonly beforeLimit?: number;
-    readonly filter?: string;
+    readonly afterDate?: string | null;
+    readonly afterLimit?: number | null;
+    readonly anchorDate?: string | null;
+    readonly beforeDate?: string | null;
+    readonly beforeLimit?: number | null;
+    readonly filter?: string | null;
   }): Query<ReadonlyArray<Log>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10521,10 +10534,10 @@ export const Railway = {
     ),
   environmentPatches: (args: {
     readonly environmentId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<EnvironmentPatch>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10553,11 +10566,11 @@ export const Railway = {
     ),
   environments: (args: {
     readonly projectId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly isEphemeral?: boolean;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly isEphemeral?: boolean | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Environment>, RailwayNotFound | RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10605,9 +10618,9 @@ export const Railway = {
       | "NETWORK_TX_GB"
       | "UNRECOGNIZED"
     >;
-    readonly includeDeleted?: boolean;
-    readonly projectId?: string;
-    readonly workspaceId?: string;
+    readonly includeDeleted?: boolean | null;
+    readonly projectId?: string | null;
+    readonly workspaceId?: string | null;
   }): Query<ReadonlyArray<EstimatedUsage>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10624,12 +10637,12 @@ export const Railway = {
     ),
   events: (args: {
     readonly projectId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly environmentId?: string;
-    readonly filter?: EventFilterInput;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly environmentId?: string | null;
+    readonly filter?: EventFilterInput | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Event>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10648,7 +10661,7 @@ export const Railway = {
       globalErrors,
     ),
   externalWorkspaces: (args?: {
-    readonly projectId?: string;
+    readonly projectId?: string | null;
   }): Query<ReadonlyArray<ExternalWorkspace>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10695,7 +10708,7 @@ export const Railway = {
   githubPRInfo: (args: {
     readonly prNumber: number;
     readonly serviceId: string;
-  }): Query<GitHubPRInfo, RailwayGlobalError> =>
+  }): Query<GitHubPRInfo | null, RailwayGlobalError> =>
     root(
       "query",
       "githubPRInfo",
@@ -10791,10 +10804,10 @@ export const Railway = {
     readonly environmentId: string;
     readonly serviceId: string;
     readonly startDate: string;
-    readonly method?: string;
-    readonly path?: string;
-    readonly statusCode?: number;
-    readonly stepSeconds?: number;
+    readonly method?: string | null;
+    readonly path?: string | null;
+    readonly statusCode?: number | null;
+    readonly stepSeconds?: number | null;
   }): Query<HttpDurationMetricsResult, RailwayGlobalError> =>
     root(
       "query",
@@ -10815,13 +10828,13 @@ export const Railway = {
     ),
   httpLogs: (args: {
     readonly deploymentId: string;
-    readonly afterDate?: string;
-    readonly afterLimit?: number;
-    readonly anchorDate?: string;
-    readonly beforeDate?: string;
-    readonly beforeLimit?: number;
-    readonly filter?: string;
-    readonly limit?: number;
+    readonly afterDate?: string | null;
+    readonly afterLimit?: number | null;
+    readonly anchorDate?: string | null;
+    readonly beforeDate?: string | null;
+    readonly beforeLimit?: number | null;
+    readonly filter?: string | null;
+    readonly limit?: number | null;
   }): Query<ReadonlyArray<HttpLog>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10845,10 +10858,10 @@ export const Railway = {
     readonly environmentId: string;
     readonly serviceId: string;
     readonly startDate: string;
-    readonly method?: string;
-    readonly path?: string;
-    readonly statusCode?: number;
-    readonly stepSeconds?: number;
+    readonly method?: string | null;
+    readonly path?: string | null;
+    readonly statusCode?: number | null;
+    readonly stepSeconds?: number | null;
   }): Query<HttpMetricsResult, RailwayGlobalError> =>
     root(
       "query",
@@ -10872,9 +10885,9 @@ export const Railway = {
     readonly environmentId: string;
     readonly serviceId: string;
     readonly startDate: string;
-    readonly method?: string;
-    readonly path?: string;
-    readonly stepSeconds?: number;
+    readonly method?: string | null;
+    readonly path?: string | null;
+    readonly stepSeconds?: number | null;
   }): Query<ReadonlyArray<HttpMetricsByStatusResult>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -10905,10 +10918,10 @@ export const Railway = {
       globalErrors,
     ),
   integrationAuths: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<IntegrationAuth>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10920,10 +10933,10 @@ export const Railway = {
     ),
   integrations: (args: {
     readonly projectId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Integration>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -10973,9 +10986,9 @@ export const Railway = {
       | "UNRECOGNIZED"
     >;
     readonly startDate: string;
-    readonly averagingWindowSeconds?: number;
-    readonly endDate?: string;
-    readonly environmentId?: string;
+    readonly averagingWindowSeconds?: number | null;
+    readonly endDate?: string | null;
+    readonly environmentId?: string | null;
     readonly groupBy?: ReadonlyArray<
       | "BILLABLE"
       | "DEPLOYMENT_ID"
@@ -10994,14 +11007,14 @@ export const Railway = {
       | "VOLUME_ID"
       | "VOLUME_INSTANCE_ID"
       | "WORKLOAD_KIND"
-    >;
-    readonly includeDeleted?: boolean;
-    readonly projectId?: string;
-    readonly sampleRateSeconds?: number;
-    readonly serviceId?: string;
-    readonly volumeId?: string;
-    readonly volumeInstanceExternalId?: string;
-    readonly workspaceId?: string;
+    > | null;
+    readonly includeDeleted?: boolean | null;
+    readonly projectId?: string | null;
+    readonly sampleRateSeconds?: number | null;
+    readonly serviceId?: string | null;
+    readonly volumeId?: string | null;
+    readonly volumeInstanceExternalId?: string | null;
+    readonly workspaceId?: string | null;
   }): Query<ReadonlyArray<MetricsResult>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11048,14 +11061,14 @@ export const Railway = {
     ),
   networkFlowLogs: (args: {
     readonly environmentId: string;
-    readonly afterDate?: string;
-    readonly afterLimit?: number;
-    readonly anchorDate?: string;
-    readonly beforeDate?: string;
-    readonly beforeLimit?: number;
-    readonly deploymentInstanceId?: string;
-    readonly filter?: string;
-    readonly serviceId?: string;
+    readonly afterDate?: string | null;
+    readonly afterLimit?: number | null;
+    readonly anchorDate?: string | null;
+    readonly beforeDate?: string | null;
+    readonly beforeLimit?: number | null;
+    readonly deploymentInstanceId?: string | null;
+    readonly filter?: string | null;
+    readonly serviceId?: string | null;
   }): Query<ReadonlyArray<NetworkFlowLog>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11076,11 +11089,11 @@ export const Railway = {
       globalErrors,
     ),
   notificationDeliveries: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly filter?: NotificationDeliveryFilterInput;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly filter?: NotificationDeliveryFilterInput | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<NotificationDelivery>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11098,7 +11111,7 @@ export const Railway = {
     ),
   notificationDelivery: (args: {
     readonly id: string;
-  }): Query<NotificationDelivery, RailwayGlobalError> =>
+  }): Query<NotificationDelivery | null, RailwayGlobalError> =>
     root(
       "query",
       "notificationDelivery",
@@ -11109,7 +11122,7 @@ export const Railway = {
     ),
   notificationRules: (args: {
     readonly workspaceId: string;
-    readonly projectId?: string;
+    readonly projectId?: string | null;
   }): Query<ReadonlyArray<NotificationRule>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11121,10 +11134,10 @@ export const Railway = {
     ),
   observabilityDashboards: (args: {
     readonly environmentId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<ObservabilityDashboard>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11141,10 +11154,10 @@ export const Railway = {
       globalErrors,
     ),
   passkeys: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Passkey>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11157,7 +11170,7 @@ export const Railway = {
   pitrHaClusterReplicationHealth: (args: {
     readonly environmentId: string;
     readonly rootServiceId: string;
-  }): Query<PitrHaClusterReplicationHealth, RailwayGlobalError> =>
+  }): Query<PitrHaClusterReplicationHealth | null, RailwayGlobalError> =>
     root(
       "query",
       "pitrHaClusterReplicationHealth",
@@ -11169,7 +11182,7 @@ export const Railway = {
   pitrHaWorkflowProgress: (args: {
     readonly environmentId: string;
     readonly rootServiceId: string;
-  }): Query<PitrHaWorkflowProgress, RailwayGlobalError> =>
+  }): Query<PitrHaWorkflowProgress | null, RailwayGlobalError> =>
     root(
       "query",
       "pitrHaWorkflowProgress",
@@ -11192,10 +11205,10 @@ export const Railway = {
   pluginLogs: (args: {
     readonly environmentId: string;
     readonly pluginId: string;
-    readonly endDate?: string;
-    readonly filter?: string;
-    readonly limit?: number;
-    readonly startDate?: string;
+    readonly endDate?: string | null;
+    readonly filter?: string | null;
+    readonly limit?: number | null;
+    readonly startDate?: string | null;
   }): Query<ReadonlyArray<Log>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11213,7 +11226,7 @@ export const Railway = {
       globalErrors,
     ),
   preferences: (args?: {
-    readonly token?: string;
+    readonly token?: string | null;
   }): Query<Preferences, RailwayGlobalError> =>
     root(
       "query",
@@ -11227,7 +11240,10 @@ export const Railway = {
     readonly environmentId: string;
     readonly privateNetworkId: string;
     readonly serviceId: string;
-  }): Query<PrivateNetworkEndpoint, RailwayNotFound | RailwayGlobalError> =>
+  }): Query<
+    PrivateNetworkEndpoint | null,
+    RailwayNotFound | RailwayGlobalError
+  > =>
     root(
       "query",
       "privateNetworkEndpoint",
@@ -11291,7 +11307,11 @@ export const Railway = {
     ),
   projectFavorites: (args: {
     readonly workspaceId: string;
-    readonly orderBy?: "CREATED_AT_DESC" | "NAME_ASC" | "UPDATED_AT_DESC";
+    readonly orderBy?:
+      | "CREATED_AT_DESC"
+      | "NAME_ASC"
+      | "UPDATED_AT_DESC"
+      | null;
   }): Query<ReadonlyArray<string>, RailwayGlobalError> =>
     rootLeaf(
       "query",
@@ -11358,14 +11378,18 @@ export const Railway = {
       globalErrors,
     ),
   projects: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly includeDeleted?: boolean;
-    readonly last?: number;
-    readonly orderBy?: "CREATED_AT_DESC" | "NAME_ASC" | "UPDATED_AT_DESC";
-    readonly userId?: string;
-    readonly workspaceId?: string;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly includeDeleted?: boolean | null;
+    readonly last?: number | null;
+    readonly orderBy?:
+      | "CREATED_AT_DESC"
+      | "NAME_ASC"
+      | "UPDATED_AT_DESC"
+      | null;
+    readonly userId?: string | null;
+    readonly workspaceId?: string | null;
   }): Query<ReadonlyArray<Project>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11414,9 +11438,9 @@ export const Railway = {
     >;
     readonly startDate: string;
     readonly workspaceId: string;
-    readonly after?: string;
-    readonly first?: number;
-    readonly includeDeleted?: boolean;
+    readonly after?: string | null;
+    readonly first?: number | null;
+    readonly includeDeleted?: boolean | null;
   }): Query<ProjectServiceUsagePage, RailwayGlobalError> =>
     root(
       "query",
@@ -11441,10 +11465,10 @@ export const Railway = {
     ]),
   projectTokens: (args: {
     readonly projectId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<ProjectToken>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11531,7 +11555,7 @@ export const Railway = {
       globalErrors,
     ),
   railwayDomainEmailForwardingLimits: (args?: {
-    readonly workspaceId?: string;
+    readonly workspaceId?: string | null;
   }): Query<RailwayDomainEmailForwardingLimits, RailwayGlobalError> =>
     root(
       "query",
@@ -11558,7 +11582,7 @@ export const Railway = {
     ),
   railwayDomains: (args: {
     readonly workspaceId: string;
-    readonly status?: "ACTIVE" | "EXPIRED" | "PURCHASING" | "REFUNDED";
+    readonly status?: "ACTIVE" | "EXPIRED" | "PURCHASING" | "REFUNDED" | null;
   }): Query<ReadonlyArray<RailwayDomain>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11580,7 +11604,7 @@ export const Railway = {
       globalErrors,
     ),
   regions: (args?: {
-    readonly projectId?: string;
+    readonly projectId?: string | null;
   }): Query<ReadonlyArray<Region>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11604,7 +11628,7 @@ export const Railway = {
   sandbox: (args: {
     readonly environmentId: string;
     readonly id: string;
-  }): Query<Sandbox, RailwayGlobalError> =>
+  }): Query<Sandbox | null, RailwayGlobalError> =>
     root(
       "query",
       "sandbox",
@@ -11626,11 +11650,11 @@ export const Railway = {
     ),
   sandboxes: (args: {
     readonly environmentId: string;
-    readonly active?: boolean;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly active?: boolean | null;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Sandbox>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11650,11 +11674,11 @@ export const Railway = {
   sandboxSessions: (args: {
     readonly environmentId: string;
     readonly id: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
-  }): Query<ReadonlyArray<SandboxSession>, RailwayGlobalError> =>
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
+  }): Query<ReadonlyArray<SandboxSession> | null, RailwayGlobalError> =>
     rootConnection(
       "query",
       "sandboxSessions",
@@ -11740,7 +11764,7 @@ export const Railway = {
   serviceInstanceLimitOverride: (args: {
     readonly environmentId: string;
     readonly serviceId: string;
-  }): Query<unknown, RailwayGlobalError> =>
+  }): Query<unknown | null, RailwayGlobalError> =>
     rootLeaf(
       "query",
       "serviceInstanceLimitOverride",
@@ -11762,10 +11786,10 @@ export const Railway = {
       globalErrors,
     ),
   sessions: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Session>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11777,8 +11801,8 @@ export const Railway = {
     ),
   signal: (args: {
     readonly name: string;
-    readonly owner?: string;
-  }): Query<Signal, RailwayGlobalError> =>
+    readonly owner?: string | null;
+  }): Query<Signal | null, RailwayGlobalError> =>
     root(
       "query",
       "signal",
@@ -11789,8 +11813,8 @@ export const Railway = {
     ),
   signalChanges: (args: {
     readonly name: string;
-    readonly limit?: number;
-    readonly owner?: string;
+    readonly limit?: number | null;
+    readonly owner?: string | null;
   }): Query<ReadonlyArray<SignalChange>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11803,7 +11827,7 @@ export const Railway = {
   signalEvaluate: (args: {
     readonly context: unknown;
     readonly name: string;
-    readonly owner?: string;
+    readonly owner?: string | null;
   }): Query<SignalEvaluation, RailwayGlobalError> =>
     root(
       "query",
@@ -11814,7 +11838,7 @@ export const Railway = {
       globalErrors,
     ),
   signals: (args?: {
-    readonly owner?: string;
+    readonly owner?: string | null;
   }): Query<ReadonlyArray<Signal>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -11825,11 +11849,11 @@ export const Railway = {
       globalErrors,
     ),
   sshPublicKeys: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
-    readonly workspaceId?: string;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
+    readonly workspaceId?: string | null;
   }): Query<ReadonlyArray<SshPublicKey>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11877,10 +11901,10 @@ export const Railway = {
     ]),
   teamTemplates: (args: {
     readonly teamId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Template>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11897,10 +11921,10 @@ export const Railway = {
       globalErrors,
     ),
   template: (args?: {
-    readonly code?: string;
-    readonly id?: string;
-    readonly owner?: string;
-    readonly repo?: string;
+    readonly code?: string | null;
+    readonly id?: string | null;
+    readonly owner?: string | null;
+    readonly repo?: string | null;
   }): Query<Template, RailwayGlobalError> =>
     root(
       "query",
@@ -11922,12 +11946,12 @@ export const Railway = {
       globalErrors,
     ),
   templates: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
-    readonly recommended?: boolean;
-    readonly verified?: boolean;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
+    readonly recommended?: boolean | null;
+    readonly verified?: boolean | null;
   }): Query<ReadonlyArray<Template>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11955,12 +11979,12 @@ export const Railway = {
     ),
   templateSearch: (args: {
     readonly query: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly category?: string;
-    readonly first?: number;
-    readonly last?: number;
-    readonly verified?: boolean;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly category?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
+    readonly verified?: boolean | null;
   }): Query<ReadonlyArray<TemplateSearchResult>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -11980,7 +12004,7 @@ export const Railway = {
     ),
   templateSourceForProject: (args: {
     readonly projectId: string;
-  }): Query<Template, RailwayGlobalError> =>
+  }): Query<Template | null, RailwayGlobalError> =>
     root(
       "query",
       "templateSourceForProject",
@@ -11991,10 +12015,10 @@ export const Railway = {
     ),
   trustedDomains: (args: {
     readonly workspaceId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<TrustedDomain>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -12039,7 +12063,7 @@ export const Railway = {
       | "NETWORK_TX_GB"
       | "UNRECOGNIZED"
     >;
-    readonly endDate?: string;
+    readonly endDate?: string | null;
     readonly groupBy?: ReadonlyArray<
       | "BILLABLE"
       | "DEPLOYMENT_ID"
@@ -12058,11 +12082,11 @@ export const Railway = {
       | "VOLUME_ID"
       | "VOLUME_INSTANCE_ID"
       | "WORKLOAD_KIND"
-    >;
-    readonly includeDeleted?: boolean;
-    readonly projectId?: string;
-    readonly startDate?: string;
-    readonly workspaceId?: string;
+    > | null;
+    readonly includeDeleted?: boolean | null;
+    readonly projectId?: string | null;
+    readonly startDate?: string | null;
+    readonly workspaceId?: string | null;
   }): Query<ReadonlyArray<AggregatedUsage>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -12103,10 +12127,10 @@ export const Railway = {
       globalErrors,
     ),
   userTemplates: (args?: {
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Template>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -12130,8 +12154,8 @@ export const Railway = {
   variables: (args: {
     readonly environmentId: string;
     readonly projectId: string;
-    readonly serviceId?: string;
-    readonly unrendered?: boolean;
+    readonly serviceId?: string | null;
+    readonly unrendered?: boolean | null;
   }): Query<unknown, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "query",
@@ -12199,8 +12223,8 @@ export const Railway = {
   volumeInstancePitrRestoreEstimate: (args: {
     readonly targetTimestamp: string;
     readonly volumeInstanceId: string;
-    readonly sourceRepoPath?: string;
-  }): Query<PitrRestoreScratchEstimate, RailwayGlobalError> =>
+    readonly sourceRepoPath?: string | null;
+  }): Query<PitrRestoreScratchEstimate | null, RailwayGlobalError> =>
     root(
       "query",
       "volumeInstancePitrRestoreEstimate",
@@ -12244,10 +12268,10 @@ export const Railway = {
     ),
   workspaceIdentityProviders: (args: {
     readonly workspaceId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<WorkspaceIdentityProvider>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -12265,7 +12289,7 @@ export const Railway = {
     ),
   workspacePolicy: (args: {
     readonly workspaceId: string;
-  }): Query<WorkspacePolicy, RailwayGlobalError> =>
+  }): Query<WorkspacePolicy | null, RailwayGlobalError> =>
     root(
       "query",
       "workspacePolicy",
@@ -12294,10 +12318,10 @@ export const Railway = {
     ),
   workspaceTemplates: (args: {
     readonly workspaceId: string;
-    readonly after?: string;
-    readonly before?: string;
-    readonly first?: number;
-    readonly last?: number;
+    readonly after?: string | null;
+    readonly before?: string | null;
+    readonly first?: number | null;
+    readonly last?: number | null;
   }): Query<ReadonlyArray<Template>, RailwayGlobalError> =>
     rootConnection(
       "query",
@@ -12333,10 +12357,10 @@ export const Railway = {
       | "NETWORK_TX_GB"
       | "UNRECOGNIZED"
     >;
-    readonly endDate?: string;
-    readonly includeDeleted?: boolean;
-    readonly startDate?: string;
-    readonly workspaceId?: string;
+    readonly endDate?: string | null;
+    readonly includeDeleted?: boolean | null;
+    readonly startDate?: string | null;
+    readonly workspaceId?: string | null;
   }): Query<ReadonlyArray<AggregatedUsage>, RailwayGlobalError> =>
     rootList(
       "query",
@@ -12501,7 +12525,7 @@ export const Railway = {
     readonly bucketId: string;
     readonly environmentId: string;
     readonly projectId: string;
-    readonly redeployDependents?: boolean;
+    readonly redeployDependents?: boolean | null;
   }): Query<
     BucketS3CompatibleCredentials,
     RailwayNotFound | RailwayGlobalError
@@ -12591,7 +12615,7 @@ export const Railway = {
     ),
   cloudAgentCheckpointCreate: (args: {
     readonly id: string;
-    readonly name?: string;
+    readonly name?: string | null;
   }): Query<CloudAgentCheckpoint, RailwayGlobalError> =>
     root(
       "mutation",
@@ -12647,8 +12671,8 @@ export const Railway = {
     ),
   cloudAgentFork: (args: {
     readonly id: string;
-    readonly name?: string;
-    readonly variables?: unknown;
+    readonly name?: string | null;
+    readonly variables?: unknown | null;
   }): Query<CloudAgent, RailwayGlobalError> =>
     root(
       "mutation",
@@ -12742,7 +12766,7 @@ export const Railway = {
   customDomainUpdate: (args: {
     readonly environmentId: string;
     readonly id: string;
-    readonly targetPort?: number;
+    readonly targetPort?: number | null;
   }): Query<boolean, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -12806,7 +12830,7 @@ export const Railway = {
     ),
   deploymentRedeploy: (args: {
     readonly id: string;
-    readonly usePreviousImageTag?: boolean;
+    readonly usePreviousImageTag?: boolean | null;
   }): Query<Deployment, RailwayGlobalError> =>
     root(
       "mutation",
@@ -12928,7 +12952,7 @@ export const Railway = {
     readonly environmentId: string;
     readonly projectId: string;
     readonly yaml: string;
-    readonly skipStagingPatch?: boolean;
+    readonly skipStagingPatch?: boolean | null;
   }): Query<DockerComposeImport, RailwayGlobalError> =>
     root(
       "mutation",
@@ -13045,9 +13069,9 @@ export const Railway = {
   environmentApplyChangeSet: (args: {
     readonly environmentId: string;
     readonly input: unknown;
-    readonly baseConfigEtag?: string;
-    readonly commitMessage?: string;
-    readonly waitForCompletion?: boolean;
+    readonly baseConfigEtag?: string | null;
+    readonly commitMessage?: string | null;
+    readonly waitForCompletion?: boolean | null;
   }): Query<ChangeSetApplyResult, RailwayGlobalError> =>
     root(
       "mutation",
@@ -13094,8 +13118,8 @@ export const Railway = {
     ]),
   environmentPatchCommit: (args: {
     readonly environmentId: string;
-    readonly commitMessage?: string;
-    readonly patch?: unknown;
+    readonly commitMessage?: string | null;
+    readonly patch?: unknown | null;
   }): Query<string, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -13111,8 +13135,8 @@ export const Railway = {
     ),
   environmentPatchCommitStaged: (args: {
     readonly environmentId: string;
-    readonly commitMessage?: string;
-    readonly skipDeploys?: boolean;
+    readonly commitMessage?: string | null;
+    readonly skipDeploys?: boolean | null;
   }): Query<string, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -13164,7 +13188,7 @@ export const Railway = {
   environmentStageChanges: (args: {
     readonly environmentId: string;
     readonly input: unknown;
-    readonly merge?: boolean;
+    readonly merge?: boolean | null;
   }): Query<EnvironmentPatch, RailwayNotFound | RailwayGlobalError> =>
     root(
       "mutation",
@@ -13359,7 +13383,7 @@ export const Railway = {
     ),
   loginSessionConsume: (args: {
     readonly code: string;
-  }): Query<string, RailwayNotFound | RailwayGlobalError> =>
+  }): Query<string | null, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
       "loginSessionConsume",
@@ -13491,7 +13515,7 @@ export const Railway = {
     ),
   pluginDelete: (args: {
     readonly id: string;
-    readonly environmentId?: string;
+    readonly environmentId?: string | null;
   }): Query<boolean, RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -14132,7 +14156,7 @@ export const Railway = {
   sandboxDestroy: (args: {
     readonly environmentId: string;
     readonly id: string;
-  }): Query<Sandbox, RailwayGlobalError> =>
+  }): Query<Sandbox | null, RailwayGlobalError> =>
     root(
       "mutation",
       "sandboxDestroy",
@@ -14145,7 +14169,7 @@ export const Railway = {
     readonly command: string;
     readonly environmentId: string;
     readonly id: string;
-    readonly timeoutSec?: number;
+    readonly timeoutSec?: number | null;
   }): Query<SandboxExecResult, RailwaySandboxNotFound | RailwayGlobalError> =>
     root(
       "mutation",
@@ -14163,7 +14187,7 @@ export const Railway = {
   sandboxHeartbeat: (args: {
     readonly environmentId: string;
     readonly id: string;
-  }): Query<Sandbox, RailwayGlobalError> =>
+  }): Query<Sandbox | null, RailwayGlobalError> =>
     root(
       "mutation",
       "sandboxHeartbeat",
@@ -14209,7 +14233,7 @@ export const Railway = {
     ),
   serviceDelete: (args: {
     readonly id: string;
-    readonly environmentId?: string;
+    readonly environmentId?: string | null;
   }): Query<boolean, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -14339,7 +14363,7 @@ export const Railway = {
   serviceInstanceAutoUpdateSnooze: (args: {
     readonly environmentId: string;
     readonly serviceId: string;
-    readonly snoozeDays?: number;
+    readonly snoozeDays?: number | null;
   }): Query<boolean, RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -14364,8 +14388,8 @@ export const Railway = {
   serviceInstanceDeploy: (args: {
     readonly environmentId: string;
     readonly serviceId: string;
-    readonly commitSha?: string;
-    readonly latestCommit?: boolean;
+    readonly commitSha?: string | null;
+    readonly latestCommit?: boolean | null;
   }): Query<boolean, RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -14383,7 +14407,7 @@ export const Railway = {
   serviceInstanceDeployV2: (args: {
     readonly environmentId: string;
     readonly serviceId: string;
-    readonly commitSha?: string;
+    readonly commitSha?: string | null;
   }): Query<string, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -14419,7 +14443,7 @@ export const Railway = {
   serviceInstanceUpdate: (args: {
     readonly input: ServiceInstanceUpdateInput;
     readonly serviceId: string;
-    readonly environmentId?: string;
+    readonly environmentId?: string | null;
   }): Query<boolean, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -14625,7 +14649,7 @@ export const Railway = {
     ),
   sshSignupApprove: (args: {
     readonly code: string;
-    readonly workspaceId?: string;
+    readonly workspaceId?: string | null;
   }): Query<boolean, RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -14762,7 +14786,7 @@ export const Railway = {
     readonly serviceId: string;
     readonly templateId: string;
     readonly volumeId: string;
-    readonly sizeMB?: number;
+    readonly sizeMB?: number | null;
   }): Query<Template, RailwayGlobalError> =>
     root(
       "mutation",
@@ -14801,7 +14825,7 @@ export const Railway = {
     ),
   trustedDomainRetriggerVerification: (args: {
     readonly id: string;
-  }): Query<TrustedDomain, RailwayGlobalError> =>
+  }): Query<TrustedDomain | null, RailwayGlobalError> =>
     root(
       "mutation",
       "trustedDomainRetriggerVerification",
@@ -14976,7 +15000,7 @@ export const Railway = {
       { input: "UserProfileUpdateInput!" },
       globalErrors,
     ),
-  userTermsUpdate: (): Query<User, RailwayGlobalError> =>
+  userTermsUpdate: (): Query<User | null, RailwayGlobalError> =>
     root(
       "mutation",
       "userTermsUpdate",
@@ -15038,7 +15062,7 @@ export const Railway = {
     ]),
   volumeInstanceBackupCreate: (args: {
     readonly volumeInstanceId: string;
-    readonly name?: string;
+    readonly name?: string | null;
   }): Query<WorkflowId, RailwayNotFound | RailwayGlobalError> =>
     root(
       "mutation",
@@ -15075,8 +15099,8 @@ export const Railway = {
   volumeInstanceBackupRestore: (args: {
     readonly volumeInstanceBackupId: string;
     readonly volumeInstanceId: string;
-    readonly replicaServiceIds?: ReadonlyArray<string>;
-    readonly wipeServiceIds?: ReadonlyArray<string>;
+    readonly replicaServiceIds?: ReadonlyArray<string> | null;
+    readonly wipeServiceIds?: ReadonlyArray<string> | null;
   }): Query<WorkflowId, RailwayNotFound | RailwayGlobalError> =>
     root(
       "mutation",
@@ -15109,8 +15133,8 @@ export const Railway = {
   volumeInstancePITRRestore: (args: {
     readonly targetTimestamp: string;
     readonly volumeInstanceId: string;
-    readonly newServiceName?: string;
-    readonly sourceRepoPath?: string;
+    readonly newServiceName?: string | null;
+    readonly sourceRepoPath?: string | null;
   }): Query<WorkflowId, RailwayGlobalError> =>
     root(
       "mutation",
@@ -15128,7 +15152,7 @@ export const Railway = {
   volumeInstanceUpdate: (args: {
     readonly input: VolumeInstanceUpdateInput;
     readonly volumeId: string;
-    readonly environmentId?: string;
+    readonly environmentId?: string | null;
   }): Query<boolean, RailwayNotFound | RailwayGlobalError> =>
     rootLeaf(
       "mutation",
@@ -15252,12 +15276,13 @@ export const Railway = {
     ),
   workspacePolicyItemUpdate: (args: {
     readonly workspaceId: string;
-    readonly enabled?: boolean;
-    readonly input?: WorkspacePolicyItemUpdateInput;
+    readonly enabled?: boolean | null;
+    readonly input?: WorkspacePolicyItemUpdateInput | null;
     readonly policy?:
       | "RESTRICT_DEPLOYS_TO_ALLOWED_SOURCES"
       | "RESTRICT_PUBLIC_TCP_PROXIES"
-      | "RESTRICT_RAILWAY_DOMAIN_GENERATION";
+      | "RESTRICT_RAILWAY_DOMAIN_GENERATION"
+      | null;
   }): Query<boolean, RailwayGlobalError> =>
     rootLeaf(
       "mutation",
