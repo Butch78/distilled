@@ -12250,12 +12250,27 @@ export const PutDispatchNamespaceScriptMetadataBindingsList =
     PutDispatchNamespaceScriptBinding,
   ) as any as S.Schema<PutDispatchNamespaceScriptMetadataBindingsList>;
 
+/** Image name -> prepared registry reference. The Durable Object selects one at runtime through ctx.container.images. */
+export type DurableObjectContainerImages = {
+  [key: string]: string | undefined;
+};
+export const DurableObjectContainerImages = /*@__PURE__*/ S.Record(
+  S.String,
+  S.String,
+) as any as S.Schema<DurableObjectContainerImages>;
+
 export interface PutDispatchNamespaceScriptContainer {
   className: string;
+  /** Name of the Container application this entry declares. Required for a Durable Object-managed Container. */
+  name?: string;
+  /** Named images a Durable Object-managed Container may start with. */
+  images?: DurableObjectContainerImages;
 }
 export const PutDispatchNamespaceScriptContainer = /*@__PURE__*/ S.suspend(() =>
   S.Struct({
     className: S.String.pipe(T.Body("class_name")),
+    name: S.optional(S.String),
+    images: S.optional(DurableObjectContainerImages),
   }),
 ).annotate({
   identifier: "PutDispatchNamespaceScriptContainer",

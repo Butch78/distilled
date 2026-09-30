@@ -1,0 +1,121 @@
+{
+  "description": "Durable Object-managed Containers (scheduling_policy \"durable_object\", public beta 2026-09) extend each entry of a Worker upload's metadata.containers from { class_name } to { name, class_name, images }: `name` is the Container application's name and `images` maps an image name the Durable Object selects at runtime (ctx.container.images.<name>) to a registry reference prepared with POST /accounts/{account_id}/containers/image-preparations. The API reference still documents { class_name } only. Wire shape taken from Cloudflare workers-sdk (wrangler 4.144.0): getContainerMetadata in packages/deploy-helpers/src/deploy/helpers/container-metadata.ts writes { name, class_name, images } into the upload metadata, and versions deploy reads the same fields back from resources.script_runtime.containers.",
+  "patches": [
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#DurableObjectContainerImages",
+      "value": {
+        "type": "map",
+        "key": {
+          "target": "smithy.api#String"
+        },
+        "value": {
+          "target": "smithy.api#String"
+        },
+        "traits": {
+          "smithy.api#documentation": "Image name -> prepared registry reference. The Durable Object selects one at runtime through ctx.container.images."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#PutScriptContainer/members/name",
+      "value": {
+        "target": "smithy.api#String",
+        "traits": {
+          "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#PutScriptContainer/members/images",
+      "value": {
+        "target": "com.cloudflare.workers#DurableObjectContainerImages",
+        "traits": {
+          "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsCreateRequestContainersItem/members/name",
+      "value": {
+        "target": "smithy.api#String",
+        "traits": {
+          "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsCreateRequestContainersItem/members/images",
+      "value": {
+        "target": "com.cloudflare.workers#DurableObjectContainerImages",
+        "traits": {
+          "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsCreateResponseContainersItem/members/name",
+      "value": {
+        "target": "smithy.api#String",
+        "traits": {
+          "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsCreateResponseContainersItem/members/images",
+      "value": {
+        "target": "com.cloudflare.workers#DurableObjectContainerImages",
+        "traits": {
+          "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsGetResponseContainersItem/members/name",
+      "value": {
+        "target": "smithy.api#String",
+        "traits": {
+          "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsGetResponseContainersItem/members/images",
+      "value": {
+        "target": "com.cloudflare.workers#DurableObjectContainerImages",
+        "traits": {
+          "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsListResultItemContainersItem/members/name",
+      "value": {
+        "target": "smithy.api#String",
+        "traits": {
+          "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/shapes/com.cloudflare.workers#BetaWorkersVersionsListResultItemContainersItem/members/images",
+      "value": {
+        "target": "com.cloudflare.workers#DurableObjectContainerImages",
+        "traits": {
+          "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+        }
+      }
+    }
+  ]
+}

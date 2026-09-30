@@ -116,7 +116,7 @@ export const StringList = /*@__PURE__*/ S.Array(
 ) as any as S.Schema<StringList>;
 
 export interface ContainerConfiguration {
-  image: string;
+  image?: string | null;
   instanceType?: string | null;
   vcpu?: number | null;
   memory?: string | null;
@@ -133,10 +133,13 @@ export interface ContainerConfiguration {
   checks?: DocumentList | null;
   dns?: unknown | null;
   sshPublicKeyIds?: StringList | null;
+  experimentalFlags?: StringList | null;
+  wranglerSsh?: unknown | null;
+  authorizedKeys?: DocumentList | null;
 }
 export const ContainerConfiguration = /*@__PURE__*/ S.suspend(() =>
   S.Struct({
-    image: S.String,
+    image: S.optional(S.NullOr(S.String)),
     instanceType: S.optional(S.NullOr(S.String).pipe(T.Body("instance_type"))),
     vcpu: S.optional(S.NullOr(S.Number)),
     memory: S.optional(S.NullOr(S.String)),
@@ -157,6 +160,13 @@ export const ContainerConfiguration = /*@__PURE__*/ S.suspend(() =>
     sshPublicKeyIds: S.optional(
       S.NullOr(StringList).pipe(T.Body("ssh_public_key_ids")),
     ),
+    experimentalFlags: S.optional(
+      S.NullOr(StringList).pipe(T.Body("experimental_flags")),
+    ),
+    wranglerSsh: S.optional(S.NullOr(S.Unknown).pipe(T.Body("wrangler_ssh"))),
+    authorizedKeys: S.optional(
+      S.NullOr(DocumentList).pipe(T.Body("authorized_keys")),
+    ),
   }),
 ).annotate({
   identifier: "ContainerConfiguration",
@@ -176,21 +186,22 @@ export const DurableObjectsRef = /*@__PURE__*/ S.suspend(() =>
 export interface CreateContainerApplicationRequest {
   accountId: string;
   name: string;
-  maxInstances: number;
-  configuration: ContainerConfiguration;
+  maxInstances?: number;
+  configuration?: ContainerConfiguration;
   durableObjects?: DurableObjectsRef;
   instances?: number;
   schedulingPolicy?: string;
   constraints?: unknown;
   affinities?: unknown;
   jobs?: boolean;
+  observability?: unknown;
 }
 export const CreateContainerApplicationRequest = /*@__PURE__*/ S.suspend(() =>
   S.Struct({
     accountId: S.String.pipe(T.Label("account_id")),
     name: S.String,
-    maxInstances: S.Number.pipe(T.Body("max_instances")),
-    configuration: ContainerConfiguration,
+    maxInstances: S.optional(S.Number.pipe(T.Body("max_instances"))),
+    configuration: S.optional(ContainerConfiguration),
     durableObjects: S.optional(
       DurableObjectsRef.pipe(T.Body("durable_objects")),
     ),
@@ -199,6 +210,7 @@ export const CreateContainerApplicationRequest = /*@__PURE__*/ S.suspend(() =>
     constraints: S.optional(S.Unknown),
     affinities: S.optional(S.Unknown),
     jobs: S.optional(S.Boolean),
+    observability: S.optional(S.Unknown),
   }).pipe(
     T.Http({
       method: "POST",
@@ -215,14 +227,15 @@ export interface ContainerApplicationItem {
   name: string;
   accountId: string;
   schedulingPolicy: string;
-  instances: number;
-  maxInstances: number;
+  instances?: number | null;
+  maxInstances?: number | null;
   constraints?: unknown | null;
   affinities?: unknown | null;
-  configuration: ContainerConfiguration;
+  configuration?: ContainerConfiguration | null;
   durableObjects?: DurableObjectsRef | null;
   createdAt: string;
   version: number;
+  observability?: unknown | null;
 }
 export const ContainerApplicationItem = /*@__PURE__*/ S.suspend(() =>
   S.Struct({
@@ -230,16 +243,17 @@ export const ContainerApplicationItem = /*@__PURE__*/ S.suspend(() =>
     name: S.String,
     accountId: S.String.pipe(T.Body("account_id")),
     schedulingPolicy: S.String.pipe(T.Body("scheduling_policy")),
-    instances: S.Number,
-    maxInstances: S.Number.pipe(T.Body("max_instances")),
+    instances: S.optional(S.NullOr(S.Number)),
+    maxInstances: S.optional(S.NullOr(S.Number).pipe(T.Body("max_instances"))),
     constraints: S.optional(S.NullOr(S.Unknown)),
     affinities: S.optional(S.NullOr(S.Unknown)),
-    configuration: ContainerConfiguration,
+    configuration: S.optional(S.NullOr(ContainerConfiguration)),
     durableObjects: S.optional(
       S.NullOr(DurableObjectsRef).pipe(T.Body("durable_objects")),
     ),
     createdAt: S.String.pipe(T.Body("created_at")),
     version: S.Number,
+    observability: S.optional(S.NullOr(S.Unknown)),
   }),
 ).annotate({
   identifier: "ContainerApplicationItem",
@@ -448,6 +462,50 @@ export const ListContainerApplicationsResponse = /*@__PURE__*/ S.suspend(() =>
   identifier: "ListContainerApplicationsResponse",
 }) as any as S.Schema<ListContainerApplicationsResponse>;
 
+export interface PrepareContainerImageRequest {
+  accountId: string;
+  /** Registry reference of an image already pushed to this account's registry. */
+  image: string;
+}
+export const PrepareContainerImageRequest = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    accountId: S.String.pipe(T.Label("account_id")),
+    image: S.String,
+  }).pipe(
+    T.Http({
+      method: "POST",
+      uri: "/accounts/{account_id}/containers/image-preparations",
+      code: 200,
+    }),
+  ),
+).annotate({
+  identifier: "PrepareContainerImageRequest",
+}) as any as S.Schema<PrepareContainerImageRequest>;
+
+export type PrepareContainerImageStatus = "pending" | "ready" | "error";
+export const PrepareContainerImageStatus = S.String;
+
+export interface PrepareContainerImageResult {
+  status: PrepareContainerImageStatus;
+  /** Why preparation failed, when status is `error`. */
+  reason?: string | null;
+}
+export const PrepareContainerImageResult = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    status: PrepareContainerImageStatus,
+    reason: S.optional(S.NullOr(S.String)),
+  }),
+).annotate({
+  identifier: "PrepareContainerImageResult",
+}) as any as S.Schema<PrepareContainerImageResult>;
+
+export type PrepareContainerImageResponse = PrepareContainerImageResult;
+export const PrepareContainerImageResponse = /*@__PURE__*/ S.suspend(() =>
+  PrepareContainerImageResult.pipe(T.EnvelopePayloadRoot()),
+).annotate({
+  identifier: "PrepareContainerImageResponse",
+}) as any as S.Schema<PrepareContainerImageResponse>;
+
 export interface UpdateContainerApplicationRequest {
   accountId: string;
   applicationId: string;
@@ -457,6 +515,7 @@ export interface UpdateContainerApplicationRequest {
   schedulingPolicy?: string;
   constraints?: unknown;
   affinities?: unknown;
+  observability?: unknown;
 }
 export const UpdateContainerApplicationRequest = /*@__PURE__*/ S.suspend(() =>
   S.Struct({
@@ -468,6 +527,7 @@ export const UpdateContainerApplicationRequest = /*@__PURE__*/ S.suspend(() =>
     schedulingPolicy: S.optional(S.String.pipe(T.Body("scheduling_policy"))),
     constraints: S.optional(S.Unknown),
     affinities: S.optional(S.Unknown),
+    observability: S.optional(S.Unknown),
   }).pipe(
     T.Http({
       method: "PATCH",
@@ -617,6 +677,21 @@ export const listContainerApplications: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: ListContainerApplicationsRequest,
   output: ListContainerApplicationsResponse,
+  errors: [InvalidRoute, CloudflareRateLimited, CloudflareError],
+  protocol: CloudflareProtocol,
+  retry: Retry.Retry,
+}));
+
+export type PrepareContainerImageError = InvalidRoute | CloudflareOpError;
+/** Prepare a pushed image for Durable Object-managed Containers. Idempotent: poll until status is `ready` (or `error`) before referencing the image from a Worker upload's metadata.containers[].images. */
+export const prepareContainerImage: API.OperationMethod<
+  PrepareContainerImageRequest,
+  PrepareContainerImageResponse,
+  PrepareContainerImageError,
+  CloudflareOpContext
+> = /*@__PURE__*/ API.make(() => ({
+  input: PrepareContainerImageRequest,
+  output: PrepareContainerImageResponse,
   errors: [InvalidRoute, CloudflareRateLimited, CloudflareError],
   protocol: CloudflareProtocol,
   retry: Retry.Retry,

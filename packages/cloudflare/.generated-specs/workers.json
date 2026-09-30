@@ -4810,6 +4810,18 @@
             "smithy.api#documentation": "Select which Durable Object class should get this container attached.",
             "smithy.api#required": {}
           }
+        },
+        "name": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+          }
+        },
+        "images": {
+          "target": "com.cloudflare.workers#DurableObjectContainerImages",
+          "traits": {
+            "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+          }
         }
       }
     },
@@ -7728,6 +7740,18 @@
           "traits": {
             "smithy.api#documentation": "Select which Durable Object class should get this container attached.",
             "smithy.api#required": {}
+          }
+        },
+        "name": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+          }
+        },
+        "images": {
+          "target": "com.cloudflare.workers#DurableObjectContainerImages",
+          "traits": {
+            "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
           }
         }
       }
@@ -11338,6 +11362,18 @@
             "smithy.api#documentation": "Select which Durable Object class should get this container attached.",
             "smithy.api#required": {}
           }
+        },
+        "name": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+          }
+        },
+        "images": {
+          "target": "com.cloudflare.workers#DurableObjectContainerImages",
+          "traits": {
+            "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+          }
         }
       }
     },
@@ -14935,6 +14971,18 @@
           "traits": {
             "smithy.api#documentation": "Select which Durable Object class should get this container attached.",
             "smithy.api#required": {}
+          }
+        },
+        "name": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+          }
+        },
+        "images": {
+          "target": "com.cloudflare.workers#DurableObjectContainerImages",
+          "traits": {
+            "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
           }
         }
       }
@@ -71444,6 +71492,18 @@
           "traits": {
             "smithy.api#required": {}
           }
+        },
+        "name": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Name of the Container application this entry declares. Required for a Durable Object-managed Container."
+          }
+        },
+        "images": {
+          "target": "com.cloudflare.workers#DurableObjectContainerImages",
+          "traits": {
+            "smithy.api#documentation": "Named images a Durable Object-managed Container may start with."
+          }
         }
       }
     },
@@ -71567,6 +71627,18 @@
             "com.cloudflare.protocols#nullable": {}
           }
         }
+      }
+    },
+    "com.cloudflare.workers#DurableObjectContainerImages": {
+      "type": "map",
+      "key": {
+        "target": "smithy.api#String"
+      },
+      "value": {
+        "target": "smithy.api#String"
+      },
+      "traits": {
+        "smithy.api#documentation": "Image name -> prepared registry reference. The Durable Object selects one at runtime through ctx.container.images."
       }
     },
     "com.cloudflare.workers#ScriptsUpdateResponsePlacementCase8": {
