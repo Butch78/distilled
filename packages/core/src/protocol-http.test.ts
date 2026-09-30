@@ -268,3 +268,45 @@ describe("UnionCases decoding", () => {
     });
   });
 });
+
+describe("KeyDictionary and maps", () => {
+  // A dictionary renames member names it cannot see in the schema; the keys
+  // of a map are data, and a data key that happens to spell a dictionary
+  // entry must reach the wire unchanged.
+  const dict = { className: "class_name" };
+  const Entry = S.Struct({
+    className: S.String.pipe(T.Body("class_name")),
+    images: S.optional(S.Record(S.String, S.String)),
+  });
+
+  test("encode leaves map keys verbatim", () => {
+    expect(
+      mapKeys(
+        Entry.ast,
+        { className: "Sandbox", images: { className: "a", fastTier: "b" } },
+        "encode",
+        dict,
+      ),
+    ).toEqual({
+      class_name: "Sandbox",
+      images: { className: "a", fastTier: "b" },
+    });
+  });
+
+  test("decode leaves map keys verbatim", () => {
+    expect(
+      mapKeys(
+        Entry.ast,
+        { class_name: "Sandbox", images: { class_name: "a" } },
+        "decode",
+        dict,
+      ),
+    ).toEqual({ className: "Sandbox", images: { class_name: "a" } });
+  });
+
+  test("an opaque object still renames through the dictionary", () => {
+    expect(
+      mapKeys(S.Unknown.ast, { className: "Sandbox" }, "encode", dict),
+    ).toEqual({ class_name: "Sandbox" });
+  });
+});

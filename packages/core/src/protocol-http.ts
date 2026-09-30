@@ -318,11 +318,14 @@ export const mapKeys = (
     }
     for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
       if (consumed.has(k) || v === undefined) continue;
-      const renamed = dict
-        ? direction === "encode"
-          ? (dict[k] ?? k)
-          : (Object.entries(dict).find(([, w]) => w === k)?.[0] ?? k)
-        : k;
+      // A key an index signature admits is map data (an image name, an asset
+      // hash), not a member name, so the dictionary never renames it.
+      const renamed =
+        dict && !(isigs && isigs.length)
+          ? direction === "encode"
+            ? (dict[k] ?? k)
+            : (Object.entries(dict).find(([, w]) => w === k)?.[0] ?? k)
+          : k;
 
       out[typeof renamed === "string" ? renamed : renamed[0]] =
         isigs && isigs.length
