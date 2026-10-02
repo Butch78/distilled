@@ -1,6 +1,6 @@
 {
   "name": "@distilled.cloud/argocd",
-  "version": "1.0.0-rc.12",
+  "version": "1.0.0-rc.13",
   "repository": {
     "type": "git",
     "url": "https://github.com/alchemy-run/distilled",
