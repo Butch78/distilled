@@ -50,16 +50,16 @@ export const CredentialsFromEnv = Layer.succeed(
   ),
 );
 
-/** Convenience layer from a plain access token (+ optional project id). */
+/** Convenience layer from a redacted access token (+ optional project id). */
 export const fromAccessToken = (config: {
-  readonly accessToken: string;
+  readonly accessToken: Redacted.Redacted<string>;
   readonly project?: string;
   readonly region?: string;
 }): Layer.Layer<Credentials> =>
   Layer.succeed(
     Credentials,
     Effect.succeed({
-      accessToken: Redacted.make(config.accessToken),
+      accessToken: config.accessToken,
       project: config.project,
       region: config.region,
     }),
