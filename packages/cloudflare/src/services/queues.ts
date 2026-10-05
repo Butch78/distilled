@@ -54,6 +54,7 @@ const KEY_DICTIONARY: Record<string, string | ReadonlyArray<string>> = {
   visibilityTimeoutMs: "visibility_timeout_ms",
   workerName: "worker_name",
   workflowName: "workflow_name",
+  zoneId: "zone_id",
 };
 
 export class ConsumerAlreadyExists
@@ -1009,6 +1010,28 @@ export const SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow>;
 
+export type SubscriptionsCreateRequestSourceMqEventSourceEmailSendingType = "email.sending";
+export const SubscriptionsCreateRequestSourceMqEventSourceEmailSendingType = S.String;
+
+export interface SubscriptionsCreateRequestSourceMqEventSourceEmailSending {
+  /** Sending domain: the zone apex or a verified sending subdomain */
+  domain?: string;
+  /** Type of source */
+  type?: SubscriptionsCreateRequestSourceMqEventSourceEmailSendingType | (string & {});
+  /** Zone ID of the sending domain */
+  zoneId?: string;
+}
+export const SubscriptionsCreateRequestSourceMqEventSourceEmailSending = /*@__PURE__*/ S.suspend(
+  () =>
+    S.Struct({
+      domain: S.optional(S.String),
+      type: S.optional(SubscriptionsCreateRequestSourceMqEventSourceEmailSendingType),
+      zoneId: S.optional(S.String.pipe(T.Body("zone_id"))),
+    }),
+).annotate({
+  identifier: "SubscriptionsCreateRequestSourceMqEventSourceEmailSending",
+}) as any as S.Schema<SubscriptionsCreateRequestSourceMqEventSourceEmailSending>;
+
 export type SubscriptionsCreateRequestSource =
   | SubscriptionsCreateRequestSourceMqEventSourceImages
   | SubscriptionsCreateRequestSourceMqEventSourceKV
@@ -1018,7 +1041,8 @@ export type SubscriptionsCreateRequestSource =
   | SubscriptionsCreateRequestSourceMqEventSourceWorkersAIModel
   | SubscriptionsCreateRequestSourceMqEventSourceWorkersBuildsWorker
   | SubscriptionsCreateRequestSourceMqEventSourceWorkersScript
-  | SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow;
+  | SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow
+  | SubscriptionsCreateRequestSourceMqEventSourceEmailSending;
 export const SubscriptionsCreateRequestSource = /*@__PURE__*/ S.Unknown.pipe(
   T.UnionCases(
     [
@@ -1031,6 +1055,7 @@ export const SubscriptionsCreateRequestSource = /*@__PURE__*/ S.Unknown.pipe(
       ["type", "workerName"],
       ["scriptTag", "type"],
       ["type", "workflowName"],
+      ["domain", "type", "zoneId"],
     ],
     {
       key: "type",
@@ -1044,6 +1069,7 @@ export const SubscriptionsCreateRequestSource = /*@__PURE__*/ S.Unknown.pipe(
         "workersBuilds.worker",
         "workers.script",
         "workflows.workflow",
+        "email.sending",
       ],
     },
   ),
@@ -1265,6 +1291,28 @@ export const SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow>;
 
+export type SubscriptionsCreateResponseSourceMqEventSourceEmailSendingType = "email.sending";
+export const SubscriptionsCreateResponseSourceMqEventSourceEmailSendingType = S.String;
+
+export interface SubscriptionsCreateResponseSourceMqEventSourceEmailSending {
+  /** Sending domain: the zone apex or a verified sending subdomain */
+  domain?: string | null;
+  /** Type of source */
+  type?: SubscriptionsCreateResponseSourceMqEventSourceEmailSendingType | null;
+  /** Zone ID of the sending domain */
+  zoneId?: string | null;
+}
+export const SubscriptionsCreateResponseSourceMqEventSourceEmailSending = /*@__PURE__*/ S.suspend(
+  () =>
+    S.Struct({
+      domain: S.optional(S.NullOr(S.String)),
+      type: S.optional(S.NullOr(SubscriptionsCreateResponseSourceMqEventSourceEmailSendingType)),
+      zoneId: S.optional(S.NullOr(S.String).pipe(T.Body("zone_id"))),
+    }),
+).annotate({
+  identifier: "SubscriptionsCreateResponseSourceMqEventSourceEmailSending",
+}) as any as S.Schema<SubscriptionsCreateResponseSourceMqEventSourceEmailSending>;
+
 export type SubscriptionsCreateResponseSource =
   | SubscriptionsCreateResponseSourceMqEventSourceImages
   | SubscriptionsCreateResponseSourceMqEventSourceKV
@@ -1274,7 +1322,8 @@ export type SubscriptionsCreateResponseSource =
   | SubscriptionsCreateResponseSourceMqEventSourceWorkersAIModel
   | SubscriptionsCreateResponseSourceMqEventSourceWorkersBuildsWorker
   | SubscriptionsCreateResponseSourceMqEventSourceWorkersScript
-  | SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow;
+  | SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow
+  | SubscriptionsCreateResponseSourceMqEventSourceEmailSending;
 export const SubscriptionsCreateResponseSource = /*@__PURE__*/ S.Unknown.pipe(
   T.UnionCases(
     [
@@ -1287,6 +1336,7 @@ export const SubscriptionsCreateResponseSource = /*@__PURE__*/ S.Unknown.pipe(
       ["type", "workerName"],
       ["scriptTag", "type"],
       ["type", "workflowName"],
+      ["domain", "type", "zoneId"],
     ],
     {
       key: "type",
@@ -1300,6 +1350,7 @@ export const SubscriptionsCreateResponseSource = /*@__PURE__*/ S.Unknown.pipe(
         "workersBuilds.worker",
         "workers.script",
         "workflows.workflow",
+        "email.sending",
       ],
     },
   ),
@@ -1592,6 +1643,28 @@ export const SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow>;
 
+export type SubscriptionsDeleteResponseSourceMqEventSourceEmailSendingType = "email.sending";
+export const SubscriptionsDeleteResponseSourceMqEventSourceEmailSendingType = S.String;
+
+export interface SubscriptionsDeleteResponseSourceMqEventSourceEmailSending {
+  /** Sending domain: the zone apex or a verified sending subdomain */
+  domain?: string | null;
+  /** Type of source */
+  type?: SubscriptionsDeleteResponseSourceMqEventSourceEmailSendingType | null;
+  /** Zone ID of the sending domain */
+  zoneId?: string | null;
+}
+export const SubscriptionsDeleteResponseSourceMqEventSourceEmailSending = /*@__PURE__*/ S.suspend(
+  () =>
+    S.Struct({
+      domain: S.optional(S.NullOr(S.String)),
+      type: S.optional(S.NullOr(SubscriptionsDeleteResponseSourceMqEventSourceEmailSendingType)),
+      zoneId: S.optional(S.NullOr(S.String).pipe(T.Body("zone_id"))),
+    }),
+).annotate({
+  identifier: "SubscriptionsDeleteResponseSourceMqEventSourceEmailSending",
+}) as any as S.Schema<SubscriptionsDeleteResponseSourceMqEventSourceEmailSending>;
+
 export type SubscriptionsDeleteResponseSource =
   | SubscriptionsDeleteResponseSourceMqEventSourceImages
   | SubscriptionsDeleteResponseSourceMqEventSourceKV
@@ -1601,7 +1674,8 @@ export type SubscriptionsDeleteResponseSource =
   | SubscriptionsDeleteResponseSourceMqEventSourceWorkersAIModel
   | SubscriptionsDeleteResponseSourceMqEventSourceWorkersBuildsWorker
   | SubscriptionsDeleteResponseSourceMqEventSourceWorkersScript
-  | SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow;
+  | SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow
+  | SubscriptionsDeleteResponseSourceMqEventSourceEmailSending;
 export const SubscriptionsDeleteResponseSource = /*@__PURE__*/ S.Unknown.pipe(
   T.UnionCases(
     [
@@ -1614,6 +1688,7 @@ export const SubscriptionsDeleteResponseSource = /*@__PURE__*/ S.Unknown.pipe(
       ["type", "workerName"],
       ["scriptTag", "type"],
       ["type", "workflowName"],
+      ["domain", "type", "zoneId"],
     ],
     {
       key: "type",
@@ -1627,6 +1702,7 @@ export const SubscriptionsDeleteResponseSource = /*@__PURE__*/ S.Unknown.pipe(
         "workersBuilds.worker",
         "workers.script",
         "workflows.workflow",
+        "email.sending",
       ],
     },
   ),
@@ -2175,6 +2251,27 @@ export const SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow = /*@_
   identifier: "SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow",
 }) as any as S.Schema<SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow>;
 
+export type SubscriptionsGetResponseSourceMqEventSourceEmailSendingType = "email.sending";
+export const SubscriptionsGetResponseSourceMqEventSourceEmailSendingType = S.String;
+
+export interface SubscriptionsGetResponseSourceMqEventSourceEmailSending {
+  /** Sending domain: the zone apex or a verified sending subdomain */
+  domain?: string | null;
+  /** Type of source */
+  type?: SubscriptionsGetResponseSourceMqEventSourceEmailSendingType | null;
+  /** Zone ID of the sending domain */
+  zoneId?: string | null;
+}
+export const SubscriptionsGetResponseSourceMqEventSourceEmailSending = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    domain: S.optional(S.NullOr(S.String)),
+    type: S.optional(S.NullOr(SubscriptionsGetResponseSourceMqEventSourceEmailSendingType)),
+    zoneId: S.optional(S.NullOr(S.String).pipe(T.Body("zone_id"))),
+  }),
+).annotate({
+  identifier: "SubscriptionsGetResponseSourceMqEventSourceEmailSending",
+}) as any as S.Schema<SubscriptionsGetResponseSourceMqEventSourceEmailSending>;
+
 export type SubscriptionsGetResponseSource =
   | SubscriptionsGetResponseSourceMqEventSourceImages
   | SubscriptionsGetResponseSourceMqEventSourceKV
@@ -2184,7 +2281,8 @@ export type SubscriptionsGetResponseSource =
   | SubscriptionsGetResponseSourceMqEventSourceWorkersAIModel
   | SubscriptionsGetResponseSourceMqEventSourceWorkersBuildsWorker
   | SubscriptionsGetResponseSourceMqEventSourceWorkersScript
-  | SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow;
+  | SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow
+  | SubscriptionsGetResponseSourceMqEventSourceEmailSending;
 export const SubscriptionsGetResponseSource = /*@__PURE__*/ S.Unknown.pipe(
   T.UnionCases(
     [
@@ -2197,6 +2295,7 @@ export const SubscriptionsGetResponseSource = /*@__PURE__*/ S.Unknown.pipe(
       ["type", "workerName"],
       ["scriptTag", "type"],
       ["type", "workflowName"],
+      ["domain", "type", "zoneId"],
     ],
     {
       key: "type",
@@ -2210,6 +2309,7 @@ export const SubscriptionsGetResponseSource = /*@__PURE__*/ S.Unknown.pipe(
         "workersBuilds.worker",
         "workers.script",
         "workflows.workflow",
+        "email.sending",
       ],
     },
   ),
@@ -2769,6 +2869,28 @@ export const SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow>;
 
+export type SubscriptionsListResultItemSourceMqEventSourceEmailSendingType = "email.sending";
+export const SubscriptionsListResultItemSourceMqEventSourceEmailSendingType = S.String;
+
+export interface SubscriptionsListResultItemSourceMqEventSourceEmailSending {
+  /** Sending domain: the zone apex or a verified sending subdomain */
+  domain?: string | null;
+  /** Type of source */
+  type?: SubscriptionsListResultItemSourceMqEventSourceEmailSendingType | null;
+  /** Zone ID of the sending domain */
+  zoneId?: string | null;
+}
+export const SubscriptionsListResultItemSourceMqEventSourceEmailSending = /*@__PURE__*/ S.suspend(
+  () =>
+    S.Struct({
+      domain: S.optional(S.NullOr(S.String)),
+      type: S.optional(S.NullOr(SubscriptionsListResultItemSourceMqEventSourceEmailSendingType)),
+      zoneId: S.optional(S.NullOr(S.String).pipe(T.Body("zone_id"))),
+    }),
+).annotate({
+  identifier: "SubscriptionsListResultItemSourceMqEventSourceEmailSending",
+}) as any as S.Schema<SubscriptionsListResultItemSourceMqEventSourceEmailSending>;
+
 export type SubscriptionsListResultItemSource =
   | SubscriptionsListResultItemSourceMqEventSourceImages
   | SubscriptionsListResultItemSourceMqEventSourceKV
@@ -2778,7 +2900,8 @@ export type SubscriptionsListResultItemSource =
   | SubscriptionsListResultItemSourceMqEventSourceWorkersAIModel
   | SubscriptionsListResultItemSourceMqEventSourceWorkersBuildsWorker
   | SubscriptionsListResultItemSourceMqEventSourceWorkersScript
-  | SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow;
+  | SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow
+  | SubscriptionsListResultItemSourceMqEventSourceEmailSending;
 export const SubscriptionsListResultItemSource = /*@__PURE__*/ S.Unknown.pipe(
   T.UnionCases(
     [
@@ -2791,6 +2914,7 @@ export const SubscriptionsListResultItemSource = /*@__PURE__*/ S.Unknown.pipe(
       ["type", "workerName"],
       ["scriptTag", "type"],
       ["type", "workflowName"],
+      ["domain", "type", "zoneId"],
     ],
     {
       key: "type",
@@ -2804,6 +2928,7 @@ export const SubscriptionsListResultItemSource = /*@__PURE__*/ S.Unknown.pipe(
         "workersBuilds.worker",
         "workers.script",
         "workflows.workflow",
+        "email.sending",
       ],
     },
   ),
@@ -3363,6 +3488,28 @@ export const SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow>;
 
+export type SubscriptionsUpdateResponseSourceMqEventSourceEmailSendingType = "email.sending";
+export const SubscriptionsUpdateResponseSourceMqEventSourceEmailSendingType = S.String;
+
+export interface SubscriptionsUpdateResponseSourceMqEventSourceEmailSending {
+  /** Sending domain: the zone apex or a verified sending subdomain */
+  domain?: string | null;
+  /** Type of source */
+  type?: SubscriptionsUpdateResponseSourceMqEventSourceEmailSendingType | null;
+  /** Zone ID of the sending domain */
+  zoneId?: string | null;
+}
+export const SubscriptionsUpdateResponseSourceMqEventSourceEmailSending = /*@__PURE__*/ S.suspend(
+  () =>
+    S.Struct({
+      domain: S.optional(S.NullOr(S.String)),
+      type: S.optional(S.NullOr(SubscriptionsUpdateResponseSourceMqEventSourceEmailSendingType)),
+      zoneId: S.optional(S.NullOr(S.String).pipe(T.Body("zone_id"))),
+    }),
+).annotate({
+  identifier: "SubscriptionsUpdateResponseSourceMqEventSourceEmailSending",
+}) as any as S.Schema<SubscriptionsUpdateResponseSourceMqEventSourceEmailSending>;
+
 export type SubscriptionsUpdateResponseSource =
   | SubscriptionsUpdateResponseSourceMqEventSourceImages
   | SubscriptionsUpdateResponseSourceMqEventSourceKV
@@ -3372,7 +3519,8 @@ export type SubscriptionsUpdateResponseSource =
   | SubscriptionsUpdateResponseSourceMqEventSourceWorkersAIModel
   | SubscriptionsUpdateResponseSourceMqEventSourceWorkersBuildsWorker
   | SubscriptionsUpdateResponseSourceMqEventSourceWorkersScript
-  | SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow;
+  | SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow
+  | SubscriptionsUpdateResponseSourceMqEventSourceEmailSending;
 export const SubscriptionsUpdateResponseSource = /*@__PURE__*/ S.Unknown.pipe(
   T.UnionCases(
     [
@@ -3385,6 +3533,7 @@ export const SubscriptionsUpdateResponseSource = /*@__PURE__*/ S.Unknown.pipe(
       ["type", "workerName"],
       ["scriptTag", "type"],
       ["type", "workflowName"],
+      ["domain", "type", "zoneId"],
     ],
     {
       key: "type",
@@ -3398,6 +3547,7 @@ export const SubscriptionsUpdateResponseSource = /*@__PURE__*/ S.Unknown.pipe(
         "workersBuilds.worker",
         "workers.script",
         "workflows.workflow",
+        "email.sending",
       ],
     },
   ),
