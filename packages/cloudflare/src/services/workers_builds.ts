@@ -12,6 +12,15 @@ import * as T from "../traits.ts";
 
 export type { CloudflareOpError, CloudflareOpContext };
 
+export class RepositoryConfigNotFound
+  extends /*@__PURE__*/ T.applyErrorMatchers(
+    /*@__PURE__*/ S.TaggedError<RepositoryConfigNotFound>()("RepositoryConfigNotFound", {
+      code: S.Number,
+      message: S.String,
+    }),
+    [{ status: 404, code: 12000 }],
+  ) {}
+
 export interface CancelBuildRequest {
   /** Account identifier. */
   accountId: string;
@@ -3305,7 +3314,7 @@ export const getLatestBuilds: API.OperationMethod<
   retry: Retry.Retry,
 }));
 
-export type GetReposConfigAutofillError = CloudflareOpError;
+export type GetReposConfigAutofillError = RepositoryConfigNotFound | CloudflareOpError;
 /** Analyze repository for automatic configuration detection */
 export const getReposConfigAutofill: API.OperationMethod<
   GetReposConfigAutofillRequest,
@@ -3315,7 +3324,7 @@ export const getReposConfigAutofill: API.OperationMethod<
 > = /*@__PURE__*/ API.make(() => ({
   input: GetReposConfigAutofillRequest,
   output: GetReposConfigAutofillResponse,
-  errors: [CloudflareRateLimited, CloudflareError],
+  errors: [RepositoryConfigNotFound, CloudflareRateLimited, CloudflareError],
   protocol: CloudflareProtocol,
   retry: Retry.Retry,
 }));
