@@ -1,13 +1,11 @@
-import { describe, expect, test } from "bun:test";
 import { runValidationModes } from "@distilled.cloud/core/testing";
 import * as Effect from "effect/Effect";
+import * as Redacted from "effect/Redacted";
+import { describe, expect, test } from "vitest";
 import { credentials } from "./credentials.ts";
 import * as Retry from "./retry.ts";
 import { createSubscription } from "./services/queues.ts";
-import {
-  getScriptEventTriggers,
-  putScriptEventTriggers,
-} from "./services/workers.ts";
+import { getScriptEventTriggers, putScriptEventTriggers } from "./services/workers.ts";
 
 const envelope = (result: unknown) =>
   JSON.stringify({ success: true, errors: [], messages: [], result });
@@ -15,9 +13,7 @@ const envelope = (result: unknown) =>
 const pushed = {
   type: "cf.artifacts.repo.pushed",
   filter: { namespace: "ns", repo_name: "repo" },
-  targets: [
-    { type: "workflow", workflow_name: "ci", script_name: "ci-worker" },
-  ],
+  targets: [{ type: "workflow", workflow_name: "ci", script_name: "ci-worker" }],
 };
 
 const bodyOf = (request: { body: { _tag: string; body?: unknown } }) =>
@@ -31,10 +27,10 @@ describe("Worker event triggers", () => {
       getScriptEventTriggers({
         accountId: "account",
         scriptName: "ci-worker",
-      }).pipe(Retry.none, Effect.provide(credentials({ apiToken: "test" }))),
+      }).pipe(Retry.none, Effect.provide(credentials({ apiToken: Redacted.make("test") }))),
       (request) => {
         expect(request.method).toBe("GET");
-        expect(request.url).toEndWith("/accounts/account/triggers/ci-worker");
+        expect(request.url.endsWith("/accounts/account/triggers/ci-worker")).toBe(true);
         return {
           body: envelope({ script_name: "ci-worker", triggers: [pushed] }),
         };
@@ -64,15 +60,13 @@ describe("Worker event triggers", () => {
           {
             type: "cf.artifacts.repo.pushed",
             filter: { namespace: "ns", repoName: "repo" },
-            targets: [
-              { type: "workflow", workflowName: "ci", scriptName: "ci-worker" },
-            ],
+            targets: [{ type: "workflow", workflowName: "ci", scriptName: "ci-worker" }],
           },
         ],
-      }).pipe(Retry.none, Effect.provide(credentials({ apiToken: "test" }))),
+      }).pipe(Retry.none, Effect.provide(credentials({ apiToken: Redacted.make("test") }))),
       (request) => {
         expect(request.method).toBe("PUT");
-        expect(request.url).toEndWith("/accounts/account/triggers/ci-worker");
+        expect(request.url.endsWith("/accounts/account/triggers/ci-worker")).toBe(true);
         expect(bodyOf(request)).toEqual([pushed]);
         return {
           body: envelope({ script_name: "ci-worker", triggers: [pushed] }),
@@ -99,7 +93,7 @@ describe("Artifacts event subscription sources", () => {
         source: { type: "artifacts.repo", namespace: "ns", repoName: "repo" },
         destination: { type: "queues.queue", queueId: "queue" },
         events: ["pushed"],
-      }).pipe(Retry.none, Effect.provide(credentials({ apiToken: "test" }))),
+      }).pipe(Retry.none, Effect.provide(credentials({ apiToken: Redacted.make("test") }))),
       (request) => {
         expect(bodyOf(request)?.source).toEqual({
           type: "artifacts.repo",
@@ -133,12 +127,7 @@ describe("Artifacts event subscription sources", () => {
 
 describe("Worker event trigger failures", () => {
   for (const [name, status, code, message] of [
-    [
-      "EventTriggerWorkflowNotFound",
-      404,
-      10200,
-      "workflows.api.error.workflow.not_found",
-    ],
+    ["EventTriggerWorkflowNotFound", 404, 10200, "workflows.api.error.workflow.not_found"],
     ["InvalidEventTriggers", 400, 10002, "workflows.api.error.body"],
   ] as const) {
     test(`types ${message} as ${name}`, async () => {
@@ -147,7 +136,7 @@ describe("Worker event trigger failures", () => {
           accountId: "account",
           scriptName: "ci-worker",
           body: [],
-        }).pipe(Retry.none, Effect.provide(credentials({ apiToken: "test" }))),
+        }).pipe(Retry.none, Effect.provide(credentials({ apiToken: Redacted.make("test") }))),
         {
           status,
           body: JSON.stringify({

@@ -1010,55 +1010,42 @@ export const SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsCreateRequestSourceMqEventSourceWorkflowsWorkflow>;
 
-export type SubscriptionsCreateRequestSourceMqEventSourceArtifactsType =
-  "artifacts";
-export const SubscriptionsCreateRequestSourceMqEventSourceArtifactsType =
-  S.String;
+export type SubscriptionsCreateRequestSourceMqEventSourceArtifactsType = "artifacts";
+export const SubscriptionsCreateRequestSourceMqEventSourceArtifactsType = S.String;
 
 export interface SubscriptionsCreateRequestSourceMqEventSourceArtifacts {
   /** Type of source */
-  type?:
-    | SubscriptionsCreateRequestSourceMqEventSourceArtifactsType
-    | (string & {});
+  type?: SubscriptionsCreateRequestSourceMqEventSourceArtifactsType | (string & {});
 }
-export const SubscriptionsCreateRequestSourceMqEventSourceArtifacts =
-  /*@__PURE__*/ S.suspend(() =>
-    S.Struct({
-      type: S.optional(
-        SubscriptionsCreateRequestSourceMqEventSourceArtifactsType,
-      ),
-    }),
-  ).annotate({
-    identifier: "SubscriptionsCreateRequestSourceMqEventSourceArtifacts",
-  }) as any as S.Schema<SubscriptionsCreateRequestSourceMqEventSourceArtifacts>;
+export const SubscriptionsCreateRequestSourceMqEventSourceArtifacts = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    type: S.optional(SubscriptionsCreateRequestSourceMqEventSourceArtifactsType),
+  }),
+).annotate({
+  identifier: "SubscriptionsCreateRequestSourceMqEventSourceArtifacts",
+}) as any as S.Schema<SubscriptionsCreateRequestSourceMqEventSourceArtifacts>;
 
-export type SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType =
-  "artifacts.repo";
-export const SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType =
-  S.String;
+export type SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType = "artifacts.repo";
+export const SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType = S.String;
 
 export interface SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo {
   /** Type of source */
-  type?:
-    | SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType
-    | (string & {});
+  type?: SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType | (string & {});
   /** Artifacts namespace of the repository */
   namespace: string;
   /** Name of the repository */
   repoName: string;
 }
-export const SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo =
-  /*@__PURE__*/ S.suspend(() =>
+export const SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo = /*@__PURE__*/ S.suspend(
+  () =>
     S.Struct({
-      type: S.optional(
-        SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType,
-      ),
+      type: S.optional(SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepoType),
       namespace: S.String,
       repoName: S.String.pipe(T.Body("repo_name")),
     }),
-  ).annotate({
-    identifier: "SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo",
-  }) as any as S.Schema<SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo>;
+).annotate({
+  identifier: "SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo",
+}) as any as S.Schema<SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo>;
 
 export type SubscriptionsCreateRequestSource =
   | SubscriptionsCreateRequestSourceMqEventSourceImages
@@ -1322,30 +1309,23 @@ export const SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsCreateResponseSourceMqEventSourceWorkflowsWorkflow>;
 
-export type SubscriptionsCreateResponseSourceMqEventSourceArtifactsType =
-  "artifacts";
-export const SubscriptionsCreateResponseSourceMqEventSourceArtifactsType =
-  S.String;
+export type SubscriptionsCreateResponseSourceMqEventSourceArtifactsType = "artifacts";
+export const SubscriptionsCreateResponseSourceMqEventSourceArtifactsType = S.String;
 
 export interface SubscriptionsCreateResponseSourceMqEventSourceArtifacts {
   /** Type of source */
   type?: SubscriptionsCreateResponseSourceMqEventSourceArtifactsType | null;
 }
-export const SubscriptionsCreateResponseSourceMqEventSourceArtifacts =
-  /*@__PURE__*/ S.suspend(() =>
-    S.Struct({
-      type: S.optional(
-        S.NullOr(SubscriptionsCreateResponseSourceMqEventSourceArtifactsType),
-      ),
-    }),
-  ).annotate({
-    identifier: "SubscriptionsCreateResponseSourceMqEventSourceArtifacts",
-  }) as any as S.Schema<SubscriptionsCreateResponseSourceMqEventSourceArtifacts>;
+export const SubscriptionsCreateResponseSourceMqEventSourceArtifacts = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    type: S.optional(S.NullOr(SubscriptionsCreateResponseSourceMqEventSourceArtifactsType)),
+  }),
+).annotate({
+  identifier: "SubscriptionsCreateResponseSourceMqEventSourceArtifacts",
+}) as any as S.Schema<SubscriptionsCreateResponseSourceMqEventSourceArtifacts>;
 
-export type SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepoType =
-  "artifacts.repo";
-export const SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepoType =
-  S.String;
+export type SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepoType = "artifacts.repo";
+export const SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepoType = S.String;
 
 export interface SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo {
   /** Type of source */
@@ -1355,20 +1335,16 @@ export interface SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo {
   /** Name of the repository */
   repoName: string;
 }
-export const SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo =
-  /*@__PURE__*/ S.suspend(() =>
+export const SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo = /*@__PURE__*/ S.suspend(
+  () =>
     S.Struct({
-      type: S.optional(
-        S.NullOr(
-          SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepoType,
-        ),
-      ),
+      type: S.optional(S.NullOr(SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepoType)),
       namespace: S.String,
       repoName: S.String.pipe(T.Body("repo_name")),
     }),
-  ).annotate({
-    identifier: "SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo",
-  }) as any as S.Schema<SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo>;
+).annotate({
+  identifier: "SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo",
+}) as any as S.Schema<SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo>;
 
 export type SubscriptionsCreateResponseSource =
   | SubscriptionsCreateResponseSourceMqEventSourceImages
@@ -1703,30 +1679,23 @@ export const SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsDeleteResponseSourceMqEventSourceWorkflowsWorkflow>;
 
-export type SubscriptionsDeleteResponseSourceMqEventSourceArtifactsType =
-  "artifacts";
-export const SubscriptionsDeleteResponseSourceMqEventSourceArtifactsType =
-  S.String;
+export type SubscriptionsDeleteResponseSourceMqEventSourceArtifactsType = "artifacts";
+export const SubscriptionsDeleteResponseSourceMqEventSourceArtifactsType = S.String;
 
 export interface SubscriptionsDeleteResponseSourceMqEventSourceArtifacts {
   /** Type of source */
   type?: SubscriptionsDeleteResponseSourceMqEventSourceArtifactsType | null;
 }
-export const SubscriptionsDeleteResponseSourceMqEventSourceArtifacts =
-  /*@__PURE__*/ S.suspend(() =>
-    S.Struct({
-      type: S.optional(
-        S.NullOr(SubscriptionsDeleteResponseSourceMqEventSourceArtifactsType),
-      ),
-    }),
-  ).annotate({
-    identifier: "SubscriptionsDeleteResponseSourceMqEventSourceArtifacts",
-  }) as any as S.Schema<SubscriptionsDeleteResponseSourceMqEventSourceArtifacts>;
+export const SubscriptionsDeleteResponseSourceMqEventSourceArtifacts = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    type: S.optional(S.NullOr(SubscriptionsDeleteResponseSourceMqEventSourceArtifactsType)),
+  }),
+).annotate({
+  identifier: "SubscriptionsDeleteResponseSourceMqEventSourceArtifacts",
+}) as any as S.Schema<SubscriptionsDeleteResponseSourceMqEventSourceArtifacts>;
 
-export type SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepoType =
-  "artifacts.repo";
-export const SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepoType =
-  S.String;
+export type SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepoType = "artifacts.repo";
+export const SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepoType = S.String;
 
 export interface SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo {
   /** Type of source */
@@ -1736,20 +1705,16 @@ export interface SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo {
   /** Name of the repository */
   repoName: string;
 }
-export const SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo =
-  /*@__PURE__*/ S.suspend(() =>
+export const SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo = /*@__PURE__*/ S.suspend(
+  () =>
     S.Struct({
-      type: S.optional(
-        S.NullOr(
-          SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepoType,
-        ),
-      ),
+      type: S.optional(S.NullOr(SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepoType)),
       namespace: S.String,
       repoName: S.String.pipe(T.Body("repo_name")),
     }),
-  ).annotate({
-    identifier: "SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo",
-  }) as any as S.Schema<SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo>;
+).annotate({
+  identifier: "SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo",
+}) as any as S.Schema<SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo>;
 
 export type SubscriptionsDeleteResponseSource =
   | SubscriptionsDeleteResponseSourceMqEventSourceImages
@@ -2340,30 +2305,23 @@ export const SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow = /*@_
   identifier: "SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow",
 }) as any as S.Schema<SubscriptionsGetResponseSourceMqEventSourceWorkflowsWorkflow>;
 
-export type SubscriptionsGetResponseSourceMqEventSourceArtifactsType =
-  "artifacts";
-export const SubscriptionsGetResponseSourceMqEventSourceArtifactsType =
-  S.String;
+export type SubscriptionsGetResponseSourceMqEventSourceArtifactsType = "artifacts";
+export const SubscriptionsGetResponseSourceMqEventSourceArtifactsType = S.String;
 
 export interface SubscriptionsGetResponseSourceMqEventSourceArtifacts {
   /** Type of source */
   type?: SubscriptionsGetResponseSourceMqEventSourceArtifactsType | null;
 }
-export const SubscriptionsGetResponseSourceMqEventSourceArtifacts =
-  /*@__PURE__*/ S.suspend(() =>
-    S.Struct({
-      type: S.optional(
-        S.NullOr(SubscriptionsGetResponseSourceMqEventSourceArtifactsType),
-      ),
-    }),
-  ).annotate({
-    identifier: "SubscriptionsGetResponseSourceMqEventSourceArtifacts",
-  }) as any as S.Schema<SubscriptionsGetResponseSourceMqEventSourceArtifacts>;
+export const SubscriptionsGetResponseSourceMqEventSourceArtifacts = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    type: S.optional(S.NullOr(SubscriptionsGetResponseSourceMqEventSourceArtifactsType)),
+  }),
+).annotate({
+  identifier: "SubscriptionsGetResponseSourceMqEventSourceArtifacts",
+}) as any as S.Schema<SubscriptionsGetResponseSourceMqEventSourceArtifacts>;
 
-export type SubscriptionsGetResponseSourceMqEventSourceArtifactsRepoType =
-  "artifacts.repo";
-export const SubscriptionsGetResponseSourceMqEventSourceArtifactsRepoType =
-  S.String;
+export type SubscriptionsGetResponseSourceMqEventSourceArtifactsRepoType = "artifacts.repo";
+export const SubscriptionsGetResponseSourceMqEventSourceArtifactsRepoType = S.String;
 
 export interface SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo {
   /** Type of source */
@@ -2373,18 +2331,16 @@ export interface SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo {
   /** Name of the repository */
   repoName: string;
 }
-export const SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo =
-  /*@__PURE__*/ S.suspend(() =>
+export const SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo = /*@__PURE__*/ S.suspend(
+  () =>
     S.Struct({
-      type: S.optional(
-        S.NullOr(SubscriptionsGetResponseSourceMqEventSourceArtifactsRepoType),
-      ),
+      type: S.optional(S.NullOr(SubscriptionsGetResponseSourceMqEventSourceArtifactsRepoType)),
       namespace: S.String,
       repoName: S.String.pipe(T.Body("repo_name")),
     }),
-  ).annotate({
-    identifier: "SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo",
-  }) as any as S.Schema<SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo>;
+).annotate({
+  identifier: "SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo",
+}) as any as S.Schema<SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo>;
 
 export type SubscriptionsGetResponseSource =
   | SubscriptionsGetResponseSourceMqEventSourceImages
@@ -2986,30 +2942,23 @@ export const SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsListResultItemSourceMqEventSourceWorkflowsWorkflow>;
 
-export type SubscriptionsListResultItemSourceMqEventSourceArtifactsType =
-  "artifacts";
-export const SubscriptionsListResultItemSourceMqEventSourceArtifactsType =
-  S.String;
+export type SubscriptionsListResultItemSourceMqEventSourceArtifactsType = "artifacts";
+export const SubscriptionsListResultItemSourceMqEventSourceArtifactsType = S.String;
 
 export interface SubscriptionsListResultItemSourceMqEventSourceArtifacts {
   /** Type of source */
   type?: SubscriptionsListResultItemSourceMqEventSourceArtifactsType | null;
 }
-export const SubscriptionsListResultItemSourceMqEventSourceArtifacts =
-  /*@__PURE__*/ S.suspend(() =>
-    S.Struct({
-      type: S.optional(
-        S.NullOr(SubscriptionsListResultItemSourceMqEventSourceArtifactsType),
-      ),
-    }),
-  ).annotate({
-    identifier: "SubscriptionsListResultItemSourceMqEventSourceArtifacts",
-  }) as any as S.Schema<SubscriptionsListResultItemSourceMqEventSourceArtifacts>;
+export const SubscriptionsListResultItemSourceMqEventSourceArtifacts = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    type: S.optional(S.NullOr(SubscriptionsListResultItemSourceMqEventSourceArtifactsType)),
+  }),
+).annotate({
+  identifier: "SubscriptionsListResultItemSourceMqEventSourceArtifacts",
+}) as any as S.Schema<SubscriptionsListResultItemSourceMqEventSourceArtifacts>;
 
-export type SubscriptionsListResultItemSourceMqEventSourceArtifactsRepoType =
-  "artifacts.repo";
-export const SubscriptionsListResultItemSourceMqEventSourceArtifactsRepoType =
-  S.String;
+export type SubscriptionsListResultItemSourceMqEventSourceArtifactsRepoType = "artifacts.repo";
+export const SubscriptionsListResultItemSourceMqEventSourceArtifactsRepoType = S.String;
 
 export interface SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo {
   /** Type of source */
@@ -3019,20 +2968,16 @@ export interface SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo {
   /** Name of the repository */
   repoName: string;
 }
-export const SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo =
-  /*@__PURE__*/ S.suspend(() =>
+export const SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo = /*@__PURE__*/ S.suspend(
+  () =>
     S.Struct({
-      type: S.optional(
-        S.NullOr(
-          SubscriptionsListResultItemSourceMqEventSourceArtifactsRepoType,
-        ),
-      ),
+      type: S.optional(S.NullOr(SubscriptionsListResultItemSourceMqEventSourceArtifactsRepoType)),
       namespace: S.String,
       repoName: S.String.pipe(T.Body("repo_name")),
     }),
-  ).annotate({
-    identifier: "SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo",
-  }) as any as S.Schema<SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo>;
+).annotate({
+  identifier: "SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo",
+}) as any as S.Schema<SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo>;
 
 export type SubscriptionsListResultItemSource =
   | SubscriptionsListResultItemSourceMqEventSourceImages
@@ -3634,30 +3579,23 @@ export const SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow =
     identifier: "SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow",
   }) as any as S.Schema<SubscriptionsUpdateResponseSourceMqEventSourceWorkflowsWorkflow>;
 
-export type SubscriptionsUpdateResponseSourceMqEventSourceArtifactsType =
-  "artifacts";
-export const SubscriptionsUpdateResponseSourceMqEventSourceArtifactsType =
-  S.String;
+export type SubscriptionsUpdateResponseSourceMqEventSourceArtifactsType = "artifacts";
+export const SubscriptionsUpdateResponseSourceMqEventSourceArtifactsType = S.String;
 
 export interface SubscriptionsUpdateResponseSourceMqEventSourceArtifacts {
   /** Type of source */
   type?: SubscriptionsUpdateResponseSourceMqEventSourceArtifactsType | null;
 }
-export const SubscriptionsUpdateResponseSourceMqEventSourceArtifacts =
-  /*@__PURE__*/ S.suspend(() =>
-    S.Struct({
-      type: S.optional(
-        S.NullOr(SubscriptionsUpdateResponseSourceMqEventSourceArtifactsType),
-      ),
-    }),
-  ).annotate({
-    identifier: "SubscriptionsUpdateResponseSourceMqEventSourceArtifacts",
-  }) as any as S.Schema<SubscriptionsUpdateResponseSourceMqEventSourceArtifacts>;
+export const SubscriptionsUpdateResponseSourceMqEventSourceArtifacts = /*@__PURE__*/ S.suspend(() =>
+  S.Struct({
+    type: S.optional(S.NullOr(SubscriptionsUpdateResponseSourceMqEventSourceArtifactsType)),
+  }),
+).annotate({
+  identifier: "SubscriptionsUpdateResponseSourceMqEventSourceArtifacts",
+}) as any as S.Schema<SubscriptionsUpdateResponseSourceMqEventSourceArtifacts>;
 
-export type SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepoType =
-  "artifacts.repo";
-export const SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepoType =
-  S.String;
+export type SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepoType = "artifacts.repo";
+export const SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepoType = S.String;
 
 export interface SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo {
   /** Type of source */
@@ -3667,20 +3605,16 @@ export interface SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo {
   /** Name of the repository */
   repoName: string;
 }
-export const SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo =
-  /*@__PURE__*/ S.suspend(() =>
+export const SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo = /*@__PURE__*/ S.suspend(
+  () =>
     S.Struct({
-      type: S.optional(
-        S.NullOr(
-          SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepoType,
-        ),
-      ),
+      type: S.optional(S.NullOr(SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepoType)),
       namespace: S.String,
       repoName: S.String.pipe(T.Body("repo_name")),
     }),
-  ).annotate({
-    identifier: "SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo",
-  }) as any as S.Schema<SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo>;
+).annotate({
+  identifier: "SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo",
+}) as any as S.Schema<SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo>;
 
 export type SubscriptionsUpdateResponseSource =
   | SubscriptionsUpdateResponseSourceMqEventSourceImages

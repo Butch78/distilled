@@ -201,13 +201,10 @@ export class DurableObjectMustBeSqlite
 
 export class EventTriggerWorkflowNotFound
   extends /*@__PURE__*/ T.applyErrorMatchers(
-    /*@__PURE__*/ S.TaggedError<EventTriggerWorkflowNotFound>()(
-      "EventTriggerWorkflowNotFound",
-      {
-        code: S.Number,
-        message: S.String,
-      },
-    ),
+    /*@__PURE__*/ S.TaggedError<EventTriggerWorkflowNotFound>()("EventTriggerWorkflowNotFound", {
+      code: S.Number,
+      message: S.String,
+    }),
     [{ code: 10200, message: { includes: "workflow.not_found" } }],
   ) {}
 
@@ -240,13 +237,10 @@ export class HyperdriveConfigNotFound
 
 export class InvalidEventTriggers
   extends /*@__PURE__*/ T.applyErrorMatchers(
-    /*@__PURE__*/ S.TaggedError<InvalidEventTriggers>()(
-      "InvalidEventTriggers",
-      {
-        code: S.Number,
-        message: S.String,
-      },
-    ),
+    /*@__PURE__*/ S.TaggedError<InvalidEventTriggers>()("InvalidEventTriggers", {
+      code: S.Number,
+      message: S.String,
+    }),
     [{ code: 10002, message: { includes: "workflows.api.error.body" } }],
   ) {}
 
@@ -17833,11 +17827,7 @@ export const GetScriptEventTriggersRequest = /*@__PURE__*/ S.suspend(() =>
     scriptName: S.String.pipe(T.Label("script_name")),
   })
     .pipe(
-      T.Http({
-        method: "GET",
-        uri: "/accounts/{account_id}/triggers/{script_name}",
-        code: 200,
-      }),
+      T.Http({ method: "GET", uri: "/accounts/{account_id}/triggers/{script_name}", code: 200 }),
     )
     .pipe(T.KeyDictionary(KEY_DICTIONARY)),
 ).annotate({
@@ -17855,9 +17845,7 @@ export const EventTriggerFilter = /*@__PURE__*/ S.suspend(() =>
     namespace: S.optional(S.NullOr(S.String)),
     repoName: S.optional(S.NullOr(S.String).pipe(T.Body("repo_name"))),
   }),
-).annotate({
-  identifier: "EventTriggerFilter",
-}) as any as S.Schema<EventTriggerFilter>;
+).annotate({ identifier: "EventTriggerFilter" }) as any as S.Schema<EventTriggerFilter>;
 
 export interface EventTriggerTarget {
   /** Target kind: `workflow`. */
@@ -17873,9 +17861,7 @@ export const EventTriggerTarget = /*@__PURE__*/ S.suspend(() =>
     workflowName: S.String.pipe(T.Body("workflow_name")),
     scriptName: S.optional(S.NullOr(S.String).pipe(T.Body("script_name"))),
   }),
-).annotate({
-  identifier: "EventTriggerTarget",
-}) as any as S.Schema<EventTriggerTarget>;
+).annotate({ identifier: "EventTriggerTarget" }) as any as S.Schema<EventTriggerTarget>;
 
 export type EventTriggerTargetList = Array<EventTriggerTarget>;
 export const EventTriggerTargetList = /*@__PURE__*/ S.Array(
@@ -17910,16 +17896,11 @@ export const ScriptEventTriggers = /*@__PURE__*/ S.suspend(() =>
     scriptName: S.String.pipe(T.Body("script_name")),
     triggers: EventTriggerList,
   }),
-).annotate({
-  identifier: "ScriptEventTriggers",
-}) as any as S.Schema<ScriptEventTriggers>;
+).annotate({ identifier: "ScriptEventTriggers" }) as any as S.Schema<ScriptEventTriggers>;
 
 export type GetScriptEventTriggersResponse = ScriptEventTriggers;
 export const GetScriptEventTriggersResponse = /*@__PURE__*/ S.suspend(() =>
-  ScriptEventTriggers.pipe(
-    T.EnvelopePayloadRoot(),
-    T.KeyDictionary(KEY_DICTIONARY),
-  ),
+  ScriptEventTriggers.pipe(T.EnvelopePayloadRoot(), T.KeyDictionary(KEY_DICTIONARY)),
 ).annotate({
   identifier: "GetScriptEventTriggersResponse",
 }) as any as S.Schema<GetScriptEventTriggersResponse>;
@@ -32137,11 +32118,7 @@ export const PutScriptEventTriggersRequest = /*@__PURE__*/ S.suspend(() =>
     body: EventTriggerList.pipe(T.HttpBody()),
   })
     .pipe(
-      T.Http({
-        method: "PUT",
-        uri: "/accounts/{account_id}/triggers/{script_name}",
-        code: 200,
-      }),
+      T.Http({ method: "PUT", uri: "/accounts/{account_id}/triggers/{script_name}", code: 200 }),
     )
     .pipe(T.KeyDictionary(KEY_DICTIONARY)),
 ).annotate({
@@ -32150,10 +32127,7 @@ export const PutScriptEventTriggersRequest = /*@__PURE__*/ S.suspend(() =>
 
 export type PutScriptEventTriggersResponse = ScriptEventTriggers;
 export const PutScriptEventTriggersResponse = /*@__PURE__*/ S.suspend(() =>
-  ScriptEventTriggers.pipe(
-    T.EnvelopePayloadRoot(),
-    T.KeyDictionary(KEY_DICTIONARY),
-  ),
+  ScriptEventTriggers.pipe(T.EnvelopePayloadRoot(), T.KeyDictionary(KEY_DICTIONARY)),
 ).annotate({
   identifier: "PutScriptEventTriggersResponse",
 }) as any as S.Schema<PutScriptEventTriggersResponse>;
