@@ -54,7 +54,8 @@
       "visibilityTimeoutMs": "visibility_timeout_ms",
       "workerName": "worker_name",
       "workflowName": "workflow_name",
-      "repoName": "repo_name"
+      "repoName": "repo_name",
+      "zoneId": "zone_id"
     },
     "distilled.finalized": true
   },
@@ -3470,6 +3471,9 @@
         },
         "MqEventSourceArtifactsRepo": {
           "target": "com.cloudflare.queues#SubscriptionsCreateRequestSourceMqEventSourceArtifactsRepo"
+        },
+        "MqEventSourceEmailSending": {
+          "target": "com.cloudflare.queues#SubscriptionsCreateRequestSourceMqEventSourceEmailSending"
         }
       }
     },
@@ -3766,6 +3770,9 @@
         },
         "MqEventSourceArtifactsRepo": {
           "target": "com.cloudflare.queues#SubscriptionsCreateResponseSourceMqEventSourceArtifactsRepo"
+        },
+        "MqEventSourceEmailSending": {
+          "target": "com.cloudflare.queues#SubscriptionsCreateResponseSourceMqEventSourceEmailSending"
         }
       }
     },
@@ -4062,6 +4069,9 @@
         },
         "MqEventSourceArtifactsRepo": {
           "target": "com.cloudflare.queues#SubscriptionsDeleteResponseSourceMqEventSourceArtifactsRepo"
+        },
+        "MqEventSourceEmailSending": {
+          "target": "com.cloudflare.queues#SubscriptionsDeleteResponseSourceMqEventSourceEmailSending"
         }
       }
     },
@@ -4358,6 +4368,9 @@
         },
         "MqEventSourceArtifactsRepo": {
           "target": "com.cloudflare.queues#SubscriptionsGetResponseSourceMqEventSourceArtifactsRepo"
+        },
+        "MqEventSourceEmailSending": {
+          "target": "com.cloudflare.queues#SubscriptionsGetResponseSourceMqEventSourceEmailSending"
         }
       }
     },
@@ -4700,6 +4713,9 @@
         },
         "MqEventSourceArtifactsRepo": {
           "target": "com.cloudflare.queues#SubscriptionsListResultItemSourceMqEventSourceArtifactsRepo"
+        },
+        "MqEventSourceEmailSending": {
+          "target": "com.cloudflare.queues#SubscriptionsListResultItemSourceMqEventSourceEmailSending"
         }
       }
     },
@@ -5099,6 +5115,9 @@
         },
         "MqEventSourceArtifactsRepo": {
           "target": "com.cloudflare.queues#SubscriptionsUpdateResponseSourceMqEventSourceArtifactsRepo"
+        },
+        "MqEventSourceEmailSending": {
+          "target": "com.cloudflare.queues#SubscriptionsUpdateResponseSourceMqEventSourceEmailSending"
         }
       }
     },
@@ -7963,6 +7982,210 @@
           "traits": {
             "smithy.api#required": {},
             "smithy.api#documentation": "Name of the repository"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsCreateRequestSourceMqEventSourceEmailSendingType": {
+      "type": "enum",
+      "members": {
+        "EMAIL_SENDING": {
+          "target": "smithy.api#Unit",
+          "traits": {
+            "smithy.api#enumValue": "email.sending"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsCreateRequestSourceMqEventSourceEmailSending": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Sending domain: the zone apex or a verified sending subdomain"
+          }
+        },
+        "type": {
+          "target": "com.cloudflare.queues#SubscriptionsCreateRequestSourceMqEventSourceEmailSendingType",
+          "traits": {
+            "smithy.api#documentation": "Type of source"
+          }
+        },
+        "zone_id": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Zone ID of the sending domain"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsCreateResponseSourceMqEventSourceEmailSendingType": {
+      "type": "enum",
+      "members": {
+        "EMAIL_SENDING": {
+          "target": "smithy.api#Unit",
+          "traits": {
+            "smithy.api#enumValue": "email.sending"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsCreateResponseSourceMqEventSourceEmailSending": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Sending domain: the zone apex or a verified sending subdomain"
+          }
+        },
+        "type": {
+          "target": "com.cloudflare.queues#SubscriptionsCreateResponseSourceMqEventSourceEmailSendingType",
+          "traits": {
+            "smithy.api#documentation": "Type of source"
+          }
+        },
+        "zone_id": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Zone ID of the sending domain"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsDeleteResponseSourceMqEventSourceEmailSendingType": {
+      "type": "enum",
+      "members": {
+        "EMAIL_SENDING": {
+          "target": "smithy.api#Unit",
+          "traits": {
+            "smithy.api#enumValue": "email.sending"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsDeleteResponseSourceMqEventSourceEmailSending": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Sending domain: the zone apex or a verified sending subdomain"
+          }
+        },
+        "type": {
+          "target": "com.cloudflare.queues#SubscriptionsDeleteResponseSourceMqEventSourceEmailSendingType",
+          "traits": {
+            "smithy.api#documentation": "Type of source"
+          }
+        },
+        "zone_id": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Zone ID of the sending domain"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsGetResponseSourceMqEventSourceEmailSendingType": {
+      "type": "enum",
+      "members": {
+        "EMAIL_SENDING": {
+          "target": "smithy.api#Unit",
+          "traits": {
+            "smithy.api#enumValue": "email.sending"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsGetResponseSourceMqEventSourceEmailSending": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Sending domain: the zone apex or a verified sending subdomain"
+          }
+        },
+        "type": {
+          "target": "com.cloudflare.queues#SubscriptionsGetResponseSourceMqEventSourceEmailSendingType",
+          "traits": {
+            "smithy.api#documentation": "Type of source"
+          }
+        },
+        "zone_id": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Zone ID of the sending domain"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsListResultItemSourceMqEventSourceEmailSendingType": {
+      "type": "enum",
+      "members": {
+        "EMAIL_SENDING": {
+          "target": "smithy.api#Unit",
+          "traits": {
+            "smithy.api#enumValue": "email.sending"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsListResultItemSourceMqEventSourceEmailSending": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Sending domain: the zone apex or a verified sending subdomain"
+          }
+        },
+        "type": {
+          "target": "com.cloudflare.queues#SubscriptionsListResultItemSourceMqEventSourceEmailSendingType",
+          "traits": {
+            "smithy.api#documentation": "Type of source"
+          }
+        },
+        "zone_id": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Zone ID of the sending domain"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsUpdateResponseSourceMqEventSourceEmailSendingType": {
+      "type": "enum",
+      "members": {
+        "EMAIL_SENDING": {
+          "target": "smithy.api#Unit",
+          "traits": {
+            "smithy.api#enumValue": "email.sending"
+          }
+        }
+      }
+    },
+    "com.cloudflare.queues#SubscriptionsUpdateResponseSourceMqEventSourceEmailSending": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Sending domain: the zone apex or a verified sending subdomain"
+          }
+        },
+        "type": {
+          "target": "com.cloudflare.queues#SubscriptionsUpdateResponseSourceMqEventSourceEmailSendingType",
+          "traits": {
+            "smithy.api#documentation": "Type of source"
+          }
+        },
+        "zone_id": {
+          "target": "smithy.api#String",
+          "traits": {
+            "smithy.api#documentation": "Zone ID of the sending domain"
           }
         }
       }

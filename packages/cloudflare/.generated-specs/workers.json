@@ -58695,8 +58695,7 @@
         "enabled": {
           "target": "smithy.api#Boolean",
           "traits": {
-            "smithy.api#documentation": "Whether observability is enabled for the Worker.",
-            "smithy.api#required": {}
+            "smithy.api#documentation": "Whether observability is enabled for the Worker."
           }
         },
         "head_sampling_rate": {
@@ -76693,14 +76692,23 @@
         }
       }
     },
-    "com.cloudflare.workers#PutScriptMetadataObservability": {
+    "com.cloudflare.workers#PutScriptObservabilityIssues": {
       "type": "structure",
       "members": {
         "enabled": {
           "target": "smithy.api#Boolean",
           "traits": {
-            "smithy.api#required": {}
+            "smithy.api#required": {},
+            "smithy.api#documentation": "Whether Workers Issues error monitoring is enabled."
           }
+        }
+      }
+    },
+    "com.cloudflare.workers#PutScriptMetadataObservability": {
+      "type": "structure",
+      "members": {
+        "enabled": {
+          "target": "smithy.api#Boolean"
         },
         "head_sampling_rate": {
           "target": "smithy.api#Double",
@@ -76719,6 +76727,9 @@
           "traits": {
             "com.cloudflare.protocols#nullable": {}
           }
+        },
+        "issues": {
+          "target": "com.cloudflare.workers#PutScriptObservabilityIssues"
         }
       }
     },
